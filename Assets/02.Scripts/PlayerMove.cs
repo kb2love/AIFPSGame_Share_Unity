@@ -46,8 +46,8 @@ public class PlayerMove : MonoBehaviour
             hor = Input.GetAxis("Horizontal");
             ver = Input.GetAxis("Vertical");
             {
-                animator.SetFloat(speedX, hor);
-                animator.SetFloat(speedY, ver);
+                animator.SetFloat(speedX, hor, 0.1f, Time.deltaTime);
+                animator.SetFloat(speedY, ver, 0.1f, Time.deltaTime);
             }
             plDir = new Vector3(hor, 0,ver).normalized;
             moveVelocity = plDir * (isSprint ? runSpeed : walkSpeed) * Time.deltaTime;
