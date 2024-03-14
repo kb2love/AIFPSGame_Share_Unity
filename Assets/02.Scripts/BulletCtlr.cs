@@ -10,7 +10,7 @@ public class BulletCtlr : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        TrailRenderer trailRenderer = GetComponent<TrailRenderer>();
+        trailRenderer = GetComponent<TrailRenderer>();
         bulletSpeed = 1000f;
     }
     void OnEnable()
@@ -21,11 +21,11 @@ public class BulletCtlr : MonoBehaviour
     void OffBullet()
     {
         gameObject.SetActive(false);
-        rb.Sleep();
     }
     void OnDisable()
     {
         trailRenderer.Clear();
+        rb.Sleep();
         transform.position = Vector3.zero;
     }
 }
