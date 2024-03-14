@@ -14,12 +14,15 @@ public class FireCtrl : MonoBehaviour
     private float fireTIme;
     private readonly int aniFire = Animator.StringToHash("FireTrigger");
     private readonly int aniReload = Animator.StringToHash("ReloadTrigger");
+    private readonly int aniIsReload = Animator.StringToHash("IsReload");
     private int bulletCount;
     private int bulletMaxCount;
     private bool isReload;
 
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         firePos = transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<Transform>();
         bullet = Resources.Load<GameObject>("Weapon/Bullet");
         source = GetComponent<AudioSource>();
@@ -33,21 +36,23 @@ public class FireCtrl : MonoBehaviour
         fireClip = Resources.Load<AudioClip>("Sounds/Fires/p_ak_1");
         StartCoroutine(OnFIre());
     }
-
-    void Update()
-    {
-        
-    }
     IEnumerator OnFIre()
     {
-        while(playerDamage.isDie)
+        while(!playerDamage.isDie)
         {
             yield return new WaitForSeconds(0.002f);
-            if (Input.GetMouseButton(0) && !isReload && Time.time - curTime > fireTIme)
+            if (Time.time - curTime > fireTIme && Input.GetMouseButton(0))
             {
-                Fire();
+                if(!isReload)
+                {
+                    Fire();
+                    if (bulletCount == 0)
+                        StartCoroutine(Reload());
+                }
                 curTime = Time.time;
             }
+            if(Input.GetKeyDown(KeyCode.R) && bulletCount != bulletMaxCount &&!isReload)
+                StartCoroutine(Reload());
         }
     }
     void Fire()
@@ -59,15 +64,16 @@ public class FireCtrl : MonoBehaviour
         animator.SetTrigger(aniFire);
         --bulletCount;
         source.PlayOneShot(fireClip, 1.0f);
-        if(bulletCount == 0)
-            StartCoroutine(Reload());
     }
     IEnumerator Reload()
     {
         isReload = true;
         animator.SetTrigger(aniReload);
-        yield return new WaitForSeconds(2.0f);
+        animator.SetBool(aniIsReload, true);
+        yield return new WaitForSeconds(1.55f);
+        animator.SetBool(aniIsReload, false);
         isReload = false;
         bulletCount = bulletMaxCount;
+
     }
 }

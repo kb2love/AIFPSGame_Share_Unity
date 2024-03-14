@@ -43,32 +43,53 @@ public class PlayerMove : MonoBehaviour
         while(!isDie)
         {
             yield return new WaitForSeconds(0.002f);
-            hor = Input.GetAxis("Horizontal");
-            ver = Input.GetAxis("Vertical");
+            RunCheck();
+            Move();
+        }
+    }
+
+    private void Move()
+    {
+        hor = Input.GetAxis("Horizontal");
+        ver = Input.GetAxis("Vertical");
+        {
+            animator.SetFloat(speedX, hor, 0.1f, Time.deltaTime);
+            animator.SetFloat(speedY, ver, 0.1f, Time.deltaTime);
+        }
+        plDir = new Vector3(hor, 0, ver).normalized;
+        moveVelocity = plDir * (isSprint ? runSpeed : walkSpeed) * Time.deltaTime;
+        GravityAndJump();
+        moveVelocity.y = hei;
+        moveVelocity = transform.TransformDirection(moveVelocity);
+        ch.Move(moveVelocity);
+    }
+    private void RunCheck()
+    {
+        if(Input.GetKey(KeyCode.LeftShift) && ver > 0)
+        {
+            isSprint = true;
+            animator.SetBool(sprint, true);
+        }
+        else if(Input.GetKeyUp(KeyCode.LeftShift) | ver <= 0)
+        {
+            isSprint = false;
+            animator.SetBool(sprint, false);
+        }
+    }
+    private void GravityAndJump()
+    {
+        if (!ch.isGrounded)
+        {
+            gravity += gravity * Time.deltaTime;
+            hei += gravity * Time.deltaTime;
+        }
+        else
+        {
+            gravity = gravityValue;
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                animator.SetFloat(speedX, hor, 0.1f, Time.deltaTime);
-                animator.SetFloat(speedY, ver, 0.1f, Time.deltaTime);
+                hei = jumpForce;
             }
-            plDir = new Vector3(hor, 0,ver).normalized;
-            moveVelocity = plDir * (isSprint ? runSpeed : walkSpeed) * Time.deltaTime;
-            {
-                if(!ch.isGrounded)
-                {
-                    gravity += gravity * Time.deltaTime;
-                    hei += gravity * Time.deltaTime;
-                }
-                else
-                {
-                    gravity = gravityValue;
-                    if (Input.GetKeyDown(KeyCode.Space))
-                    {
-                        hei = jumpForce;
-                    }
-                }
-            }
-            moveVelocity.y = hei;
-            moveVelocity = transform.TransformDirection(moveVelocity);
-            ch.Move(moveVelocity);
         }
     }
 }
