@@ -9,13 +9,19 @@ public class EnemyMovement : MonoBehaviour
     private CharacterController ch;
     private float walkSpeed;
     public float RayDistance;
-
+    public float rayPer;
+    bool rayFront;
+    RaycastHit frontHit;
+    RaycastHit righHit;
+    RaycastHit leftHit;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         ch = GetComponent<CharacterController>();
         walkSpeed = 2f;
+        rayFront = true;
+        
     }
 
     void Update()
@@ -26,35 +32,33 @@ public class EnemyMovement : MonoBehaviour
         transform.localEulerAngles = caracRot;
         plDir = transform.TransformDirection(plDir);
         ch.Move(plDir * Time.deltaTime * walkSpeed);
-        Debug.DrawRay(transform.position, transform.forward * 20f, Color.yellow);
-        Debug.DrawRay(transform.position, transform.right * 20f, Color.yellow);
-        Debug.DrawRay(transform.position, -transform.right * 20f, Color.yellow);
-        RaycastHit hit;
-        bool rayFront = Physics.Raycast(transform.position, transform.forward, out hit, RayDistance);
-        bool rayRight = Physics.Raycast(transform.position, transform.right, out hit, RayDistance);
-        bool rayLeft = Physics.Raycast(transform.position,-transform.right, out hit, RayDistance);
-        if (rayFront && rayRight && rayLeft)
+        Vector3 rayHeight = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+        Debug.DrawRay(rayHeight, transform.forward * 20f, Color.yellow);
+        Debug.DrawRay(rayHeight, transform.right * 20f, Color.yellow);
+        Debug.DrawRay(rayHeight, -transform.right * 20f, Color.yellow);
+        if (Physics.Raycast(rayHeight, -transform.right, out leftHit, RayDistance))
         {
-            
-            Quaternion quaternion = Quaternion.Euler(0, 180, 0);
-            transform.rotation = Quaternion.Slerp(transform.rotation, quaternion, Time.deltaTime * 10f);
+            Debug.Log("·¹ÀÌ1");
+            if (!Physics.Raycast(rayHeight, -transform.right, out leftHit, RayDistance)) return;
+            Debug.Log("±â¸ð¶ì1");
+            Quaternion rot = Quaternion.LookRotation(transform.right / rayPer);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rot, 10f * Time.deltaTime);
         }
-        else if(rayFront && rayRight)
+        else if (Physics.Raycast(rayHeight, transform.right, out righHit, RayDistance))
         {
-            Quaternion quaternion = Quaternion.Euler(0, -90, 0);
-            transform.rotation = Quaternion.Slerp(transform.rotation, quaternion, Time.deltaTime * 10f);
+            Debug.Log("·¹ÀÌ2");
+            if (!Physics.Raycast(rayHeight, transform.right, out righHit, RayDistance)) return;
+            Debug.Log("±â¸ð¶ì2");
+            Quaternion rot = Quaternion.LookRotation(-transform.right / rayPer);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rot, 10f * Time.deltaTime);
         }
-        else if(rayFront && rayLeft)
+        else if (Physics.Raycast(rayHeight, transform.forward, out frontHit,  RayDistance ))
         {
-            Quaternion quaternion = Quaternion.Euler(0, 90, 0);
-            transform.rotation = Quaternion.Slerp(transform.rotation, quaternion, Time.deltaTime * 10f);
+            Debug.Log("·¹ÀÌ3");
+            if (!Physics.Raycast(rayHeight, transform.forward, out frontHit, RayDistance)) return;
+            Debug.Log("±â¸ð¶ì3");
+            Quaternion rot = Quaternion.LookRotation(frontHit.normal /rayPer);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rot, 10f * Time.deltaTime);
         }
-        else 
-        if(rayFront)
-        {
-            Quaternion quaternion = Quaternion.LookRotation(hit.normal);
-            transform.rotation = Quaternion.Slerp(transform.rotation, quaternion, Time.deltaTime * 10f);
-        }
-
     }
 }
