@@ -10,6 +10,7 @@ public class FireCtrl : MonoBehaviour
     private AudioClip fireClip;
     private Animator animator;
     private PlayerDamage playerDamage;
+    private ParticleSystem fireFlash;
     private float curTime;
     private float fireTIme;
     private readonly int aniFire = Animator.StringToHash("FireTrigger");
@@ -24,6 +25,7 @@ public class FireCtrl : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         firePos = transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<Transform>();
+        fireFlash = firePos.GetChild(0).GetComponent<ParticleSystem>();
         bullet = Resources.Load<GameObject>("Weapon/Bullet");
         source = GetComponent<AudioSource>();
         animator = transform.GetChild(0).GetComponent<Animator>();
@@ -34,6 +36,7 @@ public class FireCtrl : MonoBehaviour
         bulletMaxCount = 20;
         bulletCount = bulletMaxCount;
         fireClip = Resources.Load<AudioClip>("Sounds/Fires/p_ak_1");
+        fireFlash.Stop();
         StartCoroutine(OnFIre());
     }
     IEnumerator OnFIre()
@@ -61,6 +64,8 @@ public class FireCtrl : MonoBehaviour
         _bullet.transform.position = firePos.position;
         _bullet.transform.rotation = firePos.rotation;
         _bullet.SetActive(true);
+        fireFlash.Play();
+        Invoke("FlashStop", 0.1f);
         animator.SetTrigger(aniFire);
         --bulletCount;
         source.PlayOneShot(fireClip, 1.0f);
@@ -75,5 +80,9 @@ public class FireCtrl : MonoBehaviour
         isReload = false;
         bulletCount = bulletMaxCount;
 
+    }
+    void FlashStop()
+    {
+        fireFlash.Stop();
     }
 }

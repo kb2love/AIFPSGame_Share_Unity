@@ -7,6 +7,8 @@ public class ObjectPoolingManager : MonoBehaviour
     public static ObjectPoolingManager objPooling;
     private GameObject Playerbullet;
     private List<GameObject> playerBulletList = new List<GameObject>();
+    private GameObject hitEffect;
+    private List<GameObject> hitE_List = new List<GameObject>();
     int maxPlayerBullet;
     void Awake()
     {
@@ -16,8 +18,10 @@ public class ObjectPoolingManager : MonoBehaviour
             Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
         Playerbullet = Resources.Load<GameObject>("Weapon/Bullet");
+        hitEffect = Resources.Load<GameObject>("Effects/GoopSpray");
         maxPlayerBullet = 20;
         CreatePlayerBullet();
+        CreateHitEffect();  
     }
     private void Start()
     {
@@ -46,5 +50,24 @@ public class ObjectPoolingManager : MonoBehaviour
         }
         return null;
     }
-
+    void CreateHitEffect()
+    {
+        GameObject hitEffectGroup = new GameObject("HitEffectGroup");
+        for(int i = 0; i < 6;  i++)
+        {
+            GameObject _effect = Instantiate(hitEffect, hitEffectGroup.transform);
+            _effect.name = (i + 1).ToString() + "¹ø Effect";
+            _effect.gameObject.SetActive(false);
+            hitE_List.Add(_effect);
+        }
+    }
+    public GameObject GetHitEffect()
+    {
+        foreach(GameObject _effect in hitE_List)
+        {
+            if(!_effect.activeSelf)
+                return _effect;
+        }
+        return null;
+    }
 }
