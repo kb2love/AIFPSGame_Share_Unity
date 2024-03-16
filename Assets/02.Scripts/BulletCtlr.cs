@@ -7,8 +7,10 @@ public class BulletCtlr : MonoBehaviour
     private TrailRenderer trailRenderer;
     private Rigidbody rb;
     private float bulletSpeed;
+    public int damage;
     void Awake()
     {
+        damage = 15;
         rb = GetComponent<Rigidbody>();
         trailRenderer = GetComponent<TrailRenderer>();
         bulletSpeed = 1000f;
