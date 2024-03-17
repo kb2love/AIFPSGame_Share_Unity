@@ -15199,10 +15199,10 @@ PrefabInstance:
       addedObject: {fileID: 1106424297}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: af19cc6a5ba952b4ba9d20ce847a2058, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1106424298}
+      addedObject: {fileID: 1106424299}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: af19cc6a5ba952b4ba9d20ce847a2058, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1106424299}
+      addedObject: {fileID: 1106424302}
     - targetCorrespondingSourceObject: {fileID: -6529273078546540562, guid: af19cc6a5ba952b4ba9d20ce847a2058, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1106424283}
@@ -15329,18 +15329,6 @@ MonoBehaviour:
   nextIdx: 0
   dist: 0
   disOne: {x: 0, y: 0, z: 0}
---- !u!114 &1106424298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1106424278}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dee2a8e1b7770f140b173dad968bf29f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   RayDistance: 0
   rayPer: 0
 --- !u!114 &1106424299
@@ -15355,6 +15343,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38553e10de442704bad88143415a2f73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1106424302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1106424278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46827cb2edddcff4bbb80646f511f087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 0
+  isDie: 0
 --- !u!1001 &1120360555
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -11,12 +11,14 @@ public class EnemyAI : MonoBehaviour
     private float attackDist;
     private float traceDist;
     public bool isDie;
+    public delegate void EnemyMoveHandler();
+    public static event EnemyMoveHandler moveHandler;
     void Awake()
     {
         playerTr = GameObject.FindWithTag("Player").GetComponent<Transform>();
         animator = GetComponent<Animator>();
-        attackDist = 20f;
-        traceDist = 60f;
+        attackDist = 0.1f;
+        traceDist = 0.5f;
         isDie = false;
     }
     private void OnEnable()
@@ -48,23 +50,24 @@ public class EnemyAI : MonoBehaviour
     {
         while(!isDie)
         {
-            yield return new WaitForSeconds(0.02f);
+            yield return new WaitForSeconds(0.002f);
             switch(state)
             {
                 case State.IDLE:
-
+                    Debug.Log("Idle");
                     break;
                 case State.PATROL:
-
+                    animator.SetBool("IsMove", true);
+                    moveHandler();
                     break;
                 case State.TRACE:
-
+                    Debug.Log("Trace");
                     break;
                 case State.ATTACK:
-
+                    Debug.Log("Attack");
                     break;
                 case State.DIE:
-
+                    Debug.Log("Die");
                     break;
             }
         }

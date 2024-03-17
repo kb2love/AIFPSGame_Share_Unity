@@ -25,7 +25,7 @@ public class EnemyMovement : MonoBehaviour
 
     void Update()
     {
-        animator.SetBool("IsMove", true);
+        
     }
 
     public void RayMove()
@@ -43,25 +43,19 @@ public class EnemyMovement : MonoBehaviour
         Debug.DrawRay(rayHeight, -transform.right * 5f, Color.yellow);
         if (Physics.Raycast(rayHeight, -transform.right, out leftHit, RayDistance))
         {
-            Debug.Log("·¹ÀÌ1");
             if (!Physics.Raycast(rayHeight, -transform.right, out leftHit, RayDistance)) return;
-            Debug.Log("±â¸ð¶ì1");
             Quaternion rot = Quaternion.LookRotation(transform.right / rayPer);
             transform.rotation = Quaternion.Slerp(transform.rotation, rot, 10f * Time.deltaTime);
         }
         else if (Physics.Raycast(rayHeight, transform.right, out righHit, RayDistance))
         {
-            Debug.Log("·¹ÀÌ2");
             if (!Physics.Raycast(rayHeight, transform.right, out righHit, RayDistance)) return;
-            Debug.Log("±â¸ð¶ì2");
             Quaternion rot = Quaternion.LookRotation(-transform.right / rayPer);
             transform.rotation = Quaternion.Slerp(transform.rotation, rot, 10f * Time.deltaTime);
         }
         else if (Physics.Raycast(rayHeight, transform.forward, out frontHit, RayDistance))
         {
-            Debug.Log("·¹ÀÌ3");
             if (!Physics.Raycast(rayHeight, transform.forward, out frontHit, RayDistance)) return;
-            Debug.Log("±â¸ð¶ì3");
             Quaternion rot = Quaternion.LookRotation(frontHit.normal / rayPer);
             transform.rotation = Quaternion.Slerp(transform.rotation, rot, 10f * Time.deltaTime);
         }

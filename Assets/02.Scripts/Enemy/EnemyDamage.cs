@@ -23,8 +23,9 @@ public class EnemyDamage : MonoBehaviour
         {
             col.gameObject.SetActive(false);
             hp -= col.gameObject.GetComponent<BulletCtlr>().damage;
-            _effect.transform.position = col.transform.position;
-            _effect.transform.rotation = col.transform.rotation;
+            Vector3 normal = col.contacts[0].normal;
+            _effect.transform.position = col.contacts[0].point;
+            _effect.transform.rotation = Quaternion.FromToRotation(-Vector3.forward, normal);
             _effect.SetActive(true);
             Invoke("EffectOff", 0.3f);
             animator.SetTrigger(aniE_Hit);
