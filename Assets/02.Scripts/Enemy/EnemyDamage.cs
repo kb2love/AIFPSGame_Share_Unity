@@ -9,6 +9,7 @@ public class EnemyDamage : MonoBehaviour
     private int hp;
     private int maxHp;
     private readonly int aniE_Hit = Animator.StringToHash("EnemyHit");
+    private EnemyAI enemyAI;
     GameObject _effect;
     void Start()
     {
@@ -16,6 +17,7 @@ public class EnemyDamage : MonoBehaviour
         maxHp = 100;
         hp = maxHp;
         _effect = ObjectPoolingManager.objPooling.GetHitEffect();
+        enemyAI = GetComponent<EnemyAI>();
     }
     private void OnCollisionEnter(Collision col)
     {
@@ -29,6 +31,10 @@ public class EnemyDamage : MonoBehaviour
             _effect.SetActive(true);
             Invoke("EffectOff", 0.3f);
             animator.SetTrigger(aniE_Hit);
+            if(hp <= 0)
+            {
+                enemyAI.state = EnemyAI.State.DIE;
+            }
         }
     }
     private void EffectOff()

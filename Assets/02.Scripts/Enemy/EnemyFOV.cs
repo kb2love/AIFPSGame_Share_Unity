@@ -10,16 +10,16 @@ public class EnemyFOV : MonoBehaviour
     private Transform enemyTr;
     private int playerLayer;
     private string playerTag = "Player";
-    void Start()
+    void Awake()
     {
-        viewAngle = 15f;
-        viewAngle = 120f;
         playerTr = GameObject.FindWithTag(playerTag).transform;
         enemyTr = transform;
     }
     private void OnEnable()
     {
-        playerLayer = LayerMask.NameToLayer("PLAYER");
+        playerLayer = LayerMask.NameToLayer(playerTag);
+        viewRange = 10f;
+        viewAngle = 120f;
     }
     public Vector3 CirclePoint(float angle)
     {
@@ -48,7 +48,8 @@ public class EnemyFOV : MonoBehaviour
         if(Physics.Raycast(enemyTr.position, dir, out hit, viewRange, 1 << playerLayer))
         {
             return isView = hit.collider.CompareTag(playerTag);
-        }
+            
+        }   
         return isView;
     }
 }

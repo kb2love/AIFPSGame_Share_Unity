@@ -8,6 +8,7 @@ TagManager:
   - Head
   - Enemy
   - Bullet
+  - DeadLine
   layers:
   - Default
   - TransparentFX
