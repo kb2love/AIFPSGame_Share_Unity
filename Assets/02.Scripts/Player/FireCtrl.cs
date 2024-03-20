@@ -5,7 +5,6 @@ using UnityEngine;
 public class FireCtrl : MonoBehaviour
 {
     private Transform firePos;
-    private GameObject bullet;
     private AudioSource source;
     private AudioClip fireClip;
     private Animator animator;
@@ -26,7 +25,6 @@ public class FireCtrl : MonoBehaviour
         Cursor.visible = false;
         firePos = transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<Transform>();
         fireFlash = firePos.GetChild(0).GetComponent<ParticleSystem>();
-        bullet = Resources.Load<GameObject>("Weapon/Bullet");
         source = GetComponent<AudioSource>();
         animator = transform.GetChild(0).GetComponent<Animator>();
         playerDamage = GetComponent<PlayerDamage>();

@@ -34,10 +34,6 @@ public class PlayerMove : MonoBehaviour
         StartCoroutine(PlayerMovement());
     }
 
-    void Update()
-    {
-        
-    }
     IEnumerator PlayerMovement()
     {
         while(!isDie)

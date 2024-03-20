@@ -29,7 +29,7 @@ public class EnemyDamage : MonoBehaviour
             _effect.transform.position = col.contacts[0].point;
             _effect.transform.rotation = Quaternion.FromToRotation(-Vector3.forward, normal);
             _effect.SetActive(true);
-            Invoke("EffectOff", 0.3f);
+            Invoke("EffectOff", 1f);
             animator.SetTrigger(aniE_Hit);
             if(hp <= 0)
             {
