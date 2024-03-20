@@ -41,6 +41,7 @@ public class PlayerMove : MonoBehaviour
             yield return new WaitForSeconds(0.002f);
             RunCheck();
             Move();
+            
         }
     }
 

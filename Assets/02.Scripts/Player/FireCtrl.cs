@@ -10,6 +10,8 @@ public class FireCtrl : MonoBehaviour
     private Animator animator;
     private PlayerDamage playerDamage;
     private ParticleSystem fireFlash;
+    private CanvasGroup canvasGroup;
+    private bool tabOn;
     private float curTime;
     private float fireTIme;
     private readonly int aniFire = Animator.StringToHash("FireTrigger");
@@ -21,19 +23,22 @@ public class FireCtrl : MonoBehaviour
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        
         firePos = transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<Transform>();
         fireFlash = firePos.GetChild(0).GetComponent<ParticleSystem>();
         source = GetComponent<AudioSource>();
         animator = transform.GetChild(0).GetComponent<Animator>();
         playerDamage = GetComponent<PlayerDamage>();
+        canvasGroup = GameObject.Find("Canvas_ui").transform.GetChild(0).GetComponent<CanvasGroup>();
         curTime = Time.time;
         fireTIme = 0.1f;
         isReload = false;
         bulletMaxCount = 20;
         bulletCount = bulletMaxCount;
         fireClip = Resources.Load<AudioClip>("Sounds/Fires/p_ak_1");
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        tabOn = false;
         fireFlash.Stop();
         StartCoroutine(OnFIre());
     }
@@ -42,20 +47,47 @@ public class FireCtrl : MonoBehaviour
         while(!playerDamage.isDie)
         {
             yield return new WaitForSeconds(0.002f);
-            if (Time.time - curTime > fireTIme && Input.GetMouseButton(0))
-            {
-                if(!isReload)
-                {
-                    Fire();
-                    if (bulletCount == 0)
-                        StartCoroutine(Reload());
-                }
-                curTime = Time.time;
-            }
-            if(Input.GetKeyDown(KeyCode.R) && bulletCount != bulletMaxCount &&!isReload)
-                StartCoroutine(Reload());
+            FireAndReload();
+            TabInventory();
         }
     }
+
+    private void TabInventory()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            tabOn = !tabOn;
+        }
+        if (tabOn)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            canvasGroup.alpha = 1;
+        }
+        else if (!tabOn)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            canvasGroup.alpha = 0;
+        }
+    }
+
+    private void FireAndReload()
+    {
+        if (Time.time - curTime > fireTIme && Input.GetMouseButton(0))
+        {
+            if (!isReload && !tabOn)
+            {
+                Fire();
+                if (bulletCount == 0)
+                    StartCoroutine(Reload());
+            }
+            curTime = Time.time;
+        }
+        if (Input.GetKeyDown(KeyCode.R) && bulletCount != bulletMaxCount && !isReload)
+            StartCoroutine(Reload());
+    }
+
     void Fire()
     {
         GameObject _bullet = ObjectPoolingManager.objPooling.GetPlayerBullet();
