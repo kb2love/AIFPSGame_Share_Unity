@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FireCtrl : MonoBehaviour
 {
@@ -11,13 +12,17 @@ public class FireCtrl : MonoBehaviour
     private PlayerDamage playerDamage;
     private ParticleSystem fireFlash;
     private CanvasGroup canvasGroup;
+    private Image weaponImage;
+    public Text bulletText;
+    private GetItem getItem;
     private bool tabOn;
     private float curTime;
     private float fireTIme;
     private readonly int aniFire = Animator.StringToHash("FireTrigger");
     private readonly int aniReload = Animator.StringToHash("ReloadTrigger");
     private readonly int aniIsReload = Animator.StringToHash("IsReload");
-    private int bulletCount;
+    public int bulletCount;
+    public int bulletValue;
     private int bulletMaxCount;
     private bool isReload;
 
@@ -30,11 +35,15 @@ public class FireCtrl : MonoBehaviour
         animator = transform.GetChild(0).GetComponent<Animator>();
         playerDamage = GetComponent<PlayerDamage>();
         canvasGroup = GameObject.Find("Canvas_ui").transform.GetChild(0).GetComponent<CanvasGroup>();
+        weaponImage = GameObject.Find("Panel-Weapon").transform.GetChild(0).GetComponent<Image>();
+        bulletText = weaponImage.transform.parent.GetChild(1).GetComponent<Text>();
+        getItem = GetComponent<GetItem>();
         curTime = Time.time;
         fireTIme = 0.1f;
         isReload = false;
-        bulletMaxCount = 20;
-        bulletCount = bulletMaxCount;
+        bulletValue = 0;
+        bulletMaxCount = 30;
+        bulletCount = bulletValue;
         fireClip = Resources.Load<AudioClip>("Sounds/Fires/p_ak_1");
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -76,15 +85,15 @@ public class FireCtrl : MonoBehaviour
     {
         if (Time.time - curTime > fireTIme && Input.GetMouseButton(0))
         {
-            if (!isReload && !tabOn)
+            if (!isReload && !tabOn & bulletCount > 0)
             {
                 Fire();
-                if (bulletCount == 0)
+                if (bulletCount == 0 && bulletValue > 0)
                     StartCoroutine(Reload());
             }
             curTime = Time.time;
         }
-        if (Input.GetKeyDown(KeyCode.R) && bulletCount != bulletMaxCount && !isReload)
+        if (Input.GetKeyDown(KeyCode.R) && bulletCount != bulletValue && !isReload && bulletValue > 0 && bulletCount < 30)
             StartCoroutine(Reload());
     }
 
@@ -99,6 +108,7 @@ public class FireCtrl : MonoBehaviour
         animator.SetTrigger(aniFire);
         --bulletCount;
         source.PlayOneShot(fireClip, 1.0f);
+        bulletText.text = bulletCount.ToString() + " / " + bulletValue.ToString();
     }
     IEnumerator Reload()
     {
@@ -108,8 +118,47 @@ public class FireCtrl : MonoBehaviour
         yield return new WaitForSeconds(1.55f);
         animator.SetBool(aniIsReload, false);
         isReload = false;
-        bulletCount = bulletMaxCount;
-
+        if(bulletValue >= bulletMaxCount)
+        {
+            if(bulletCount == 0)
+            {
+                bulletCount += bulletMaxCount;
+                bulletValue -= bulletCount;
+            }
+            else if(bulletCount > 0)
+            {
+                int cot = 30;
+                cot -= bulletCount;
+                bulletCount += cot;
+                bulletValue -= cot;
+            }
+        }
+        else if(bulletValue < bulletMaxCount)
+        {
+            if(bulletCount == 0)
+            {
+                bulletCount += bulletValue;
+                bulletValue -= bulletCount; 
+            }
+            else if(bulletCount > 0)
+            { 
+                int let = 30;
+                let -= bulletCount;
+                if(bulletValue >= let)
+                {
+                    bulletCount += let;
+                    bulletValue -= let;
+                }
+                else if( bulletValue < let)
+                {
+                    bulletCount += bulletValue;
+                    bulletValue -= bulletValue;
+                }
+            }
+            
+        }
+        GameManager.Instance.itemEmptText.text = bulletValue.ToString();
+        bulletText.text = bulletCount.ToString() + " / " + bulletValue.ToString();
     }
     void FlashStop()
     {

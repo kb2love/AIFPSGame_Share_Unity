@@ -19,7 +19,7 @@ public class ObjectPoolingManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         Playerbullet = Resources.Load<GameObject>("Weapon/Bullet");
         hitEffect = Resources.Load<GameObject>("Effects/GoopSpray");
-        maxPlayerBullet = 20;
+        maxPlayerBullet = 30;
         CreatePlayerBullet();
         CreateHitEffect();  
     }
