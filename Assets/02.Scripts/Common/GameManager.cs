@@ -48,11 +48,11 @@ public class GameManager : MonoBehaviour
 
                 break;
             case ItemType.GUN:
-                Debug.Log("Gun");
-                CaseGun();
+
                 break;
             case ItemType.BULLET:
-
+                Debug.Log("Bullet");
+                CaseBullet();
                 break;
             case ItemType.PARTS:
 
@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void CaseGun()
+    private void CaseBullet()
     {
         fireCtrl.bulletValue += (int)ItemDataBase.itemDataBase.itemValue;
         itemEmptText.text = fireCtrl.bulletValue.ToString();
@@ -76,5 +76,9 @@ public class GameManager : MonoBehaviour
         itemEmptyImage.sprite = pistolBulletBox;
         itemEmpty.transform.SetParent(imageDrop[1]);
         itemEmptyImage.enabled = true;
+    }
+    private void CaseGun()
+    {
+
     }
 }

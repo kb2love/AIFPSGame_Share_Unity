@@ -127,7 +127,7 @@ public class FireCtrl : MonoBehaviour
             }
             else if(bulletCount > 0)
             {
-                int cot = 30;
+                int cot = bulletMaxCount;
                 cot -= bulletCount;
                 bulletCount += cot;
                 bulletValue -= cot;
@@ -142,7 +142,7 @@ public class FireCtrl : MonoBehaviour
             }
             else if(bulletCount > 0)
             { 
-                int let = 30;
+                int let = bulletMaxCount;
                 let -= bulletCount;
                 if(bulletValue >= let)
                 {

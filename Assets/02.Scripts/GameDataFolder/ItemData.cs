@@ -19,9 +19,5 @@ public class ItemData
     public Sprite itemImage;
     public float itemValue = 30;
     public List<ItemData> itemDataList = new List<ItemData>();
-    public bool ItemUse()
-    {
-        return false;
-    }
 }
 

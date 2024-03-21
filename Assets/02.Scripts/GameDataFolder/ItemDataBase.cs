@@ -8,7 +8,7 @@ public class ItemDataBase : MonoBehaviour
     public ItemType itemType;
     public string itemName;
     public Sprite itemImage;
-    public float itemValue = 0;
+    public float itemValue = 30;
     public enum ItemType
     {
         HEAL = 1,
@@ -21,10 +21,6 @@ public class ItemDataBase : MonoBehaviour
     private void Awake()
     {
         itemDataBase = this;
-    }
-    
-    public bool ItemUse()
-    {
-        return false;
+        itemValue = 30;
     }
 }
