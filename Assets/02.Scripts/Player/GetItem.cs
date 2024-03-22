@@ -7,17 +7,18 @@ public class GetItem : MonoBehaviour
 {
     private string itemTag = "Item";
     private GameObject getItemPanel;
-    private bool isContact;
+    public bool isContact;
     
     void Awake()
     {
         getItemPanel = GameObject.Find("Canvas_ui").transform.GetChild(1).gameObject;
         isContact = false;
     }
-    void OnEnable()
+    void Start()
     {
-        
+       
     }
+    private 
     void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag(itemTag))
@@ -33,9 +34,7 @@ public class GetItem : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
-                other.gameObject.SetActive(false);
-                getItemPanel.SetActive(false);
-                Debug.Log("get");
+                GetItemF(other);
                 GameManager.Instance.AddItem(ItemType.HEAL);
             }
         }
@@ -43,9 +42,7 @@ public class GetItem : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
-                other.gameObject.SetActive(false);
-                getItemPanel.SetActive(false);
-                Debug.Log("get");
+                GetItemF(other);
                 GameManager.Instance.AddItem(ItemType.BULLET);
             }
         }
@@ -53,13 +50,18 @@ public class GetItem : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
-                other.gameObject.SetActive(false);
-                getItemPanel.SetActive(false);
-                Debug.Log("get");
+                GetItemF(other);
                 GameManager.Instance.AddItem(ItemType.GUN);
             }
         }
     }
+
+    private void GetItemF(Collider other)
+    {
+        other.gameObject.SetActive(false);
+        getItemPanel.SetActive(false);
+    }
+
     void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag(itemTag))

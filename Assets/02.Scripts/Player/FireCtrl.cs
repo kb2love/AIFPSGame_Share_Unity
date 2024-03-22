@@ -157,7 +157,7 @@ public class FireCtrl : MonoBehaviour
             }
             
         }
-        GameManager.Instance.itemEmptText.text = bulletValue.ToString();
+        /*GameManager.Instance.itemEmptyObject.text = bulletValue.ToString();*/
         bulletText.text = bulletCount.ToString() + " / " + bulletValue.ToString();
     }
     void FlashStop()

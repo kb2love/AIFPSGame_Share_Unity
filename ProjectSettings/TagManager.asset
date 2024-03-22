@@ -11,6 +11,7 @@ TagManager:
   - DeadLine
   - Item
   - Gun
+  - E_Bullet
   layers:
   - Default
   - TransparentFX

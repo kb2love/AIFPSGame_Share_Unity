@@ -6,6 +6,7 @@ public class ItemDataBase : MonoBehaviour
 {
     public static ItemDataBase itemDataBase;
     public ItemType itemType;
+    public int itemCount;
     public string itemName;
     public Sprite itemImage;
     public float itemValue = 30;

@@ -11,7 +11,8 @@ public class EnemyAI : MonoBehaviour
     private float attackDist;
     private float traceDist;
     public bool isDie;
-    EnemyMove enemyMove;
+    private EnemyFire enemyFire;
+    private EnemyMove enemyMove;
     public delegate void EnemyMoveHandler();
     public static event EnemyMoveHandler moveHandler;
     public delegate void PlayerTraceHandler();
@@ -23,6 +24,7 @@ public class EnemyAI : MonoBehaviour
         playerTr = GameObject.FindWithTag("Player").GetComponent<Transform>();
         animator = GetComponent<Animator>();
         enemyFOV = GetComponent<EnemyFOV>();
+        enemyFire = GetComponent<EnemyFire>();
         attackDist = 5f;
         traceDist = 10f;
         isDie = false;
@@ -41,12 +43,9 @@ public class EnemyAI : MonoBehaviour
             float dist = Vector3.Distance(playerTr.position, transform.position);
             if(dist < attackDist)
             {
-                if (enemyFOV.IsViewPlayer())
                     state = State.ATTACK;
-                else
-                    state = State.TRACE;
             }
-            else if(enemyFOV.IsTracePlayer())
+            else if(dist < traceDist)
             {
                 state = State.TRACE;
                 
@@ -67,24 +66,32 @@ public class EnemyAI : MonoBehaviour
             {
                 case State.IDLE:
                     Debug.Log("Idle");
+                    enemyMove.isTrace = false;
+                    enemyFire.isAttack = false;
                     animator.SetBool("IsMove", false);
                     break;
                 case State.PATROL:
                     enemyMove.isTrace = false;
+                    enemyFire.isAttack = false;
                     animator.SetBool("IsMove", true);
                     moveHandler();
                     break;
                 case State.TRACE:
-                    Debug.Log("Trace");
                     animator.SetBool("IsMove", true);
                     playerTraceHandler();
+                    enemyFire.isAttack = false;
                     break;
                 case State.ATTACK:
-                    Debug.Log("Attack");
+                    animator.SetBool("IsMove", false);
                     enemyMove.isTrace = false;
+                    enemyFire.isAttack = true;
+                    Vector3 rot = playerTr.position - transform.position;
+                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(rot), 10f * Time.deltaTime);
                     break;
                 case State.DIE:
                     Debug.Log("Die");
+                    enemyMove.isTrace = false;
+                    enemyFire.isAttack = false;
                     break;
             }
         }

@@ -5,11 +5,14 @@ using UnityEngine;
 public class ObjectPoolingManager : MonoBehaviour
 {
     public static ObjectPoolingManager objPooling;
-    private GameObject Playerbullet;
-    private List<GameObject> playerBulletList = new List<GameObject>();
+    private GameObject playerBullet;
+    private GameObject enemyBullet;
     private GameObject hitEffect;
+    private List<GameObject> playerBulletList = new List<GameObject>();
+    private List<GameObject> enemyBulletList = new List<GameObject>();
     private List<GameObject> hitE_List = new List<GameObject>();
-    int maxPlayerBullet;
+    private int maxPlayerBullet;
+    private int maxEnmeyBullet;
     void Awake()
     {
         if (objPooling == null)
@@ -17,11 +20,14 @@ public class ObjectPoolingManager : MonoBehaviour
         else if (objPooling != this)
             Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
-        Playerbullet = Resources.Load<GameObject>("Weapon/Bullet");
+        playerBullet = Resources.Load<GameObject>("Weapon/Bullet");
+        enemyBullet = Resources.Load<GameObject>("Weapon/E_Bullet");
         hitEffect = Resources.Load<GameObject>("Effects/GoopSpray");
+        maxEnmeyBullet = 40;
         maxPlayerBullet = 30;
         CreatePlayerBullet();
         CreateHitEffect();  
+        CreateEnemyBullet();
     }
     private void Start()
     {
@@ -35,17 +41,38 @@ public class ObjectPoolingManager : MonoBehaviour
         GameObject playerBulletGroup = new GameObject("PlayerBulletGroup");
         for (int i = 0; i < maxPlayerBullet; i++)
         {
-            GameObject _bullet = Instantiate(Playerbullet, playerBulletGroup.transform);
+            GameObject _bullet = Instantiate(playerBullet, playerBulletGroup.transform);
             _bullet.name = (i + 1).ToString() + "¹ß";
             _bullet.gameObject.SetActive(false);
             playerBulletList.Add(_bullet);
         }
     }
+    
     public GameObject GetPlayerBullet()
     {
         foreach (GameObject _bullet in playerBulletList)
         {
             if(!_bullet.activeSelf)
+                return _bullet;
+        }
+        return null;
+    }
+    void CreateEnemyBullet()
+    {
+        GameObject enemyBulletGroup = new GameObject("EnemyBulletGroup");
+        for (int i = 0; i < maxEnmeyBullet; i++)
+        {
+            GameObject e_bullet = Instantiate(enemyBullet, enemyBulletGroup.transform);
+            e_bullet.name = "e_" + (i + 1).ToString() + "¹ß";
+            e_bullet.gameObject.SetActive(false);
+            enemyBulletList.Add(e_bullet);
+        }
+    }
+    public GameObject GetEnemyBullet()
+    {
+        foreach(GameObject _bullet in enemyBulletList)
+        {
+            if( !_bullet.activeSelf)
                 return _bullet;
         }
         return null;
