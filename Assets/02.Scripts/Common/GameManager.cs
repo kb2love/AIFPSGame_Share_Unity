@@ -20,8 +20,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Image[] itemEmptyImage;
     [SerializeField] private List<Image> itemEmptyImageList = new List<Image>();
 
-    [SerializeField] private Sprite pistolBulletBox;
+    [SerializeField] private Sprite bulletBoxSprite;
+
     private FireCtrl fireCtrl;
+    private int itemEmptyIdx;
     void Awake()
     {
         if(Instance == null)
@@ -35,7 +37,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
         fireCtrl = GameObject.FindWithTag("Player").GetComponent<FireCtrl>();
         itemEmptyObject = GameObject.Find("Item_EmptyGroup").GetComponentsInChildren<Transform>(includeInactive: false);
-        pistolBulletBox = Resources.Load<Sprite>("Image/Inventory/PistolBulletBox");
+        bulletBoxSprite = Resources.Load<Sprite>("Image/Inventory/PistolBulletBox");
         itemEmptyImage = GameObject.Find("Item_EmptyGroup").transform.GetComponentsInChildren<Image>(includeInactive: false);
         itemEmptyRect = GameObject.Find("Item_EmptyGroup").transform.GetComponentsInChildren<RectTransform>(includeInactive: false);
         imageDrop = GameObject.Find("ItemList").GetComponentsInChildren<RectTransform>();
@@ -68,13 +70,15 @@ public class GameManager : MonoBehaviour
             Text textCompenet = childTransform.transform.GetChild(0).GetComponent<Text>();
             itemEmptyText.Add(textCompenet);
         }
+        itemEmptyIdx = 0;
     }
     public void AddItem(ItemType itemType)
     {
         switch(itemType)
         {
             case ItemType.HEAL:
-
+                CaseHeal();
+                Debug.Log("Heal");
                 break;
             case ItemType.GUN:
                 CaseGun();
@@ -98,33 +102,47 @@ public class GameManager : MonoBehaviour
 
     private void CaseHeal()
     {
+        for (int i = 0; i < imageDropList.Count; i++)
+        {
+            if (imageDropList[i].childCount > 0)
+            {
+                continue;
+            }
+            for (int j = 0; j < itemEmptyRectList.Count; j++)
+            {
+                if (imageDropList[i].childCount == 0)
+                {
+                    itemEmptyRectList[itemEmptyIdx].SetParent(imageDropList[i]);
+                    itemEmptyIdx++;
+                }
 
+            }
+            break;
+        }
     }
     private void CaseBullet()
     {
         Debug.Log("Bullet");
-        fireCtrl.bulletValue += (int)ItemDataBase.itemDataBase.itemValue;
+        fireCtrl.bulletValue += (int)ItemDataBase.itemDataBase.itemBulletCount;
         fireCtrl.bulletText.text = fireCtrl.bulletCount.ToString() + " / " + fireCtrl.bulletValue.ToString();
-        #region 배열을 쓰지않고 하나만 하는방법
-        /*itemEmptyObject.text = fireCtrl.bulletValue.ToString();
-        itemEmptyObject.enabled = true;
-        itemEmptyImage.sprite = pistolBulletBox;
-         itemEmptyRect.transform.SetParent(imageDrop[1]);
-         itemEmptyImage.enabled = true;*/
-        #endregion
-        for(int i = 0;i < imageDropList.Count;i++)
+        
+        for(int i = 0;i < imageDropList.Count;i++)  //인벤토리에 불렛이 추가된다
         {
             if (imageDropList[i].childCount > 0) continue;
-            for(int j = 0; j < itemEmptyRectList.Count;j++)
+            for (int j = 0; j < itemEmptyRectList.Count;j++)
             {
                 if (imageDropList[i].childCount == 0)
                 {
-                    itemEmptyRectList[j].SetParent(imageDropList[i]);
-                    break;
+                    itemEmptyRectList[itemEmptyIdx].SetParent(imageDropList[i]);
+                    itemEmptyImageList[itemEmptyIdx].sprite = bulletBoxSprite;
+                    itemEmptyImageList[itemEmptyIdx].enabled = true;
+                    itemEmptyText[itemEmptyIdx].text = fireCtrl.bulletValue.ToString();
+                    itemEmptyText[itemEmptyIdx].gameObject.SetActive(true);
+                    itemEmptyIdx++;
                 }
 
             }
-            if (imageDropList[i].childCount > 0) return;
+            break;
         }
     }
     private void CaseGun()
