@@ -9,23 +9,37 @@ public class ItemDataBase : MonoBehaviour
     public int itemCount;
     public string itemName;
     public Sprite itemImage;
-    public float itemBulletCount;
-    public float itemBulletDamage;
+    public float rifleBulletCount;
+    public float rifleBulletDamage;
+    public float shotgunBulletCount;
+    public float shotgunBulletDamage;
     public float itemHealValue;
     public enum ItemType
     {
         HEAL = 1,
-        GUN,
+        RIFLE,
+        SHOTGUN,
         BULLET,
-        PARTS,
         ARMOR,
         GRENADE
     }
+    [System.Serializable]
+    public class ItemData
+    {
+        public ItemType itemType;
+        public string itemName;
+        public Sprite itemImage;
+        public float itemValue = 30;
+        public List<ItemData> itemDataList = new List<ItemData>();
+    }
+
     private void Awake()
     {
         itemDataBase = this;
-        itemBulletCount = 30;
-        itemBulletDamage = 25;
+        rifleBulletCount = 30;
+        rifleBulletDamage = 25;
+        shotgunBulletCount = 10;
+        shotgunBulletDamage = 50;
         itemHealValue = 20;
     }
 }

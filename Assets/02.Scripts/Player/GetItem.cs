@@ -35,7 +35,7 @@ public class GetItem : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.F))
             {
                 GetItemF(other);
-                GameManager.Instance.AddItem(ItemType.HEAL);
+                GameManager.Instance.AddItem(ItemDataBase.ItemType.HEAL);
             }
         }
         else if (other.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.BULLET)
@@ -43,15 +43,15 @@ public class GetItem : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.F))
             {
                 GetItemF(other);
-                GameManager.Instance.AddItem(ItemType.BULLET);
+                GameManager.Instance.AddItem(ItemDataBase.ItemType.BULLET);
             }
         }
-        else if (other.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.GUN)
+        else if (other.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
                 GetItemF(other);
-                GameManager.Instance.AddItem(ItemType.GUN);
+                GameManager.Instance.AddItem(ItemDataBase.ItemType.SHOTGUN);
             }
         }
     }

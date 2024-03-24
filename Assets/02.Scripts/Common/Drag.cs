@@ -5,19 +5,20 @@ using UnityEngine.EventSystems;
 public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     private RectTransform inventoryTr;
-    private RectTransform equipmentTr;
-    private RectTransform ItemListTr;
     private RectTransform itemTr;
+    [SerializeField] private RectTransform rightHand;
+    [SerializeField] public Vector2 origPos;
     private CanvasGroup canvasGroup;
     public static GameObject DraggingItem = null;
-
+    private FireCtrl fireCtrl;
+   
     void Start()
     {
         canvasGroup = GetComponent<CanvasGroup>();
         itemTr = GetComponent<RectTransform>();
         inventoryTr = GameObject.Find("Image-Inventory").GetComponent<RectTransform>();
-        ItemListTr = inventoryTr.transform.GetChild(0).GetComponent<RectTransform>();
-        equipmentTr = inventoryTr.transform.GetChild(1).GetComponent<RectTransform>();
+        fireCtrl = GameObject.FindWithTag("Player").GetComponent<FireCtrl>();
+        rightHand = GameObject.Find("Inventory_equipment").GetComponent<RectTransform>();
     }
     public void OnDrag(PointerEventData eventData)
     {
@@ -28,15 +29,26 @@ public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         DraggingItem = this.transform.gameObject;
         itemTr.SetParent(inventoryTr);
         canvasGroup.blocksRaycasts = false;
+        origPos = itemTr.position;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         DraggingItem = null;
         canvasGroup.blocksRaycasts = true;
-        if(itemTr.parent == inventoryTr)
+
+        
+        if(itemTr.parent == rightHand && this.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLE)
         {
-            itemTr.SetParent(ItemListTr);
+            fireCtrl.isShotGun = false;
+        }
+        else if(itemTr.parent == rightHand && this.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)
+        {
+            fireCtrl.isShotGun = true;
+        }
+        else if (itemTr.parent == inventoryTr)
+        {
+            itemTr.position = origPos;
         }
     }
 }

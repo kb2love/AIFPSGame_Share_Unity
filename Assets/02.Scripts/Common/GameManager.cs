@@ -7,23 +7,26 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance = null;
-    [SerializeField] private Transform[] itemEmptyObject;
-    [SerializeField] private List<Transform> itemEmptyObjectList = new List<Transform>();
-    [SerializeField] private List<Text> itemEmptyText = new List<Text>();
+    private Transform[] itemEmptyObject;
+    private List<Transform> itemEmptyObjectList = new List<Transform>();
+    public List<Text> itemEmptyText = new List<Text>();
 
-    [SerializeField] private RectTransform[] itemEmptyRect;
-    [SerializeField] private List<RectTransform> itemEmptyRectList = new List<RectTransform>();
+    private RectTransform[] itemEmptyRect;
+    public List<RectTransform> itemEmptyRectList = new List<RectTransform>();
 
     private RectTransform[] imageDrop;
-    [SerializeField] private List<RectTransform> imageDropList = new List<RectTransform>();
+    private List<RectTransform> imageDropList = new List<RectTransform>();
 
-    [SerializeField] private Image[] itemEmptyImage;
-    [SerializeField] private List<Image> itemEmptyImageList = new List<Image>();
+    private Image[] itemEmptyImage;
+    public List<Image> itemEmptyImageList = new List<Image>();
 
-    [SerializeField] private Sprite bulletBoxSprite;
+    private Sprite bulletBoxSprite;
+    private Sprite shotGunSprite;
 
     private FireCtrl fireCtrl;
-    private int itemEmptyIdx;
+    public int itemEmptyIdx;
+    public int bulletIdx;
+    [SerializeField] public bool isBullet;
     void Awake()
     {
         if(Instance == null)
@@ -38,6 +41,7 @@ public class GameManager : MonoBehaviour
         fireCtrl = GameObject.FindWithTag("Player").GetComponent<FireCtrl>();
         itemEmptyObject = GameObject.Find("Item_EmptyGroup").GetComponentsInChildren<Transform>(includeInactive: false);
         bulletBoxSprite = Resources.Load<Sprite>("Image/Inventory/PistolBulletBox");
+        shotGunSprite = Resources.Load<Sprite>("Image/Inventory/ShotGunImage");
         itemEmptyImage = GameObject.Find("Item_EmptyGroup").transform.GetComponentsInChildren<Image>(includeInactive: false);
         itemEmptyRect = GameObject.Find("Item_EmptyGroup").transform.GetComponentsInChildren<RectTransform>(includeInactive: false);
         imageDrop = GameObject.Find("ItemList").GetComponentsInChildren<RectTransform>();
@@ -71,29 +75,30 @@ public class GameManager : MonoBehaviour
             itemEmptyText.Add(textCompenet);
         }
         itemEmptyIdx = 0;
+        bulletIdx = 0;
+        isBullet = false;
     }
-    public void AddItem(ItemType itemType)
+    public void AddItem(ItemDataBase.ItemType itemType)
     {
         switch(itemType)
         {
-            case ItemType.HEAL:
+            case ItemDataBase.ItemType.HEAL:
                 CaseHeal();
                 Debug.Log("Heal");
                 break;
-            case ItemType.GUN:
-                CaseGun();
+            case ItemDataBase.ItemType.RIFLE:
                 break;
-            case ItemType.BULLET:
+            case ItemDataBase.ItemType.SHOTGUN:
+                CaseShotGun();
+                break;
+            case ItemDataBase.ItemType.BULLET:
                 Debug.Log("Bullet");
                 CaseBullet();
                 break;
-            case ItemType.PARTS:
+            case ItemDataBase.ItemType.ARMOR:
 
                 break;
-            case ItemType.ARMOR:
-
-                break;
-            case ItemType.GRENADE:
+            case ItemDataBase.ItemType.GRENADE:
 
                 break;
 
@@ -104,49 +109,55 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < imageDropList.Count; i++)
         {
-            if (imageDropList[i].childCount > 0)
-            {
-                continue;
-            }
-            for (int j = 0; j < itemEmptyRectList.Count; j++)
-            {
-                if (imageDropList[i].childCount == 0)
-                {
+            if (imageDropList[i].childCount > 0) continue;
+            /*for (int j = 0; j < itemEmptyRectList.Count; j++)
+            {*/
+                /*if (imageDropList[i].childCount == 0)
+                {*/
                     itemEmptyRectList[itemEmptyIdx].SetParent(imageDropList[i]);
                     itemEmptyIdx++;
-                }
-
-            }
             break;
         }
     }
     private void CaseBullet()
     {
         Debug.Log("Bullet");
-        fireCtrl.bulletValue += (int)ItemDataBase.itemDataBase.itemBulletCount;
-        fireCtrl.bulletText.text = fireCtrl.bulletCount.ToString() + " / " + fireCtrl.bulletValue.ToString();
+        fireCtrl.rilfeBulletValue += (int)ItemDataBase.itemDataBase.rifleBulletCount;
+        fireCtrl.rifleBulletText.text = fireCtrl.rifleBulletCount.ToString() + " / " + fireCtrl.rilfeBulletValue.ToString();
         
-        for(int i = 0;i < imageDropList.Count;i++)  //인벤토리에 불렛이 추가된다
+        if(!isBullet)
         {
-            if (imageDropList[i].childCount > 0) continue;
-            for (int j = 0; j < itemEmptyRectList.Count;j++)
+            for (int i = 0; i < imageDropList.Count; i++)  //인벤토리에 불렛이 추가된다
             {
-                if (imageDropList[i].childCount == 0)
-                {
-                    itemEmptyRectList[itemEmptyIdx].SetParent(imageDropList[i]);
-                    itemEmptyImageList[itemEmptyIdx].sprite = bulletBoxSprite;
-                    itemEmptyImageList[itemEmptyIdx].enabled = true;
-                    itemEmptyText[itemEmptyIdx].text = fireCtrl.bulletValue.ToString();
-                    itemEmptyText[itemEmptyIdx].gameObject.SetActive(true);
-                    itemEmptyIdx++;
-                }
-
+                if (imageDropList[i].childCount > 0) continue;
+                        itemEmptyRectList[itemEmptyIdx].SetParent(imageDropList[i]);
+                        itemEmptyImageList[itemEmptyIdx].sprite = bulletBoxSprite;
+                        itemEmptyImageList[itemEmptyIdx].enabled = true;
+                        itemEmptyText[itemEmptyIdx].text = fireCtrl.rilfeBulletValue.ToString();
+                        itemEmptyText[itemEmptyIdx].gameObject.SetActive(true);
+                        bulletIdx = itemEmptyIdx;
+                        itemEmptyIdx++;
+                        isBullet = true;
+                break;
             }
-            break;
+        }
+        else if(isBullet)
+        {
+            itemEmptyText[bulletIdx].text = fireCtrl.rilfeBulletValue.ToString();
         }
     }
-    private void CaseGun()
+    private void CaseShotGun()
     {
-
+        for (int i = 0; i < imageDropList.Count; i++)
+        {
+            if (imageDropList[i].childCount > 0) continue;
+            itemEmptyRectList[itemEmptyIdx].SetParent(imageDropList[i]);
+            itemEmptyImageList[itemEmptyIdx].sprite = shotGunSprite;
+            itemEmptyImageList[itemEmptyIdx].enabled=true;
+            itemEmptyRectList[itemEmptyIdx].gameObject.GetComponent<ItemDataBase>().itemType = ItemDataBase.ItemType.SHOTGUN;
+            itemEmptyIdx++;
+            
+            break;
+        }
     }
 }

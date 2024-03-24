@@ -5,50 +5,68 @@ using UnityEngine.UI;
 
 public class FireCtrl : MonoBehaviour
 {
-    private Transform firePos;
+    private Transform rifleFirePos;
+    private Transform shotgunFirePos;
     private AudioSource source;
-    private AudioClip fireClip;
+    private AudioClip rifleClip;
     private Animator animator;
     private PlayerDamage playerDamage;
-    private ParticleSystem fireFlash;
+    private ParticleSystem rifleFlash;
+     private ParticleSystem shotgunFlahs;
     private CanvasGroup canvasGroup;
     private Image weaponImage;
-    public Text bulletText;
+    public Text rifleBulletText;
     private GetItem getItem;
+    private RectTransform itemEmptyGroup;
+    private MeshRenderer rifleMesh;
+    private MeshRenderer shotgunMesh;
     private bool tabOn;
     private float curTime;
     private float fireTIme;
     private readonly int aniFire = Animator.StringToHash("FireTrigger");
     private readonly int aniReload = Animator.StringToHash("ReloadTrigger");
     private readonly int aniIsReload = Animator.StringToHash("IsReload");
-    public int bulletCount;
-    public int bulletValue;
-    private int bulletMaxCount;
+    public int rifleBulletCount;
+    public int rilfeBulletValue;
+    private int rifleBulletMaxCount;
     private bool isReload;
-
+    public bool isShotGun;
     void Start()
     {
-        
-        firePos = transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<Transform>();
-        fireFlash = firePos.GetChild(0).GetComponent<ParticleSystem>();
-        source = GetComponent<AudioSource>();
         animator = transform.GetChild(0).GetComponent<Animator>();
-        playerDamage = GetComponent<PlayerDamage>();
+
+        rifleFirePos = animator.transform.GetChild(0).GetChild(0).GetChild(0).transform;
+        shotgunFirePos = animator.transform.GetChild(0).GetChild(1).GetChild(0).transform;
+
+        rifleFlash = rifleFirePos.GetChild(0).GetComponent<ParticleSystem>();
+        shotgunFlahs = shotgunFirePos.GetChild(0).GetComponent <ParticleSystem>();
+
+        rifleMesh = rifleFirePos.parent.GetComponent<MeshRenderer>();
+        shotgunMesh = shotgunFirePos.parent.GetComponent<MeshRenderer>();
+
+        itemEmptyGroup = GameObject.Find("Item_EmptyGroup").GetComponent<RectTransform>();
+        source = GetComponent<AudioSource>();
+        rifleClip = Resources.Load<AudioClip>("Sounds/Fires/p_ak_1");
         canvasGroup = GameObject.Find("Canvas_ui").transform.GetChild(0).GetComponent<CanvasGroup>();
         weaponImage = GameObject.Find("Panel-Weapon").transform.GetChild(0).GetComponent<Image>();
-        bulletText = weaponImage.transform.parent.GetChild(1).GetComponent<Text>();
+        rifleBulletText = weaponImage.transform.parent.GetChild(1).GetComponent<Text>();
+        playerDamage = GetComponent<PlayerDamage>();
         getItem = GetComponent<GetItem>();
+
         curTime = Time.time;
         fireTIme = 0.1f;
-        isReload = false;
-        bulletValue = 0;
-        bulletMaxCount = 30;
-        bulletCount = bulletValue;
-        fireClip = Resources.Load<AudioClip>("Sounds/Fires/p_ak_1");
+
+        rilfeBulletValue = 0;
+        rifleBulletMaxCount = 30;
+        rifleBulletCount = rilfeBulletValue;
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        isShotGun = false;
         tabOn = false;
-        fireFlash.Stop();
+        isReload = false;
+        rifleFlash.Stop();
+        shotgunFlahs.Stop();
         StartCoroutine(OnFIre());
     }
     IEnumerator OnFIre()
@@ -56,7 +74,11 @@ public class FireCtrl : MonoBehaviour
         while(!playerDamage.isDie)
         {
             yield return new WaitForSeconds(0.002f);
-            FireAndReload();
+            if(!isShotGun)
+                RifleFireAndReload();
+            else 
+                ShotGunFireAndReload();
+
             TabInventory();
         }
     }
@@ -80,88 +102,107 @@ public class FireCtrl : MonoBehaviour
             canvasGroup.alpha = 0;
         }
     }
-
-    private void FireAndReload()
+    private void ShotGunFireAndReload()
     {
+        rifleMesh.enabled = false;
+        shotgunMesh.enabled = true;
+        if(Input.GetMouseButton(0))
+        {
+            
+        }
+    }
+    private void RifleFireAndReload()
+    {
+        shotgunMesh.enabled = false;
+        rifleMesh.enabled = true;
         if (Time.time - curTime > fireTIme && Input.GetMouseButton(0))
         {
-            if (!isReload && !tabOn & bulletCount > 0)
+            if (!isReload && !tabOn & rifleBulletCount > 0)
             {
-                Fire();
-                if (bulletCount == 0 && bulletValue > 0)
-                    StartCoroutine(Reload());
+                RifleFire();
+                if (rifleBulletCount == 0 && rilfeBulletValue > 0)
+                    StartCoroutine(RifleReload());
             }
             curTime = Time.time;
         }
-        if (Input.GetKeyDown(KeyCode.R) && bulletCount != bulletValue && !isReload && bulletValue > 0 && bulletCount < 30)
-            StartCoroutine(Reload());
+        if (Input.GetKeyDown(KeyCode.R) && rifleBulletCount != rilfeBulletValue && !isReload && rilfeBulletValue > 0 && rifleBulletCount < 30)
+            StartCoroutine(RifleReload());
     }
 
-    void Fire()
+    void RifleFire()
     {
         GameObject _bullet = ObjectPoolingManager.objPooling.GetPlayerBullet();
-        _bullet.transform.position = firePos.position;
-        _bullet.transform.rotation = firePos.rotation;
+        _bullet.transform.position = rifleFirePos.position;
+        _bullet.transform.rotation = rifleFirePos.rotation;
         _bullet.SetActive(true);
-        fireFlash.Play();
-        Invoke("FlashStop", 0.1f);
+        rifleFlash.Play();
+        Invoke("RifleFlashStop", 0.1f);
         animator.SetTrigger(aniFire);
-        --bulletCount;
-        source.PlayOneShot(fireClip, 1.0f);
-        bulletText.text = bulletCount.ToString() + " / " + bulletValue.ToString();
+        --rifleBulletCount;
+        source.PlayOneShot(rifleClip, 1.0f);
+        rifleBulletText.text = rifleBulletCount.ToString() + " / " + rilfeBulletValue.ToString();
     }
-    IEnumerator Reload()
+    IEnumerator RifleReload()
     {
+        
         isReload = true;
         animator.SetTrigger(aniReload);
         animator.SetBool(aniIsReload, true);
         yield return new WaitForSeconds(1.55f);
         animator.SetBool(aniIsReload, false);
         isReload = false;
-        if(bulletValue >= bulletMaxCount)
+        if(rilfeBulletValue >= rifleBulletMaxCount)
         {
-            if(bulletCount == 0)
+            if(rifleBulletCount == 0)
             {
-                bulletCount += bulletMaxCount;
-                bulletValue -= bulletCount;
+                rifleBulletCount += rifleBulletMaxCount;
+                rilfeBulletValue -= rifleBulletCount;
             }
-            else if(bulletCount > 0)
+            else if(rifleBulletCount > 0)
             {
-                int cot = bulletMaxCount;
-                cot -= bulletCount;
-                bulletCount += cot;
-                bulletValue -= cot;
+                int cot = rifleBulletMaxCount;
+                cot -= rifleBulletCount;
+                rifleBulletCount += cot;
+                rilfeBulletValue -= cot;
             }
         }
-        else if(bulletValue < bulletMaxCount)
+        else if(rilfeBulletValue < rifleBulletMaxCount)
         {
-            if(bulletCount == 0)
+            if(rifleBulletCount == 0)
             {
-                bulletCount += bulletValue;
-                bulletValue -= bulletCount; 
+                rifleBulletCount += rilfeBulletValue;
+                rilfeBulletValue -= rifleBulletCount; 
             }
-            else if(bulletCount > 0)
+            else if(rifleBulletCount > 0)
             { 
-                int let = bulletMaxCount;
-                let -= bulletCount;
-                if(bulletValue >= let)
+                int let = rifleBulletMaxCount;
+                let -= rifleBulletCount;
+                if(rilfeBulletValue >= let)
                 {
-                    bulletCount += let;
-                    bulletValue -= let;
+                    rifleBulletCount += let;
+                    rilfeBulletValue -= let;
                 }
-                else if( bulletValue < let)
+                else if( rilfeBulletValue < let)
                 {
-                    bulletCount += bulletValue;
-                    bulletValue -= bulletValue;
+                    rifleBulletCount += rilfeBulletValue;
+                    rilfeBulletValue -= rilfeBulletValue;
                 }
             }
             
         }
         /*GameManager.Instance.itemEmptyObject.text = bulletValue.ToString();*/
-        bulletText.text = bulletCount.ToString() + " / " + bulletValue.ToString();
+        rifleBulletText.text = rifleBulletCount.ToString() + " / " + rilfeBulletValue.ToString();
+        GameManager.Instance.itemEmptyText[GameManager.Instance.bulletIdx].text = rilfeBulletValue.ToString();
+        if(rilfeBulletValue == 0)
+        {
+            GameManager.Instance.itemEmptyRectList[GameManager.Instance.bulletIdx].SetParent(itemEmptyGroup);
+            GameManager.Instance.itemEmptyImageList[GameManager.Instance.bulletIdx].enabled = false;
+            GameManager.Instance.itemEmptyText[GameManager.Instance.bulletIdx].enabled = false;
+            GameManager.Instance.isBullet = false;
+        }
     }
-    void FlashStop()
+    void RifleFlashStop()
     {
-        fireFlash.Stop();
+        rifleFlash.Stop();
     }
 }
