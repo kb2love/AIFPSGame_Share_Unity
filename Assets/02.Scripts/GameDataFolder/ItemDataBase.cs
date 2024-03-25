@@ -9,17 +9,19 @@ public class ItemDataBase : MonoBehaviour
     public int itemCount;
     public string itemName;
     public Sprite itemImage;
-    public float rifleBulletCount;
+    public int rifleBulletCount;
     public float rifleBulletDamage;
-    public float shotgunBulletCount;
+    public int shotgunBulletCount;
     public float shotgunBulletDamage;
+    public float itemHealCount;
     public float itemHealValue;
     public enum ItemType
     {
         HEAL = 1,
         RIFLE,
         SHOTGUN,
-        BULLET,
+        RIFLEBULLET,
+        SHOTGUNBULLET,
         ARMOR,
         GRENADE
     }
@@ -37,9 +39,10 @@ public class ItemDataBase : MonoBehaviour
     {
         itemDataBase = this;
         rifleBulletCount = 30;
-        rifleBulletDamage = 25;
+        rifleBulletDamage = 15;
         shotgunBulletCount = 10;
         shotgunBulletDamage = 50;
+        itemHealCount = 0;
         itemHealValue = 20;
     }
 }

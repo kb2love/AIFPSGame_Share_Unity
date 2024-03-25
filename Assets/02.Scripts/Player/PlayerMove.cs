@@ -6,6 +6,7 @@ public class PlayerMove : MonoBehaviour
 {
     private CharacterController ch;
     private Animator animator;
+    private PlayerDamage playerDamage;
     private float walkSpeed;
     private float runSpeed;
     private float gravity;
@@ -14,7 +15,6 @@ public class PlayerMove : MonoBehaviour
     private float hei;
     private float jumpForce;
     private bool isSprint;
-    public bool isDie;
     private Vector3 plDir;
     private Vector3 moveVelocity;
     private readonly int speedX = Animator.StringToHash("speedX");
@@ -24,19 +24,19 @@ public class PlayerMove : MonoBehaviour
     {
         ch = GetComponent<CharacterController>();
         animator = transform.GetChild(0).GetComponent<Animator>();
+        playerDamage = GetComponent<PlayerDamage>();
         walkSpeed = 3f;
         runSpeed = 5f;
         gravityValue = -0.05f;
         gravity = gravityValue;
         jumpForce = 0.03f;
         isSprint = false;
-        isDie = false;
         StartCoroutine(PlayerMovement());
     }
 
     IEnumerator PlayerMovement()
     {
-        while(!isDie)
+        while(!playerDamage.isDie)
         {
             yield return new WaitForSeconds(0.002f);
             RunCheck();

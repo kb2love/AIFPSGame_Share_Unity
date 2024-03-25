@@ -38,12 +38,12 @@ public class GetItem : MonoBehaviour
                 GameManager.Instance.AddItem(ItemDataBase.ItemType.HEAL);
             }
         }
-        else if (other.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.BULLET)
+        else if (other.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLE)
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
                 GetItemF(other);
-                GameManager.Instance.AddItem(ItemDataBase.ItemType.BULLET);
+                GameManager.Instance.AddItem(ItemDataBase.ItemType.RIFLE);
             }
         }
         else if (other.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)
@@ -54,6 +54,23 @@ public class GetItem : MonoBehaviour
                 GameManager.Instance.AddItem(ItemDataBase.ItemType.SHOTGUN);
             }
         }
+        else if (other.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLEBULLET)
+        {
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                GetItemF(other);
+                GameManager.Instance.AddItem(ItemDataBase.ItemType.RIFLEBULLET);
+            }
+        }
+        else if (other.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUNBULLET)
+        {
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                GetItemF(other);
+                GameManager.Instance.AddItem(ItemDataBase.ItemType.SHOTGUNBULLET);
+            }
+        }
+
     }
 
     private void GetItemF(Collider other)

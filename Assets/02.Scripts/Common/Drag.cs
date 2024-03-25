@@ -18,7 +18,7 @@ public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         itemTr = GetComponent<RectTransform>();
         inventoryTr = GameObject.Find("Image-Inventory").GetComponent<RectTransform>();
         fireCtrl = GameObject.FindWithTag("Player").GetComponent<FireCtrl>();
-        rightHand = GameObject.Find("Inventory_equipment").GetComponent<RectTransform>();
+        rightHand = GameObject.Find("Inventory_equipment").transform.GetChild(0).GetComponent<RectTransform>();
     }
     public void OnDrag(PointerEventData eventData)
     {
@@ -40,11 +40,22 @@ public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         
         if(itemTr.parent == rightHand && this.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLE)
         {
+            fireCtrl.isRifle = true;
             fireCtrl.isShotGun = false;
         }
         else if(itemTr.parent == rightHand && this.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)
         {
             fireCtrl.isShotGun = true;
+            fireCtrl.isRifle = false;
+        }
+        else if(itemTr.parent != rightHand && this.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLE )
+        {
+            Debug.Log("ตส>");
+            fireCtrl.isRifle = false;
+        }
+        else if(itemTr.parent != rightHand && this.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)
+        {
+            fireCtrl.isShotGun = false;
         }
         else if (itemTr.parent == inventoryTr)
         {

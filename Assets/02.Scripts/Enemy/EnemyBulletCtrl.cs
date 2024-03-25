@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletCtlr : MonoBehaviour
+public class EnemyBulletCtrl : MonoBehaviour
 {
     private TrailRenderer trailRenderer;
     private Rigidbody rb;

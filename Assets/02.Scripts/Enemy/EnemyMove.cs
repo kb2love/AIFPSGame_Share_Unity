@@ -70,7 +70,6 @@ public class EnemyMove : MonoBehaviour
         if (dist <= 0.5f)
         {
 
-            Debug.Log("next++");
             ++nextIdx;
             if (nextIdx >= 4)
             {

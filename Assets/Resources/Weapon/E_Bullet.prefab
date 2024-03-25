@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6849612726835385563}
   - component: {fileID: 3761125328554732994}
   - component: {fileID: 1003487388355233778}
-  - component: {fileID: 109312769719856055}
+  - component: {fileID: 5149896285403745559}
   m_Layer: 0
   m_Name: E_Bullet
   m_TagString: E_Bullet
@@ -223,7 +223,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.05
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &109312769719856055
+--- !u!114 &5149896285403745559
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -232,7 +232,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 578413683858959061}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 857368a1568fea145ad198813dac43c8, type: 3}
+  m_Script: {fileID: 11500000, guid: fb9af872cb9688e40aa6a06d3534311f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
