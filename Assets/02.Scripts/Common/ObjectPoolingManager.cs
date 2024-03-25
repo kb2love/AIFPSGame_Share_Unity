@@ -11,6 +11,8 @@ public class ObjectPoolingManager : MonoBehaviour
     private GameObject madicine;
     private GameObject rifleBulletBox;
     private GameObject shotgunBulletBox;
+    private GameObject enemy;
+    private List<GameObject> enemyList = new List<GameObject>();
     private List<GameObject> rifleBulletBoxList = new List<GameObject>();
     private List<GameObject> shotgunBulletBoxList = new List<GameObject>();
     private List<GameObject> madicineList = new List<GameObject>();
@@ -33,6 +35,7 @@ public class ObjectPoolingManager : MonoBehaviour
         madicine = Resources.Load<GameObject>("Spawn/Madicine");
         rifleBulletBox = Resources.Load<GameObject>("Spawn/RifleBulletBox");
         shotgunBulletBox = Resources.Load<GameObject>("Spawn/ShotGunBulletBox");
+        enemy = Resources.Load<GameObject>("Spawn/Enemy");
         maxEnmeyBullet = 40;
         maxPlayerBullet = 30;
         itemSpawnCount = 10;
@@ -42,6 +45,7 @@ public class ObjectPoolingManager : MonoBehaviour
         CreateMadicine();
         CreateRifleBulletBox();
         CreateShotGunBulletBox();
+        CreateEnemy();
     }
     void CreatePlayerBullet()
     {
@@ -109,6 +113,17 @@ public class ObjectPoolingManager : MonoBehaviour
             shotgunBulletBoxList.Add(_shotgunBulletBox);
         }
     }
+    void CreateEnemy()
+    {
+        GameObject enemyGroup = new GameObject("EnemyGroup");
+        for (int i = 0; i < 6; i++)
+        {
+            GameObject _enemy = Instantiate(enemy, enemyGroup.transform);
+            _enemy.name = (i + 1).ToString() + "¹ø Enemy";
+            _enemy.gameObject.SetActive(false);
+            enemyList.Add(_enemy);
+        }
+    }
     public GameObject GetPlayerBullet()
     {
         foreach (GameObject _bullet in playerBulletList)
@@ -162,6 +177,15 @@ public class ObjectPoolingManager : MonoBehaviour
         {
             if (!_shotgunBulletBox.activeSelf)
                 return _shotgunBulletBox;
+        }
+        return null;
+    }
+    public GameObject GetEnemy()
+    {
+        foreach (GameObject _enemy in enemyList)
+        {
+            if (!_enemy.activeSelf)
+                return _enemy;
         }
         return null;
     }

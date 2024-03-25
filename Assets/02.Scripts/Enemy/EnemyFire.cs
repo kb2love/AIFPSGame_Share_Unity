@@ -14,7 +14,7 @@ public class EnemyFire : MonoBehaviour
     public bool isAttack;
     private bool isReload;
     EnemyAI enemyAI;
-    void Start()
+    private void OnEnable()
     {
         isAttack = false;
         firePos = GameObject.Find("E_FirePos").GetComponent<Transform>();

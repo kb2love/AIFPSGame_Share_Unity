@@ -245,6 +245,7 @@ public class FireCtrl : MonoBehaviour
             GameManager.Instance.itemEmptyRectList[GameManager.Instance.rifleBulletIdx].GetComponent<Image>().enabled = false;
             GameManager.Instance.itemEmptyText[GameManager.Instance.rifleBulletIdx].enabled = false;
             GameManager.Instance.isRifleBullet = false;
+            GameManager.Instance.GetComponent<LoopSpawn>().spawnRfBulletCount--;
         }
     }
     IEnumerator ShotGunReload()
@@ -302,6 +303,7 @@ public class FireCtrl : MonoBehaviour
             GameManager.Instance.itemEmptyRectList[GameManager.Instance.shotgunBulletIdx].GetComponent<Image>().enabled = false;
             GameManager.Instance.itemEmptyText[GameManager.Instance.shotgunBulletIdx].enabled = false;
             GameManager.Instance.isShotGunBullet = false;
+            GameManager.Instance.GetComponent<LoopSpawn>().spawnSgBulletCount--;
         }
     }
     void RifleFlashStop()

@@ -214,7 +214,6 @@ public class GameManager : MonoBehaviour
     }
     private void HealItem()
     {
-        Debug.Log("das");
         ItemDataBase.itemDataBase.itemHealCount--;
         itemEmptyText[healIdx].text = ItemDataBase.itemDataBase.itemHealCount.ToString();
         playerDamage.HP += (int)ItemDataBase.itemDataBase.itemHealValue;
@@ -227,5 +226,6 @@ public class GameManager : MonoBehaviour
             itemEmptyRectList[healIdx].GetComponent<Image>().enabled = false;
             itemEmptyText[healIdx].gameObject.SetActive(false);
         }
+        GetComponent<LoopSpawn>().spawnMadicineCount--;
     }
 }

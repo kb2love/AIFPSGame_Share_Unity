@@ -89,12 +89,17 @@ public class EnemyAI : MonoBehaviour
                     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(rot), 10f * Time.deltaTime);
                     break;
                 case State.DIE:
-                    Debug.Log("Die");
-                    enemyMove.isTrace = false;
-                    enemyFire.isAttack = false;
+                    EnemyDie();
                     break;
             }
         }
     }
-
+    public void EnemyDie()
+    {
+        state = State.DIE;
+        Debug.Log("Die");
+        enemyMove.isTrace = false;
+        enemyFire.isAttack = false;
+        GameManager.Instance.GetComponent<LoopSpawn>().enemySpawnCount--;
+    }
 }

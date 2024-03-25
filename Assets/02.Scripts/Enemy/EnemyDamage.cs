@@ -33,7 +33,7 @@ public class EnemyDamage : MonoBehaviour
             animator.SetTrigger(aniE_Hit);
             if(hp <= 0)
             {
-                enemyAI.state = EnemyAI.State.DIE;
+                enemyAI.EnemyDie();
             }
         }
     }
