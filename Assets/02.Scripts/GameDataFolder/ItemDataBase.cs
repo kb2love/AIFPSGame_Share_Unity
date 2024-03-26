@@ -38,9 +38,9 @@ public class ItemDataBase : MonoBehaviour
     private void Awake()
     {
         itemDataBase = this;
-        rifleBulletCount = 30;
+        rifleBulletCount = 0;
         rifleBulletDamage = 15;
-        shotgunBulletCount = 10;
+        shotgunBulletCount = 0;
         shotgunBulletDamage = 50;
         itemHealCount = 0;
         itemHealValue = 20;

@@ -29,10 +29,8 @@ public class FireCtrl : MonoBehaviour
     private readonly int aniReload = Animator.StringToHash("ReloadTrigger");
     private readonly int aniIsReload = Animator.StringToHash("IsReload");
     public int rifleBulletCount;
-    public int rilfeBulletValue;
     private int rifleBulletMaxCount;
     public int shotgunBulletCount;
-    public int shotgunBulletValue;
     private int shotgunBulletMaxCount;
     private bool isReload;
     public bool isRifle;
@@ -64,13 +62,11 @@ public class FireCtrl : MonoBehaviour
         curTime = Time.time;
         fireTIme = 0.1f;
 
-        rilfeBulletValue = 0;
         rifleBulletMaxCount = 30;
-        rifleBulletCount = rilfeBulletValue;
+        rifleBulletCount = ItemDataBase.itemDataBase.rifleBulletCount;
 
-        shotgunBulletValue = 0;
         shotgunBulletMaxCount = 10;
-        shotgunBulletCount = shotgunBulletValue;
+        shotgunBulletCount = ItemDataBase.itemDataBase.shotgunBulletCount;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -127,18 +123,18 @@ public class FireCtrl : MonoBehaviour
         rifleMesh.enabled = true;
         bulletCtlr.damage = (int)ItemDataBase.itemDataBase.rifleBulletDamage;
         bulletColider.radius = 0.05f;
-        bulletText.text = rifleBulletCount.ToString() + " / " + rilfeBulletValue.ToString();
+        bulletText.text = rifleBulletCount.ToString() + " / " + ItemDataBase.itemDataBase.rifleBulletCount.ToString();
         if (Time.time - curTime > fireTIme && Input.GetMouseButton(0) && isRifle)
         {
             if (!isReload && !tabOn && rifleBulletCount > 0)
             {
                 RifleFire();
-                if (rifleBulletCount == 0 & rilfeBulletValue > 0)
+                if (rifleBulletCount == 0 & ItemDataBase.itemDataBase.rifleBulletCount > 0)
                     StartCoroutine(RifleReload());
             }
             curTime = Time.time;
         }
-        if (Input.GetKeyDown(KeyCode.R) && rifleBulletCount != rilfeBulletValue && !isReload & rilfeBulletValue > 0 && rifleBulletCount < 30 && isRifle)
+        if (Input.GetKeyDown(KeyCode.R) && rifleBulletCount != ItemDataBase.itemDataBase.rifleBulletCount && !isReload & ItemDataBase.itemDataBase.rifleBulletCount > 0 && rifleBulletCount < 30 && isRifle)
             StartCoroutine(RifleReload());
     }
     private void ShotGunFireAndReload()
@@ -148,17 +144,17 @@ public class FireCtrl : MonoBehaviour
         shotgunMesh.enabled = true;
         bulletCtlr.damage = (int)ItemDataBase.itemDataBase.shotgunBulletDamage;
         bulletColider.radius = 0.2f;
-        bulletText.text = shotgunBulletCount.ToString() + " / " + shotgunBulletValue.ToString();
+        bulletText.text = shotgunBulletCount.ToString() + " / " + ItemDataBase.itemDataBase.shotgunBulletCount.ToString();
         if (Input.GetMouseButtonDown(0) && isShotGun)
         {
             if (!isReload && !tabOn && shotgunBulletCount > 0)
             {
                 ShotGunFire();
-                if (shotgunBulletCount == 0 && shotgunBulletValue > 0)
+                if (shotgunBulletCount == 0 && ItemDataBase.itemDataBase.shotgunBulletCount > 0)
                     StartCoroutine(ShotGunReload());
             }
         }
-        if (Input.GetKeyDown(KeyCode.R) && shotgunBulletCount != shotgunBulletValue && !isReload & shotgunBulletValue > 0 && shotgunBulletCount < 10 && isShotGun)
+        if (Input.GetKeyDown(KeyCode.R) && shotgunBulletCount != ItemDataBase.itemDataBase.shotgunBulletCount && !isReload & ItemDataBase.itemDataBase.shotgunBulletCount > 0 && shotgunBulletCount < 10 && isShotGun)
             StartCoroutine(ShotGunReload());
     }
     void RifleFire()
@@ -172,7 +168,7 @@ public class FireCtrl : MonoBehaviour
         animator.SetTrigger(aniFire);
         --rifleBulletCount;
         source.PlayOneShot(rifleClip, 1.0f);
-        bulletText.text = rifleBulletCount.ToString() + " / " + rilfeBulletValue.ToString();
+        bulletText.text = rifleBulletCount.ToString() + " / " + ItemDataBase.itemDataBase.rifleBulletCount.ToString();
     }
     void ShotGunFire()
     {
@@ -185,7 +181,7 @@ public class FireCtrl : MonoBehaviour
         animator.SetTrigger(aniFire);
         --shotgunBulletCount;
         source.PlayOneShot(shotgunClip, 1.0f);
-        bulletText.text = shotgunBulletCount.ToString() + " / " + shotgunBulletValue.ToString();
+        bulletText.text = shotgunBulletCount.ToString() + " / " + ItemDataBase.itemDataBase.shotgunBulletCount.ToString();
 
     }
     IEnumerator RifleReload()
@@ -197,49 +193,49 @@ public class FireCtrl : MonoBehaviour
         yield return new WaitForSeconds(1.55f);
         animator.SetBool(aniIsReload, false);
         isReload = false;
-        if(rilfeBulletValue >= rifleBulletMaxCount)
+        if(ItemDataBase.itemDataBase.rifleBulletCount >= rifleBulletMaxCount)
         {
             if(rifleBulletCount == 0)
             {
                 rifleBulletCount += rifleBulletMaxCount;
-                rilfeBulletValue -= rifleBulletCount;
+                ItemDataBase.itemDataBase.rifleBulletCount -= rifleBulletCount;
             }
             else if(rifleBulletCount > 0)
             {
                 int cot = rifleBulletMaxCount;
                 cot -= rifleBulletCount;
                 rifleBulletCount += cot;
-                rilfeBulletValue -= cot;
+                ItemDataBase.itemDataBase.rifleBulletCount -= cot;
             }
         }
-        else if(rilfeBulletValue < rifleBulletMaxCount)
+        else if(ItemDataBase.itemDataBase.rifleBulletCount < rifleBulletMaxCount)
         {
             if(rifleBulletCount == 0)
             {
-                rifleBulletCount += rilfeBulletValue;
-                rilfeBulletValue -= rifleBulletCount; 
+                rifleBulletCount += ItemDataBase.itemDataBase.rifleBulletCount;
+                ItemDataBase.itemDataBase.rifleBulletCount -= rifleBulletCount; 
             }
             else if(rifleBulletCount > 0)
             { 
                 int let = rifleBulletMaxCount;
                 let -= rifleBulletCount;
-                if(rilfeBulletValue >= let)
+                if(ItemDataBase.itemDataBase.rifleBulletCount >= let)
                 {
                     rifleBulletCount += let;
-                    rilfeBulletValue -= let;
+                    ItemDataBase.itemDataBase.rifleBulletCount -= let;
                 }
-                else if( rilfeBulletValue < let)
+                else if(ItemDataBase.itemDataBase.rifleBulletCount < let)
                 {
-                    rifleBulletCount += rilfeBulletValue;
-                    rilfeBulletValue -= rilfeBulletValue;
+                    rifleBulletCount += ItemDataBase.itemDataBase.rifleBulletCount;
+                    ItemDataBase.itemDataBase.rifleBulletCount -= ItemDataBase.itemDataBase.rifleBulletCount;
                 }
             }
             
         }
         /*GameManager.Instance.itemEmptyObject.text = bulletValue.ToString();*/
-        bulletText.text = rifleBulletCount.ToString() + " / " + rilfeBulletValue.ToString();
-        GameManager.Instance.itemEmptyText[GameManager.Instance.rifleBulletIdx].text = rilfeBulletValue.ToString();
-        if(rilfeBulletValue == 0)
+        bulletText.text = rifleBulletCount.ToString() + " / " + ItemDataBase.itemDataBase.rifleBulletCount.ToString();
+        GameManager.Instance.itemEmptyText[GameManager.Instance.rifleBulletIdx].text = ItemDataBase.itemDataBase.rifleBulletCount.ToString();
+        if(ItemDataBase.itemDataBase.rifleBulletCount == 0)
         {
             GameManager.Instance.itemEmptyRectList[GameManager.Instance.rifleBulletIdx].SetParent(itemEmptyGroup);
             GameManager.Instance.itemEmptyRectList[GameManager.Instance.rifleBulletIdx].GetComponent<Image>().enabled = false;
@@ -256,48 +252,48 @@ public class FireCtrl : MonoBehaviour
         yield return new WaitForSeconds(1.55f);
         animator.SetBool(aniIsReload, false);
         isReload = false;
-        if (shotgunBulletValue >= shotgunBulletMaxCount)
+        if (ItemDataBase.itemDataBase.shotgunBulletCount >= shotgunBulletMaxCount)
         {
             if (shotgunBulletCount == 0)
             {
                 shotgunBulletCount += shotgunBulletMaxCount;
-                shotgunBulletValue -= shotgunBulletCount;
+                ItemDataBase.itemDataBase.shotgunBulletCount -= shotgunBulletCount;
             }
             else if (shotgunBulletCount > 0)
             {
                 int shot = shotgunBulletMaxCount;
                 shot -= shotgunBulletCount;
                 shotgunBulletCount += shot;
-                shotgunBulletValue -= shot;
+                ItemDataBase.itemDataBase.shotgunBulletCount -= shot;
             }
         }
-        else if (shotgunBulletValue < shotgunBulletMaxCount)
+        else if (ItemDataBase.itemDataBase.shotgunBulletCount < shotgunBulletMaxCount)
         {
             if (shotgunBulletCount == 0)
             {
-                shotgunBulletCount += shotgunBulletValue;
-                shotgunBulletValue -= shotgunBulletCount;
+                shotgunBulletCount += ItemDataBase.itemDataBase.shotgunBulletCount;
+                ItemDataBase.itemDataBase.shotgunBulletCount -= shotgunBulletCount;
             }
             else if (shotgunBulletCount > 0)
             {
                 int gun = shotgunBulletMaxCount;
                 gun -= shotgunBulletCount;
-                if (shotgunBulletValue >= gun)
+                if (ItemDataBase.itemDataBase.shotgunBulletCount >= gun)
                 {
                     shotgunBulletCount += gun;
-                    shotgunBulletValue -= gun;
+                    ItemDataBase.itemDataBase.shotgunBulletCount -= gun;
                 }
-                else if (shotgunBulletValue < gun)
+                else if (ItemDataBase.itemDataBase.shotgunBulletCount < gun)
                 {
-                    shotgunBulletCount += shotgunBulletValue;
-                    shotgunBulletValue -= shotgunBulletValue;
+                    shotgunBulletCount += ItemDataBase.itemDataBase.shotgunBulletCount;
+                    ItemDataBase.itemDataBase.shotgunBulletCount -= ItemDataBase.itemDataBase.shotgunBulletCount;
                 }
             }
 
         }
-        bulletText.text = shotgunBulletCount.ToString() + " / " + shotgunBulletValue.ToString();
-        GameManager.Instance.itemEmptyText[GameManager.Instance.rifleBulletIdx].text = shotgunBulletValue.ToString();
-        if (shotgunBulletValue == 0)
+        bulletText.text = shotgunBulletCount.ToString() + " / " + ItemDataBase.itemDataBase.shotgunBulletCount.ToString();
+        GameManager.Instance.itemEmptyText[GameManager.Instance.rifleBulletIdx].text = ItemDataBase.itemDataBase.shotgunBulletCount.ToString();
+        if (ItemDataBase.itemDataBase.shotgunBulletCount == 0)
         {
             GameManager.Instance.itemEmptyRectList[GameManager.Instance.shotgunBulletIdx].SetParent(itemEmptyGroup);
             GameManager.Instance.itemEmptyRectList[GameManager.Instance.shotgunBulletIdx].GetComponent<Image>().enabled = false;

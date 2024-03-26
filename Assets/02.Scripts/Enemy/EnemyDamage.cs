@@ -36,9 +36,11 @@ public class EnemyDamage : MonoBehaviour
             _effect.SetActive(true);
             Invoke("EffectOff", 1f);
             animator.SetTrigger(aniE_Hit);
+            Debug.Log(hp);
             if(hp <= 0)
             {
                 enemyAI.EnemyDie();
+                
             }
         }
     }
