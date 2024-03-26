@@ -7,11 +7,13 @@ public class GetItem : MonoBehaviour
 {
     private string itemTag = "Item";
     private GameObject getItemPanel;
+    private PlayerDamage playerDamage;
     public bool isContact;
-    
+    private List<Collider> colliders = new List<Collider>();
     void Awake()
     {
         getItemPanel = GameObject.Find("Canvas_ui").transform.GetChild(1).gameObject;
+        playerDamage = GetComponent<PlayerDamage>();
         isContact = false;
     }
     void Start()
@@ -25,58 +27,65 @@ public class GetItem : MonoBehaviour
         {
             getItemPanel.SetActive(true);
             isContact = true;
+            colliders.Add(other);
+            StartCoroutine(GetItemPlayer());
         }
     }
     
-    void OnTriggerStay(Collider other)
+    IEnumerator GetItemPlayer()
     {
-        if (other.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.HEAL)
+        while (isContact)
         {
-            if (Input.GetKeyDown(KeyCode.F))
+            yield return new WaitForSeconds(0.002f);
+            if (colliders[0].gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.HEAL)
             {
-                GetItemF(other);
-                GameManager.Instance.AddItem(ItemDataBase.ItemType.HEAL);
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    GetItemF(colliders[0]);
+                    GameManager.Instance.AddItem(ItemDataBase.ItemType.HEAL);
+                }
+            }
+            else if (colliders[0].gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLE)
+            {
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    GetItemF(colliders[0]);
+                    GameManager.Instance.AddItem(ItemDataBase.ItemType.RIFLE);
+                }
+            }
+            else if (colliders[0].gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)
+            {
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    GetItemF(colliders[0]);
+                    GameManager.Instance.AddItem(ItemDataBase.ItemType.SHOTGUN);
+                }
+            }
+            else if (colliders[0].gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLEBULLET)
+            {
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    GetItemF(colliders[0]);
+                    GameManager.Instance.AddItem(ItemDataBase.ItemType.RIFLEBULLET);
+                }
+            }
+            else if (colliders[0].gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUNBULLET)
+            {
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    GetItemF(colliders[0]);
+                    GameManager.Instance.AddItem(ItemDataBase.ItemType.SHOTGUNBULLET);
+                }
             }
         }
-        else if (other.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLE)
-        {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                GetItemF(other);
-                GameManager.Instance.AddItem(ItemDataBase.ItemType.RIFLE);
-            }
-        }
-        else if (other.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)
-        {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                GetItemF(other);
-                GameManager.Instance.AddItem(ItemDataBase.ItemType.SHOTGUN);
-            }
-        }
-        else if (other.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLEBULLET)
-        {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                GetItemF(other);
-                GameManager.Instance.AddItem(ItemDataBase.ItemType.RIFLEBULLET);
-            }
-        }
-        else if (other.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUNBULLET)
-        {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                GetItemF(other);
-                GameManager.Instance.AddItem(ItemDataBase.ItemType.SHOTGUNBULLET);
-            }
-        }
-
     }
 
     private void GetItemF(Collider other)
     {
         other.gameObject.SetActive(false);
         getItemPanel.SetActive(false);
+        isContact = false;
+        colliders.RemoveAt(0);
     }
 
     void OnTriggerExit(Collider other)

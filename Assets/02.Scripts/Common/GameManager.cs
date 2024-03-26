@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
         }
         DontDestroyOnLoad(this.gameObject);
-        fireCtrl = GameObject.FindWithTag("Player").GetComponent<FireCtrl>();
+        fireCtrl = FindObjectOfType<FireCtrl>();
         rifleBulletBoxSprite = Resources.Load<Sprite>("Image/Inventory/PistolBulletBox");
         shotgunBulletBoxSprite = Resources.Load<Sprite>("Image/Inventory/ShotGunBulletBox");
         shotGunSprite = Resources.Load<Sprite>("Image/Inventory/ShotGunImage");
@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
         healSprite = Resources.Load<Sprite>("Image/Inventory/Madecian");
         itemEmptyRect = GameObject.Find("Item_EmptyGroup").transform.GetComponentsInChildren<RectTransform>(includeInactive: false);
         imageDrop = GameObject.Find("ItemList").GetComponentsInChildren<RectTransform>();
-        playerDamage = GameObject.FindWithTag("Player").GetComponent<PlayerDamage>();   
+        playerDamage = FindObjectOfType<PlayerDamage>();   
         for(int i = 1; i < imageDrop.Length; i++)
         {
             imageDropList.Add(imageDrop[i]);

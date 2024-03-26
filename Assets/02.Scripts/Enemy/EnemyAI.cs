@@ -13,22 +13,17 @@ public class EnemyAI : MonoBehaviour
     public bool isDie;
     private EnemyFire enemyFire;
     private EnemyMove enemyMove;
-    public delegate void EnemyMoveHandler();
-    public static event EnemyMoveHandler moveHandler;
-    public delegate void PlayerTraceHandler();
-    public static event PlayerTraceHandler playerTraceHandler;
     
-    private EnemyFOV enemyFOV;
-    void Awake()
+    void Start()
     {
+
         playerTr = GameObject.FindWithTag("Player").GetComponent<Transform>();
-        animator = GetComponent<Animator>();
-        enemyFOV = GetComponent<EnemyFOV>();
+        animator = transform.GetChild(0).GetComponent<Animator>();
         enemyFire = GetComponent<EnemyFire>();
+        enemyMove = GetComponent<EnemyMove>();
         attackDist = 5f;
         traceDist = 10f;
         isDie = false;
-        enemyMove = GetComponent<EnemyMove>();
     }
     private void OnEnable()
     {
@@ -45,10 +40,9 @@ public class EnemyAI : MonoBehaviour
             {
                     state = State.ATTACK;
             }
-            else if(dist < traceDist)
+            else if(dist < traceDist && enemyMove.isTrace)
             {
                 state = State.TRACE;
-                
             }
             else
             {
@@ -65,28 +59,16 @@ public class EnemyAI : MonoBehaviour
             switch(state)
             {
                 case State.IDLE:
-                    Debug.Log("Idle");
-                    enemyMove.isTrace = false;
-                    enemyFire.isAttack = false;
-                    animator.SetBool("IsMove", false);
+                    IdleState();
                     break;
                 case State.PATROL:
-                    enemyMove.isTrace = false;
-                    enemyFire.isAttack = false;
-                    animator.SetBool("IsMove", true);
-                    moveHandler();
+                    PatrolState();
                     break;
                 case State.TRACE:
-                    animator.SetBool("IsMove", true);
-                    playerTraceHandler();
-                    enemyFire.isAttack = false;
+                    TraceState();
                     break;
                 case State.ATTACK:
-                    animator.SetBool("IsMove", false);
-                    enemyMove.isTrace = false;
-                    enemyFire.isAttack = true;
-                    Vector3 rot = playerTr.position - transform.position;
-                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(rot), 10f * Time.deltaTime);
+                    AttackState();
                     break;
                 case State.DIE:
                     EnemyDie();
@@ -94,12 +76,50 @@ public class EnemyAI : MonoBehaviour
             }
         }
     }
+
+    private void AttackState()
+    {
+        animator.SetBool("IsMove", false);
+        enemyMove.isTrace = false;
+        enemyFire.isAttack = true;
+
+        Vector3 rot = playerTr.position - transform.position;
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(rot), 10f * Time.deltaTime);
+        transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
+    }
+
+    private void TraceState()
+    {
+        animator.SetBool("IsMove", true);
+        enemyMove.OnPlayerTrace();
+        enemyFire.isAttack = false;
+    }
+
+    private void PatrolState()
+    {
+        enemyMove.isTrace = false;
+        enemyFire.isAttack = false;
+        animator.SetBool("IsMove", true);
+        enemyMove.RacastStairs();
+    }
+
+    private void IdleState()
+    {
+        Debug.Log("Idle");
+        enemyMove.isTrace = false;
+        enemyFire.isAttack = false;
+        animator.SetBool("IsMove", false);
+    }
+
     public void EnemyDie()
     {
+        animator.SetBool("IsMove", false);
         state = State.DIE;
         Debug.Log("Die");
         enemyMove.isTrace = false;
         enemyFire.isAttack = false;
+        isDie = true;
+        gameObject.SetActive(false);
         GameManager.Instance.GetComponent<LoopSpawn>().enemySpawnCount--;
     }
 }

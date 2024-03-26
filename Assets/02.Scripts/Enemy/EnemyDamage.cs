@@ -13,12 +13,17 @@ public class EnemyDamage : MonoBehaviour
     private GameObject _effect;
     void Start()
     {
-        animator = GetComponent<Animator>();
+
+        animator = transform.GetChild(0).GetComponent<Animator>();
         maxHp = 100;
         hp = maxHp;
         _effect = ObjectPoolingManager.objPooling.GetHitEffect();
         enemyAI = GetComponent<EnemyAI>();
     }
+    void OnEnable()
+    {
+    }
+
     private void OnCollisionEnter(Collision col)
     {
         if(col.gameObject.CompareTag(bulletTag))

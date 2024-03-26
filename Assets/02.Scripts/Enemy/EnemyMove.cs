@@ -4,11 +4,11 @@ using UnityEngine;
 using UnityEngine.AI;
 public class EnemyMove : MonoBehaviour
 {
-    CharacterController ch;
-    Transform[] stairsPoint;
-    Transform playerTr;
-    List<Transform> stairList = new List<Transform>();
-    float walkSpeed;
+   // private CharacterController ch;
+    private Transform[] stairsPoint;
+    private Transform playerTr;
+   [SerializeField] private List<Transform> stairList = new List<Transform>();
+    public float walkSpeed;
     private int nextIdx = 0;
     private float dist;
     private Vector3 disOne;
@@ -16,38 +16,33 @@ public class EnemyMove : MonoBehaviour
     private float RayDistance;
     private float rayPer;
     public bool isTrace;
-    RaycastHit frontHit;
-    RaycastHit righHit;
-    RaycastHit leftHit;
-    private void Awake()
+    private RaycastHit frontHit;
+    private RaycastHit righHit;
+    private RaycastHit leftHit;
+    void Start()
     {
-        ch = GetComponent<CharacterController>();
+       // ch = GetComponent<CharacterController>();
         playerTr = GameObject.FindWithTag("Player").transform;
-        walkSpeed = 2f;
-        rayPer = 2;
-        RayDistance = 1;
         isStair = false;
         stairsPoint = GameObject.Find("StairPoints").GetComponentsInChildren<Transform>();
         isTrace = false;
-        for(int i = 0; i < stairsPoint.Length; i++)
+        for (int i = 0; i < stairsPoint.Length; i++)
         {
             stairList.Add(stairsPoint[i]);
         }
         stairList.RemoveAt(0);
-
+        walkSpeed = 1.5f;
+        rayPer = 2;
+        RayDistance = 1;
     }
     private void OnEnable()
     {
-        EnemyAI.moveHandler += RacastStairs;
-        EnemyAI.playerTraceHandler += OnPlayerTrace;
+
     }
 
-    private void RacastStairs()
+    public void RacastStairs()
     {
         if (isTrace) return;
-        Vector3 plDir = new Vector3(0, 0, 1);
-        plDir = transform.TransformDirection(plDir);
-
         disOne = (stairList[nextIdx].position - transform.position).normalized;
         dist = Vector3.Distance(stairList[nextIdx].position, transform.position);
         Vector3 height = new Vector3(transform.position.x, transform.position.y + 0.25f, transform.position.z);
@@ -65,7 +60,7 @@ public class EnemyMove : MonoBehaviour
         }
         else if (isStair)
         {
-            ch.Move(disOne * walkSpeed * Time.deltaTime);
+            transform.Translate(disOne * walkSpeed * Time.deltaTime);
         }
         if (dist <= 0.5f)
         {
@@ -84,12 +79,12 @@ public class EnemyMove : MonoBehaviour
     }
    private void RayMove()
     {
-        Vector3 plDir = new Vector3(0f, 0f, 1).normalized;
+        Vector3 plDir = new Vector3(0f, 0f, 1);
         Vector3 caracRot = transform.localEulerAngles;
         caracRot.x = caracRot.z = 0f;
         transform.localEulerAngles = caracRot;
-        plDir = transform.TransformDirection(plDir);
-        ch.Move(plDir * Time.deltaTime * walkSpeed);
+        //plDir = transform.TransformDirection(plDir);
+        transform.Translate(plDir * Time.deltaTime * walkSpeed);
         Vector3 rayHeight = new Vector3(transform.position.x, transform.position.y + 0.25f, transform.position.z);
         Debug.DrawRay(rayHeight, transform.forward * 5f, Color.yellow);
         Debug.DrawRay(rayHeight, transform.right * 5f, Color.yellow);
@@ -113,18 +108,23 @@ public class EnemyMove : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, rot, 10f * Time.deltaTime);         
         }
     }
-    private void OnPlayerTrace()
+    public void OnPlayerTrace()
     {
-        isTrace = true;
+        /*if (!isTrace) return;
+        float distY = playerTr.position.y - transform.position.y;
+        if (distY > 1)
+        {
+            isTrace = false;
+        }
+        else if(distY < 1)
+        {
+            isTrace = true;
+        }
+        isTrace = true;*/
         Vector3 plDis = (playerTr.position - transform.position).normalized;
-        ch.Move(plDis * walkSpeed * Time.deltaTime);
+        transform.Translate(plDis * walkSpeed * Time.deltaTime);
         Vector3 plRot = playerTr.position - transform.position;
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(plRot), 10f * Time.deltaTime);
-    }
-    private void OnDisable()
-    {
-        EnemyAI.moveHandler -= RacastStairs;
-        EnemyAI.playerTraceHandler -= OnPlayerTrace;
     }
 }
 

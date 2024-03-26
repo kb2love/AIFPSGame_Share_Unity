@@ -17,7 +17,7 @@ public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         canvasGroup = GetComponent<CanvasGroup>();
         itemTr = GetComponent<RectTransform>();
         inventoryTr = GameObject.Find("Image-Inventory").GetComponent<RectTransform>();
-        fireCtrl = GameObject.FindWithTag("Player").GetComponent<FireCtrl>();
+        fireCtrl = FindObjectOfType<FireCtrl>();
         rightHand = GameObject.Find("Inventory_equipment").transform.GetChild(0).GetComponent<RectTransform>();
     }
     public void OnDrag(PointerEventData eventData)

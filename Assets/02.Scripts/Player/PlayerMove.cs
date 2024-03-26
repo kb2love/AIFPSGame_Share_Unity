@@ -53,7 +53,7 @@ public class PlayerMove : MonoBehaviour
             animator.SetFloat(speedX, hor, 0.1f, Time.deltaTime);
             animator.SetFloat(speedY, ver, 0.1f, Time.deltaTime);
         }
-        plDir = new Vector3(hor, 0, ver).normalized;
+        plDir = new Vector3(hor, 0, ver);
         moveVelocity = plDir * (isSprint ? runSpeed : walkSpeed) * Time.deltaTime;
         GravityAndJump();
         moveVelocity.y = hei;

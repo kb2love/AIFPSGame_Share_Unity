@@ -18,11 +18,12 @@ public class LoopSpawn : MonoBehaviour
     public int spawnRfBulletCount;
     public int spawnMadicineCount;
     public int enemySpawnCount;
+    public float spawnTime;
     private HashSet<int> e_spawnIdx = new HashSet<int>();
     private HashSet<int> spawnIdx = new HashSet<int>();
     void Start()
     {
-        playerDamage =GameObject.FindWithTag("Player").GetComponent<PlayerDamage>();
+        playerDamage =FindObjectOfType<PlayerDamage>();
         rifleItem = Resources.Load<GameObject>("Spawn/RifleItem");
         shotgunItem = Resources.Load<GameObject>("Spawn/ShotGunItem");
         spawnPoints = GameObject.Find("SpawnPointsGroup").GetComponentsInChildren<Transform>();
@@ -61,9 +62,9 @@ public class LoopSpawn : MonoBehaviour
         spawnIdx.Add(spawnTrIdx);
         while (!playerDamage.isDie )
         {
-            float spawnTime = Random.Range(10f, 30f);
+            spawnTime = Random.Range(2f, 3f);
             yield return new WaitForSeconds(spawnTime);
-            if (spawnRfBulletCount <= 10)
+            if (spawnRfBulletCount < 10)
             {
                 do
                 {
@@ -76,7 +77,7 @@ public class LoopSpawn : MonoBehaviour
                 _rifleBulletBox.SetActive(true);
                 spawnRfBulletCount++;
             }
-            if (spawnSgBulletCount <= 10)
+            if (spawnSgBulletCount < 10)
             {
                 do
                 {
@@ -89,7 +90,7 @@ public class LoopSpawn : MonoBehaviour
                 _shotgunBulletBox.SetActive(true);
                 spawnSgBulletCount++;
             }
-            if (spawnMadicineCount <= 10)
+            if (spawnMadicineCount < 10)
             {
                 do
                 {
@@ -102,7 +103,7 @@ public class LoopSpawn : MonoBehaviour
                 _madicine.SetActive(true);
                 spawnMadicineCount++;
             }
-            if(enemySpawnCount <= 5)
+            if (enemySpawnCount <= 5)
             {
                 do
                 {
@@ -110,7 +111,7 @@ public class LoopSpawn : MonoBehaviour
                 } while (e_spawnIdx.Contains(e_spawnTrIdx));
                 e_spawnIdx.Add(e_spawnTrIdx);
                 GameObject _enemy = ObjectPoolingManager.objPooling.GetEnemy();
-                _enemy.transform.position = enemySpanwPointList[e_spawnTrIdx].position; 
+                _enemy.transform.position = enemySpanwPointList[e_spawnTrIdx].position;
                 _enemy.transform.rotation = Quaternion.identity;
                 _enemy.SetActive(true);
                 enemySpawnCount++;
