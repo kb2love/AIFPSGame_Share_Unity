@@ -117,7 +117,6 @@ public class EnemyAI : MonoBehaviour
     public void EnemyDie()
     {
         animator.SetBool("IsMove", false);
-        Debug.Log("Die");
         enemyMove.isTrace = false;
         enemyFire.isAttack = false;
         GetComponent<Rigidbody>().useGravity = false;

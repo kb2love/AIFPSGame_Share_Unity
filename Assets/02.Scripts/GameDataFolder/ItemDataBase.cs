@@ -24,6 +24,15 @@ public class ItemDataBase : MonoBehaviour
         SHOTGUNBULLET,
         GRENADE
     }
+    [System.Serializable]
+    public class ItemData
+    {
+        public ItemType itemType;
+        public string itemName;
+        public Sprite itemImage;
+        public float itemValue = 30;
+        public List<ItemData> itemDataList = new List<ItemData>();
+    }
     private void Awake()
     {
         itemDataBase = this;
@@ -33,14 +42,5 @@ public class ItemDataBase : MonoBehaviour
         itemHealCount = 0;
         itemHealValue = 20;
     }
-}
-[System.Serializable]
-public class ItemData
-{
-    public ItemType itemType;
-    public string itemName;
-    public Sprite itemImage;
-    public float itemValue = 30;
-    public List<ItemData> itemDataList = new List<ItemData>();
 }
 

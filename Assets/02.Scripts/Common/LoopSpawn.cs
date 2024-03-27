@@ -14,7 +14,6 @@ public class LoopSpawn : MonoBehaviour
     private GameObject rifleItem;
     private GameObject shotgunItem;
     [SerializeField] private int spawnTrIdx;
-    private int e_spawnTrIdx;
     public int spawnSgBulletCount;
     public int spawnRfBulletCount;
     public int spawnMadicineCount;
@@ -25,7 +24,6 @@ public class LoopSpawn : MonoBehaviour
     public int enemyMaxSpawnCount;
     public int spawnTime;
     private int allItemCount;
-    private HashSet<int> e_spawnIdx = new HashSet<int>();
     [SerializeField] private HashSet<int> spawnIdx = new HashSet<int>();
     void Start()
     {
@@ -43,10 +41,8 @@ public class LoopSpawn : MonoBehaviour
         spawnRfMaxBulletCount = 10;
         spawnMaxMadicineCount = 10;
         enemyMaxSpawnCount = 5;
-        e_spawnTrIdx = 0;
         allItemCount = 0;
         spawnIdx.Clear();
-        e_spawnIdx.Clear();
         for (int i = 1; i < spawnPoints.Length; i++)
         {
             spawnPointsList.Add(spawnPoints[i]);
@@ -143,23 +139,12 @@ public class LoopSpawn : MonoBehaviour
             }
             if (enemySpawnCount < enemyMaxSpawnCount)
             {
-                do
-                {
-                    e_spawnTrIdx = Random.Range(0, enemySpanwPointList.Count);
-                } while (e_spawnIdx.Contains(e_spawnTrIdx));
-                e_spawnIdx.Add(e_spawnTrIdx);
+
                 GameObject _enemy = ObjectPoolingManager.objPooling.GetEnemy();
-                _enemy.transform.position = enemySpanwPointList[e_spawnTrIdx].position;
+                _enemy.transform.position = enemySpanwPointList[enemySpawnCount].position;
                 _enemy.transform.rotation = Quaternion.identity;
                 _enemy.SetActive(true);
                 enemySpawnCount++;
-                int plue = 0;
-                plue++;
-                if (plue == enemyMaxSpawnCount-1)
-                {
-                    plue = 0;
-                    e_spawnIdx.Clear();
-                }
             }
         }
     }

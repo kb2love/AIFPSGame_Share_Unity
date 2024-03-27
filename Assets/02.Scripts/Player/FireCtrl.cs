@@ -56,7 +56,6 @@ public class FireCtrl : MonoBehaviour
         bulletText = weaponImage.transform.parent.GetChild(1).GetComponent<Text>();
         playerDamage = GetComponent<PlayerDamage>();
         Invoke("ColiderCol", 0.2f);
-
         curTime = Time.time;
         fireTIme = 0.1f;
 
@@ -123,7 +122,9 @@ public class FireCtrl : MonoBehaviour
         {
             if (!isReload && !tabOn && rifleBulletCount > 0)
             {
-                ShootFire(rifleFlash, "RifleFlashStop", shotgunBulletCount, shotgunClip, ItemDataBase.itemDataBase.shotgunBulletCount);
+                ShootFire(rifleFlash, "RifleFlashStop", rifleBulletCount, rifleClip, ItemDataBase.itemDataBase.rifleBulletCount);
+                rifleBulletCount--;
+                Debug.Log(rifleBulletCount);
                 if (rifleBulletCount == 0 & ItemDataBase.itemDataBase.rifleBulletCount > 0)
                     StartCoroutine(RifleReload());
             }
@@ -141,7 +142,8 @@ public class FireCtrl : MonoBehaviour
         {
             if (!isReload && !tabOn && shotgunBulletCount > 0)
             {
-                ShootFire(shotgunFlahs, "ShotGunFlashStop",shotgunBulletCount,shotgunClip,ItemDataBase.itemDataBase.shotgunBulletCount);
+                ShootFire(shotgunFlahs, "ShotGunFlashStop", shotgunBulletCount,shotgunClip,ItemDataBase.itemDataBase.shotgunBulletCount);
+                shotgunBulletCount--;
                 if (shotgunBulletCount == 0 && ItemDataBase.itemDataBase.shotgunBulletCount > 0)
                     StartCoroutine(ShotGunReload());
             }
@@ -210,7 +212,6 @@ public class FireCtrl : MonoBehaviour
         particle.Play();
         Invoke(st, 0.1f);
         animator.SetTrigger(aniFire);
-        --bulletCount;
         source.PlayOneShot(clip, 1.0f);
         bulletText.text = bulletCount.ToString() + " / " + itemDatabaseCount.ToString();
 
