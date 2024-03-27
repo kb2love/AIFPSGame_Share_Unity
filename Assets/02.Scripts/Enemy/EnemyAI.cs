@@ -23,10 +23,13 @@ public class EnemyAI : MonoBehaviour
         enemyMove = GetComponent<EnemyMove>();
         attackDist = 5f;
         traceDist = 10f;
-        isDie = false;
     }
     private void OnEnable()
     {
+        GetComponent<Rigidbody>().useGravity = true;
+        GetComponent<Rigidbody>().isKinematic = false;
+        GetComponent<CapsuleCollider>().isTrigger = false;
+        isDie = false;
         StartCoroutine(EnemyScope());
         StartCoroutine(EnemyMotion());  
     }
@@ -114,12 +117,22 @@ public class EnemyAI : MonoBehaviour
     public void EnemyDie()
     {
         animator.SetBool("IsMove", false);
-        state = State.DIE;
         Debug.Log("Die");
         enemyMove.isTrace = false;
         enemyFire.isAttack = false;
+        GetComponent<Rigidbody>().useGravity = false;
+        GetComponent<Rigidbody>().isKinematic = true;
+        GetComponent<CapsuleCollider>().isTrigger = true;
         isDie = true;
+        Invoke("OffObject", 2.0f);
+    }
+    private void OffObject()
+    {
         gameObject.SetActive(false);
         GameManager.Instance.GetComponent<LoopSpawn>().enemySpawnCount--;
+    }
+    void OnDisable()
+    {
+
     }
 }

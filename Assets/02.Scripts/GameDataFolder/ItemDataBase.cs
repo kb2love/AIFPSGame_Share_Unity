@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static ItemDataBase;
 
 public class ItemDataBase : MonoBehaviour
 {
@@ -10,10 +11,9 @@ public class ItemDataBase : MonoBehaviour
     public string itemName;
     public Sprite itemImage;
     public int rifleBulletCount;
-    public float rifleBulletDamage;
+    public float BulletDamage;
     public int shotgunBulletCount;
-    public float shotgunBulletDamage;
-    public float itemHealCount;
+    public int itemHealCount;
     public float itemHealValue;
     public enum ItemType
     {
@@ -22,27 +22,25 @@ public class ItemDataBase : MonoBehaviour
         SHOTGUN,
         RIFLEBULLET,
         SHOTGUNBULLET,
-        ARMOR,
         GRENADE
     }
-    [System.Serializable]
-    public class ItemData
-    {
-        public ItemType itemType;
-        public string itemName;
-        public Sprite itemImage;
-        public float itemValue = 30;
-        public List<ItemData> itemDataList = new List<ItemData>();
-    }
-
     private void Awake()
     {
         itemDataBase = this;
         rifleBulletCount = 0;
-        rifleBulletDamage = 15;
+        BulletDamage = 0;
         shotgunBulletCount = 0;
-        shotgunBulletDamage = 50;
         itemHealCount = 0;
         itemHealValue = 20;
     }
 }
+[System.Serializable]
+public class ItemData
+{
+    public ItemType itemType;
+    public string itemName;
+    public Sprite itemImage;
+    public float itemValue = 30;
+    public List<ItemData> itemDataList = new List<ItemData>();
+}
+

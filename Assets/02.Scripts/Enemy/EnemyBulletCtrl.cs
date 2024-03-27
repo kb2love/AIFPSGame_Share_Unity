@@ -10,7 +10,7 @@ public class EnemyBulletCtrl : MonoBehaviour
     public float damage;
     void Awake()
     {
-        damage = ItemDataBase.itemDataBase.rifleBulletDamage;
+        damage = ItemDataBase.itemDataBase.BulletDamage;
         rb = GetComponent<Rigidbody>();
         trailRenderer = GetComponent<TrailRenderer>();
         bulletSpeed = 1000f;

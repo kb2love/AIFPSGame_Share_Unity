@@ -16,13 +16,13 @@ public class EnemyFire : MonoBehaviour
     EnemyAI enemyAI;
     void Start()
     {
-        isAttack = false;
         maxBulletCount = 20;
         bulletCount = maxBulletCount;
-        isReload = false;
     }
     private void OnEnable()
     {
+        isAttack = false;
+        isReload = false;
         animator = transform.GetChild(0).GetComponent<Animator>();
         firePos = transform.GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetComponent<Transform>();
         shotFlash = firePos.transform.GetChild(0).GetComponent<ParticleSystem>();

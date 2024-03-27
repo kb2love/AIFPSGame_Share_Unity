@@ -10,7 +10,7 @@ public class BulletCtlr : MonoBehaviour
     public float damage;
     void Awake()
     {
-        damage = ItemDataBase.itemDataBase.rifleBulletDamage;
+        damage = 15;
         rb = GetComponent<Rigidbody>();
         trailRenderer = GetComponent<TrailRenderer>();
         bulletSpeed = 1000f;
@@ -19,6 +19,7 @@ public class BulletCtlr : MonoBehaviour
     {
         rb.AddForce(transform.forward * bulletSpeed);
         Invoke("OffBullet", 3.0f);
+        damage = ItemDataBase.itemDataBase.BulletDamage;
     }
     void OffBullet()
     {

@@ -42,11 +42,13 @@ public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         {
             fireCtrl.isRifle = true;
             fireCtrl.isShotGun = false;
+            fireCtrl.ChangeRifle();
         }
         else if(itemTr.parent == rightHand && this.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)
         {
             fireCtrl.isShotGun = true;
             fireCtrl.isRifle = false;
+            fireCtrl.ChangeShotGun();
         }
         else if(itemTr.parent != rightHand && this.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLE )
         {

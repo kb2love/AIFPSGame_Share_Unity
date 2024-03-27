@@ -6,7 +6,7 @@ public class EnemyDamage : MonoBehaviour
 {
     private Animator animator;
     private string bulletTag = "Bullet";
-    private int hp;
+    [SerializeField] private int hp;
     private int maxHp;
     private readonly int aniE_Hit = Animator.StringToHash("EnemyHit");
     private EnemyAI enemyAI;
@@ -15,13 +15,13 @@ public class EnemyDamage : MonoBehaviour
     {
 
         animator = transform.GetChild(0).GetComponent<Animator>();
-        maxHp = 100;
-        hp = maxHp;
         _effect = ObjectPoolingManager.objPooling.GetHitEffect();
         enemyAI = GetComponent<EnemyAI>();
     }
     void OnEnable()
     {
+        maxHp = 100;
+        hp = maxHp;
     }
 
     private void OnCollisionEnter(Collision col)
@@ -40,7 +40,6 @@ public class EnemyDamage : MonoBehaviour
             if(hp <= 0)
             {
                 enemyAI.EnemyDie();
-                
             }
         }
     }

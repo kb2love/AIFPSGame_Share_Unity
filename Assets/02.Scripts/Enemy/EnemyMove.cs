@@ -23,9 +23,7 @@ public class EnemyMove : MonoBehaviour
     {
        // ch = GetComponent<CharacterController>();
         playerTr = GameObject.FindWithTag("Player").transform;
-        isStair = false;
         stairsPoint = GameObject.Find("StairPoints").GetComponentsInChildren<Transform>();
-        isTrace = false;
         for (int i = 0; i < stairsPoint.Length; i++)
         {
             stairList.Add(stairsPoint[i]);
@@ -37,7 +35,8 @@ public class EnemyMove : MonoBehaviour
     }
     private void OnEnable()
     {
-
+        isStair = false;
+        isTrace = false;
     }
 
     public void RacastStairs()

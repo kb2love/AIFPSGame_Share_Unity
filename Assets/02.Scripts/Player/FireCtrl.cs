@@ -20,8 +20,7 @@ public class FireCtrl : MonoBehaviour
     private RectTransform itemEmptyGroup;
     private MeshRenderer rifleMesh;
     private MeshRenderer shotgunMesh;
-    private BulletCtlr bulletCtlr;
-    private SphereCollider bulletColider;
+    [SerializeField] private SphereCollider[] bulletColider;
     private bool tabOn;
     private float curTime;
     private float fireTIme;
@@ -56,8 +55,7 @@ public class FireCtrl : MonoBehaviour
         weaponImage = GameObject.Find("Panel-Weapon").transform.GetChild(0).GetComponent<Image>();
         bulletText = weaponImage.transform.parent.GetChild(1).GetComponent<Text>();
         playerDamage = GetComponent<PlayerDamage>();
-        bulletCtlr = Resources.Load<BulletCtlr>("Weapon/Bullet");
-        bulletColider = bulletCtlr.GetComponent<SphereCollider>();
+        Invoke("ColiderCol", 0.2f);
 
         curTime = Time.time;
         fireTIme = 0.1f;
@@ -95,7 +93,10 @@ public class FireCtrl : MonoBehaviour
             TabInventory();
         }
     }
-
+    private void ColiderCol()
+    {
+        bulletColider = GameObject.Find("PlayerBulletGroup").GetComponentsInChildren<SphereCollider>();
+    }
     private void TabInventory()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
@@ -118,17 +119,11 @@ public class FireCtrl : MonoBehaviour
     
     private void RifleFireAndReload()
     {
-        isShotGun = false;
-        shotgunMesh.enabled = false;
-        rifleMesh.enabled = true;
-        bulletCtlr.damage = (int)ItemDataBase.itemDataBase.rifleBulletDamage;
-        bulletColider.radius = 0.05f;
-        bulletText.text = rifleBulletCount.ToString() + " / " + ItemDataBase.itemDataBase.rifleBulletCount.ToString();
         if (Time.time - curTime > fireTIme && Input.GetMouseButton(0) && isRifle)
         {
             if (!isReload && !tabOn && rifleBulletCount > 0)
             {
-                RifleFire();
+                ShootFire(rifleFlash, "RifleFlashStop", shotgunBulletCount, shotgunClip, ItemDataBase.itemDataBase.shotgunBulletCount);
                 if (rifleBulletCount == 0 & ItemDataBase.itemDataBase.rifleBulletCount > 0)
                     StartCoroutine(RifleReload());
             }
@@ -137,19 +132,16 @@ public class FireCtrl : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R) && rifleBulletCount != ItemDataBase.itemDataBase.rifleBulletCount && !isReload & ItemDataBase.itemDataBase.rifleBulletCount > 0 && rifleBulletCount < 30 && isRifle)
             StartCoroutine(RifleReload());
     }
+
+    
+
     private void ShotGunFireAndReload()
     {
-        isRifle = false;
-        rifleMesh.enabled = false;
-        shotgunMesh.enabled = true;
-        bulletCtlr.damage = (int)ItemDataBase.itemDataBase.shotgunBulletDamage;
-        bulletColider.radius = 0.2f;
-        bulletText.text = shotgunBulletCount.ToString() + " / " + ItemDataBase.itemDataBase.shotgunBulletCount.ToString();
         if (Input.GetMouseButtonDown(0) && isShotGun)
         {
             if (!isReload && !tabOn && shotgunBulletCount > 0)
             {
-                ShotGunFire();
+                ShootFire(shotgunFlahs, "ShotGunFlashStop",shotgunBulletCount,shotgunClip,ItemDataBase.itemDataBase.shotgunBulletCount);
                 if (shotgunBulletCount == 0 && ItemDataBase.itemDataBase.shotgunBulletCount > 0)
                     StartCoroutine(ShotGunReload());
             }
@@ -157,7 +149,32 @@ public class FireCtrl : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R) && shotgunBulletCount != ItemDataBase.itemDataBase.shotgunBulletCount && !isReload & ItemDataBase.itemDataBase.shotgunBulletCount > 0 && shotgunBulletCount < 10 && isShotGun)
             StartCoroutine(ShotGunReload());
     }
-    void RifleFire()
+
+    public void ChangeShotGun()
+    {
+        isRifle = false;
+        rifleMesh.enabled = false;
+        shotgunMesh.enabled = true;
+        ItemDataBase.itemDataBase.BulletDamage = 50;
+        for (int i = 1; i < bulletColider.Length; i++)
+        {
+            bulletColider[i].radius = 0.2f;
+        }
+        bulletText.text = shotgunBulletCount.ToString() + " / " + ItemDataBase.itemDataBase.shotgunBulletCount.ToString();
+    }
+    public void ChangeRifle()
+    {
+        isShotGun = false;
+        shotgunMesh.enabled = false;
+        rifleMesh.enabled = true;
+        ItemDataBase.itemDataBase.BulletDamage = 15;
+        for (int i = 1; i < bulletColider.Length; i++)
+        {
+            bulletColider[i].radius = 0.05f;
+        }
+        bulletText.text = rifleBulletCount.ToString() + " / " + ItemDataBase.itemDataBase.rifleBulletCount.ToString();
+    }
+    /*void RifleFire()
     {
         GameObject _bullet = ObjectPoolingManager.objPooling.GetPlayerBullet();
         _bullet.transform.position = rifleFirePos.position;
@@ -169,8 +186,8 @@ public class FireCtrl : MonoBehaviour
         --rifleBulletCount;
         source.PlayOneShot(rifleClip, 1.0f);
         bulletText.text = rifleBulletCount.ToString() + " / " + ItemDataBase.itemDataBase.rifleBulletCount.ToString();
-    }
-    void ShotGunFire()
+    }*/
+    /*void ShotGun()
     {
         GameObject _bullet = ObjectPoolingManager.objPooling.GetPlayerBullet();
         _bullet.transform.position = shotgunFirePos.position;
@@ -182,6 +199,20 @@ public class FireCtrl : MonoBehaviour
         --shotgunBulletCount;
         source.PlayOneShot(shotgunClip, 1.0f);
         bulletText.text = shotgunBulletCount.ToString() + " / " + ItemDataBase.itemDataBase.shotgunBulletCount.ToString();
+
+    }*/
+    void ShootFire(ParticleSystem particle, string st, int bulletCount, AudioClip clip, int itemDatabaseCount)
+    {
+        GameObject _bullet = ObjectPoolingManager.objPooling.GetPlayerBullet();
+        _bullet.transform.position = shotgunFirePos.position;
+        _bullet.transform.rotation = shotgunFirePos.rotation;
+        _bullet.SetActive(true);
+        particle.Play();
+        Invoke(st, 0.1f);
+        animator.SetTrigger(aniFire);
+        --bulletCount;
+        source.PlayOneShot(clip, 1.0f);
+        bulletText.text = bulletCount.ToString() + " / " + itemDatabaseCount.ToString();
 
     }
     IEnumerator RifleReload()
