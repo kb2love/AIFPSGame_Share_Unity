@@ -5,6 +5,9 @@ using UnityEngine.AI;
 
 public class LoopSpawn : MonoBehaviour
 {
+    [SerializeField] private EnemyData enemyData;
+    [SerializeField] private MadicinData madicinData;
+    [SerializeField] private GunData gunData;
     private Transform[] spawnPoints;
     private Transform[] enemySpanwPoint;
     private Transform gunSpawnPoint;
@@ -13,18 +16,17 @@ public class LoopSpawn : MonoBehaviour
     private PlayerDamage playerDamage;
     private GameObject rifleItem;
     private GameObject shotgunItem;
-    [SerializeField] private int spawnTrIdx;
+    private int spawnTrIdx;
+    private int e_spawnTrIdx;
+    private int e_Count;
     public int spawnSgBulletCount;
     public int spawnRfBulletCount;
     public int spawnMadicineCount;
-    public int spawnSgMaxBulletCount;
-    public int spawnRfMaxBulletCount;
-    public int spawnMaxMadicineCount;
     public int enemySpawnCount;
-    public int enemyMaxSpawnCount;
-    public int spawnTime;
+    public int allSpawnTime;
     private int allItemCount;
-    [SerializeField] private HashSet<int> spawnIdx = new HashSet<int>();
+    private HashSet<int> e_spawnIdx = new HashSet<int>();
+    private HashSet<int> spawnIdx = new HashSet<int>();
     void Start()
     {
         playerDamage =FindObjectOfType<PlayerDamage>();
@@ -37,10 +39,6 @@ public class LoopSpawn : MonoBehaviour
         spawnRfBulletCount = 0;
         spawnMadicineCount = 0;
         enemySpawnCount = 0;
-        spawnSgMaxBulletCount = 10;
-        spawnRfMaxBulletCount = 10;
-        spawnMaxMadicineCount = 10;
-        enemyMaxSpawnCount = 5;
         allItemCount = 0;
         spawnIdx.Clear();
         for (int i = 1; i < spawnPoints.Length; i++)
@@ -57,19 +55,13 @@ public class LoopSpawn : MonoBehaviour
     {
        
         yield return new WaitForSeconds(2f);
-        /*do
-        {
-            spawnTrIdx = Random.Range(0, spawnPointsList.Count);
-        } while (spawnIdx.Contains(spawnTrIdx));
-        spawnIdx.Add(spawnTrIdx);
-        Instantiate(rifleItem, spawnPointsList[spawnTrIdx].position, Quaternion.identity);*/
         Instantiate(rifleItem, gunSpawnPoint.position, Quaternion.identity);
         GameObject _rifleBulletBox1 = ObjectPoolingManager.objPooling.GetRifleBulletBox();
         _rifleBulletBox1.transform.position = gunSpawnPoint.position + (Vector3.right * 0.5f);
         _rifleBulletBox1.transform.rotation = Quaternion.identity;
         _rifleBulletBox1.SetActive(true);
         spawnRfBulletCount++;
-        --spawnRfMaxBulletCount;
+        --gunData.Rf_SpawnCount;
         do
         {
             spawnTrIdx = Random.Range(0, spawnPointsList.Count);
@@ -78,16 +70,15 @@ public class LoopSpawn : MonoBehaviour
         spawnIdx.Add(spawnTrIdx);
         while (!playerDamage.isDie )
         {
-            spawnTime = Random.Range(2, 3);
-            yield return new WaitForSeconds(spawnTime);
-            if (spawnRfBulletCount < spawnRfMaxBulletCount)
+            allSpawnTime = Random.Range(2, 3);
+            yield return new WaitForSeconds(allSpawnTime);
+            if (spawnRfBulletCount < gunData.Rf_SpawnCount)
             {
                 do
                 {
                     spawnTrIdx = Random.Range(0, spawnPointsList.Count);
-                } while (spawnIdx.Contains(spawnTrIdx));
+                } while (spawnIdx.Contains(spawnTrIdx) && spawnIdx.Count < spawnPointsList.Count);
                 spawnIdx.Add(spawnTrIdx);
-                Debug.Log(spawnTrIdx);
                 GameObject _rifleBulletBox = ObjectPoolingManager.objPooling.GetRifleBulletBox();
                 _rifleBulletBox.transform.position = spawnPointsList[spawnTrIdx].transform.position;
                 _rifleBulletBox.transform.rotation = Quaternion.identity;
@@ -99,14 +90,13 @@ public class LoopSpawn : MonoBehaviour
                     spawnIdx.Clear();
                 }
             }
-            if (spawnSgBulletCount < spawnSgMaxBulletCount)
+            if (spawnSgBulletCount < gunData.Sg_SpawnCount)
             {
                 do
                 {
                     spawnTrIdx = Random.Range(0, spawnPointsList.Count);
-                } while (spawnIdx.Contains(spawnTrIdx));
+                } while (spawnIdx.Contains(spawnTrIdx) && spawnIdx.Count < spawnPointsList.Count);
                 spawnIdx.Add(spawnTrIdx);
-                Debug.Log(spawnTrIdx);
                 GameObject _shotgunBulletBox = ObjectPoolingManager.objPooling.GetShotGunBulletBox();
                 _shotgunBulletBox.transform.position = spawnPointsList[spawnTrIdx].position;
                 _shotgunBulletBox.transform.rotation = Quaternion.identity;
@@ -118,14 +108,13 @@ public class LoopSpawn : MonoBehaviour
                     spawnIdx.Clear();
                 }
             }
-            if (spawnMadicineCount < spawnMaxMadicineCount)
+            if (spawnMadicineCount < madicinData.m_SpawnCount)
             {
                 do
                 {
                     spawnTrIdx = Random.Range(0, spawnPointsList.Count);
-                } while (spawnIdx.Contains(spawnTrIdx));
+                } while (spawnIdx.Contains(spawnTrIdx) && spawnIdx.Count < spawnPointsList.Count);
                 spawnIdx.Add(spawnTrIdx);
-                Debug.Log(spawnTrIdx);
                 GameObject _madicine = ObjectPoolingManager.objPooling.GetMadicine();
                 _madicine.transform.position = spawnPointsList[spawnTrIdx].position;
                 _madicine.transform.rotation = Quaternion.identity;
@@ -137,14 +126,22 @@ public class LoopSpawn : MonoBehaviour
                     spawnIdx.Clear();
                 }
             }
-            if (enemySpawnCount < enemyMaxSpawnCount)
+            if (enemySpawnCount < enemyData.e_SpawnCount)
             {
-
+                do
+                {
+                    e_spawnTrIdx = Random.Range(0, enemySpanwPointList.Count);
+                } while (e_spawnIdx.Contains(e_spawnTrIdx) && e_spawnIdx.Count < enemySpanwPointList.Count);
                 GameObject _enemy = ObjectPoolingManager.objPooling.GetEnemy();
-                _enemy.transform.position = enemySpanwPointList[enemySpawnCount].position;
+                _enemy.transform.position = enemySpanwPointList[e_spawnTrIdx].position;
                 _enemy.transform.rotation = Quaternion.identity;
                 _enemy.SetActive(true);
                 enemySpawnCount++;
+                e_Count++;
+                if(e_Count >= enemySpanwPointList.Count-2)
+                {
+                    e_spawnIdx.Clear();
+                }
             }
         }
     }

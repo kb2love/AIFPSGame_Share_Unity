@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/01.Scenes/StartScene.unity
     guid: 846b96cf1a527554fbf84a525c39e5e1
   - enabled: 1
-    path: Assets/01.Scenes/Battle Scene Loop.unity
+    path: Assets/01.Scenes/BattleLoop Scene.unity
     guid: 0f7d0af0b6d06ed4cad665a799f0553e
   m_configObjects: {}

@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
+    [SerializeField] PlayerData playerData;
     private CharacterController ch;
     private Animator animator;
     private PlayerDamage playerDamage;
-    private float walkSpeed;
-    private float runSpeed;
     private float gravity;
     private float gravityValue;
     private float hor, ver;
     private float hei;
-    private float jumpForce;
     private bool isSprint;
     private Vector3 plDir;
     private Vector3 moveVelocity;
@@ -25,11 +23,8 @@ public class PlayerMove : MonoBehaviour
         ch = GetComponent<CharacterController>();
         animator = transform.GetChild(0).GetComponent<Animator>();
         playerDamage = GetComponent<PlayerDamage>();
-        walkSpeed = 3f;
-        runSpeed = 5f;
         gravityValue = -0.05f;
         gravity = gravityValue;
-        jumpForce = 0.03f;
         isSprint = false;
         StartCoroutine(PlayerMovement());
     }
@@ -54,7 +49,7 @@ public class PlayerMove : MonoBehaviour
             animator.SetFloat(speedY, ver, 0.1f, Time.deltaTime);
         }
         plDir = new Vector3(hor, 0, ver);
-        moveVelocity = plDir * (isSprint ? runSpeed : walkSpeed) * Time.deltaTime;
+        moveVelocity = plDir * (isSprint ? playerData.runSpeed : playerData.moveSpeed) * Time.deltaTime;
         GravityAndJump();
         moveVelocity.y = hei;
         moveVelocity = transform.TransformDirection(moveVelocity);
@@ -85,7 +80,7 @@ public class PlayerMove : MonoBehaviour
             gravity = gravityValue;
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                hei = jumpForce;
+                hei = playerData.jumpForce;
             }
         }
     }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyDamage : MonoBehaviour
 {
+    [SerializeField]
+    private EnemyData _enemyData;
     private Animator animator;
     private string bulletTag = "Bullet";
     [SerializeField] private int hp;
@@ -20,7 +22,7 @@ public class EnemyDamage : MonoBehaviour
     }
     void OnEnable()
     {
-        maxHp = 100;
+        maxHp = _enemyData.e_Hp;
         hp = maxHp;
     }
 
@@ -36,7 +38,6 @@ public class EnemyDamage : MonoBehaviour
             _effect.SetActive(true);
             Invoke("EffectOff", 1f);
             animator.SetTrigger(aniE_Hit);
-            Debug.Log(hp);
             if(hp <= 0)
             {
                 enemyAI.EnemyDie();

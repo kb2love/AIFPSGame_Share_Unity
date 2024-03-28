@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6faf2c0fa8982f3428881445289904e6, type: 3}
+  m_Name: GunData
+  m_EditorClassIdentifier: 
+  Sg_Count: 0
+  Sg_SpawnCount: 10
+  Rf_Count: 0
+  Rf_SpawnCount: 10
+  g_damage: 15
+  sgB_Sprite: {fileID: 21300000, guid: bbef690e2f46d914996e00aa9a8207e8, type: 3}
+  rfB_Sprite: {fileID: 21300000, guid: 2955dd9e6f801e145b4de022fed3a903, type: 3}
+  sg_Sprite: {fileID: 21300000, guid: 5c9a346ecdb82fa48bc4d0a25e74295e, type: 3}
+  rf_Sprite: {fileID: 21300000, guid: 1fdf57fd1b36113449cd424f828a8f00, type: 3}

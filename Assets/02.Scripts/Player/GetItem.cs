@@ -7,13 +7,11 @@ public class GetItem : MonoBehaviour
 {
     private string itemTag = "Item";
     private GameObject getItemPanel;
-    private PlayerDamage playerDamage;
     public bool isContact;
     [SerializeField] private List<GameObject> collidersSet = new List<GameObject>();
     void Awake()
     {
         getItemPanel = GameObject.Find("Canvas_ui").transform.GetChild(1).gameObject;
-        playerDamage = GetComponent<PlayerDamage>();
         isContact = false;
     }
     void Start()
@@ -29,58 +27,56 @@ public class GetItem : MonoBehaviour
             collidersSet.Clear();
             collidersSet.Add(other.gameObject);
             isContact = true;
-            Invoke("Contact", 0.1f);
+            StartCoroutine(GetItemPlayer());
         }
-    }
-    private void Contact()
-    {
-        StartCoroutine(GetItemPlayer());
     }
     IEnumerator GetItemPlayer()
     {
         while (isContact)
         {
             yield return new WaitForSeconds(0.002f);
-                if (collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.HEAL)
+            if (collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.HEAL)
+            { 
+                if (Input.GetKeyDown(KeyCode.F))
                 {
-                    if (Input.GetKeyDown(KeyCode.F))
-                    {
-                        GetItemF(collidersSet[0]);
-                        GameManager.Instance.AddItem(ItemDataBase.ItemType.HEAL);
-                    }
+                    GetItemF(collidersSet[0]);
+                    GameManager.Instance.AddItem(ItemDataBase.ItemType.HEAL);
                 }
-                else if (collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLE)
+            }
+            else if (collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLE)
+            {
+                if (Input.GetKeyDown(KeyCode.F))
                 {
-                    if (Input.GetKeyDown(KeyCode.F))
-                    {
-                        GetItemF(collidersSet[0]);
-                        GameManager.Instance.AddItem(ItemDataBase.ItemType.RIFLE);
-                    }
+                    GetItemF(collidersSet[0]);
+                    Debug.Log("왜두번될까");
+                    GameManager.Instance.AddItem(ItemDataBase.ItemType.RIFLE);
                 }
-                else if (collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)
+            }
+            else if (collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)
+            {
+                if (Input.GetKeyDown(KeyCode.F))
                 {
-                    if (Input.GetKeyDown(KeyCode.F))
-                    {
-                        GetItemF(collidersSet[0]);
-                        GameManager.Instance.AddItem(ItemDataBase.ItemType.SHOTGUN);
-                    }
+                    GetItemF(collidersSet[0]);
+                    GameManager.Instance.AddItem(ItemDataBase.ItemType.SHOTGUN);
                 }
-                else if (collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLEBULLET)
+            }
+            else if (collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLEBULLET)
+            {
+                if (Input.GetKeyDown(KeyCode.F))
                 {
-                    if (Input.GetKeyDown(KeyCode.F))
-                    {
-                        GetItemF(collidersSet[0]);
-                        GameManager.Instance.AddItem(ItemDataBase.ItemType.RIFLEBULLET);
-                    }
+                    GetItemF(collidersSet[0]);
+                    Debug.Log("왜두번될까");
+                    GameManager.Instance.AddItem(ItemDataBase.ItemType.RIFLEBULLET);
                 }
-                else if (collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUNBULLET)
+            }
+            else if (collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUNBULLET)
+            {
+                if (Input.GetKeyDown(KeyCode.F))
                 {
-                    if (Input.GetKeyDown(KeyCode.F))
-                    {
-                        GetItemF(collidersSet[0]);
-                        GameManager.Instance.AddItem(ItemDataBase.ItemType.SHOTGUNBULLET);
-                    }
+                    GetItemF(collidersSet[0]);
+                    GameManager.Instance.AddItem(ItemDataBase.ItemType.SHOTGUNBULLET);
                 }
+            }
         }
     }
 
@@ -89,7 +85,6 @@ public class GetItem : MonoBehaviour
         other.SetActive(false);
         getItemPanel.SetActive(false);
         isContact = false;
-        OnTriggerEnter(gameObject.GetComponent<Collider>());
     }
 
     void OnTriggerExit(Collider other)

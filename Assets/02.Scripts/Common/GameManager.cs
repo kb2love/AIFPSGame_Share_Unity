@@ -7,9 +7,13 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance = null;
+
+    [SerializeField] MadicinData madicinData;
+    [SerializeField] GunData gunData;
+    [SerializeField] PlayerData playerData;
     public List<Text> itemEmptyText = new List<Text>();
 
-    [SerializeField] private RectTransform[] itemEmptyRect;
+    private RectTransform[] itemEmptyRect;
     public List<RectTransform> itemEmptyRectList = new List<RectTransform>();
 
     private RectTransform[] imageDrop;
@@ -17,12 +21,6 @@ public class GameManager : MonoBehaviour
 
     private PlayerDamage playerDamage;
     private LoopSpawn loopSpawn;
-
-    private Sprite rifleBulletBoxSprite;
-    private Sprite shotgunBulletBoxSprite; 
-    private Sprite shotGunSprite;
-    private Sprite rifleSprite;
-    private Sprite healSprite;
 
     private FireCtrl fireCtrl;
     public int itemEmptyIdx;
@@ -43,13 +41,7 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
         }
         DontDestroyOnLoad(this.gameObject);
-
         fireCtrl = FindObjectOfType<FireCtrl>();
-        rifleBulletBoxSprite = Resources.Load<Sprite>("Image/Inventory/PistolBulletBox");
-        shotgunBulletBoxSprite = Resources.Load<Sprite>("Image/Inventory/ShotGunBulletBox");
-        shotGunSprite = Resources.Load<Sprite>("Image/Inventory/ShotGunImage");
-        rifleSprite = Resources.Load<Sprite>("Image/Inventory/RifleImage");
-        healSprite = Resources.Load<Sprite>("Image/Inventory/Madecian");
         itemEmptyRect = GameObject.Find("Item_EmptyGroup").transform.GetComponentsInChildren<RectTransform>(includeInactive: false);
         imageDrop = GameObject.Find("ItemList").GetComponentsInChildren<RectTransform>();
         playerDamage = FindObjectOfType<PlayerDamage>();   
@@ -75,6 +67,10 @@ public class GameManager : MonoBehaviour
         isRifleBullet = false;
         isShotGunBullet = false;
         isHeal = false;
+        gunData.Rf_SpawnCount = 10;
+        madicinData.m_SpawnCount = 10;
+        gunData.Rf_Count = 0;
+        gunData.Sg_Count = 0;
     }
     public void AddItem(ItemDataBase.ItemType itemType)
     {
@@ -84,10 +80,10 @@ public class GameManager : MonoBehaviour
                 CaseHeal();
                 break;
             case ItemDataBase.ItemType.RIFLE:
-                AddGun(rifleSprite, ItemDataBase.ItemType.RIFLE);
+                AddGun(gunData.rf_Sprite, ItemDataBase.ItemType.RIFLE);
                 break;
             case ItemDataBase.ItemType.SHOTGUN:
-                AddGun(shotGunSprite, ItemDataBase.ItemType.SHOTGUN);
+                AddGun(gunData.sg_Sprite, ItemDataBase.ItemType.SHOTGUN);
                 break;
             case ItemDataBase.ItemType.RIFLEBULLET:
                 CaseRifleBullet();
@@ -104,11 +100,10 @@ public class GameManager : MonoBehaviour
     private void CaseHeal()
     {
 
-        ItemDataBase.itemDataBase.itemHealCount++;
-        Debug.Log(ItemDataBase.itemDataBase.itemHealCount);
-        itemEmptyText[itemEmptyIdx].text = ItemDataBase.itemDataBase.itemHealCount.ToString();
+        madicinData.m_Count++;
+        itemEmptyText[itemEmptyIdx].text = madicinData.m_Count.ToString();
         loopSpawn.spawnMadicineCount--;
-        loopSpawn.spawnMaxMadicineCount--;
+        madicinData.m_SpawnCount--;
         for (int i = 0; i < imageDropList.Count; i++)
         {
             if (!isHeal)
@@ -116,13 +111,13 @@ public class GameManager : MonoBehaviour
                 if (imageDropList[i].childCount > 0) continue;
                 itemEmptyRectList[itemEmptyIdx].GetComponent<Button>().onClick.AddListener(HealItem);
                 healIdx = itemEmptyIdx;
-                AddItem(i, healSprite,ItemDataBase.itemDataBase.itemHealCount);
+                AddItem(i, madicinData.m_Sprite,madicinData.m_Count);
                 isHeal = true;
                 break;
             }
             else
             {
-                itemEmptyText[healIdx].text = ItemDataBase.itemDataBase.itemHealCount.ToString();
+                itemEmptyText[healIdx].text = madicinData.m_Count.ToString();
             }
         }
     }
@@ -142,32 +137,32 @@ public class GameManager : MonoBehaviour
     }
     private void CaseRifleBullet()
     {
-        ItemDataBase.itemDataBase.rifleBulletCount += 30;
+        gunData.Rf_Count += 30;
         if(fireCtrl.isRifle)
-            fireCtrl.bulletText.text = fireCtrl.rifleBulletCount.ToString() + " / " + ItemDataBase.itemDataBase.rifleBulletCount.ToString();
+            fireCtrl.bulletText.text = fireCtrl.rifleBulletCount.ToString() + " / " + gunData.Rf_Count.ToString();
         
         if(!isRifleBullet)
         {
             for (int i = 0; i < imageDropList.Count; i++)  //인벤토리에 불렛이 추가된다
             {
                 if (imageDropList[i].childCount > 0) continue;
+                itemEmptyRectList[itemEmptyIdx].gameObject.GetComponent<ItemDataBase>().itemType = ItemDataBase.ItemType.RIFLE;
                 rifleBulletIdx = itemEmptyIdx;
-                AddItem(i, rifleBulletBoxSprite,ItemDataBase.itemDataBase.rifleBulletCount);
+                AddItem(i, gunData.rfB_Sprite,gunData.Rf_Count);
                 isRifleBullet = true;
                 break;
             }
         }
         else 
         {
-            itemEmptyText[rifleBulletIdx].text = ItemDataBase.itemDataBase.rifleBulletCount.ToString();
+            itemEmptyText[rifleBulletIdx].text = gunData.Rf_Count.ToString();
         }
     }
     private void CaseShotGunBullet()
     {
-        Debug.Log("Bullet");
-        ItemDataBase.itemDataBase.shotgunBulletCount += 10;
+        gunData.Sg_Count += 10;
         if(fireCtrl.isShotGun)
-            fireCtrl.bulletText.text = fireCtrl.shotgunBulletCount.ToString() + " / " + ItemDataBase.itemDataBase.shotgunBulletCount.ToString();
+            fireCtrl.bulletText.text = fireCtrl.shotgunBulletCount.ToString() + " / " + gunData.Sg_Count.ToString();
         if (!isShotGunBullet)
         {
             for (int i = 0; i < imageDropList.Count; i++)  //인벤토리에 불렛이 추가된다
@@ -175,7 +170,7 @@ public class GameManager : MonoBehaviour
                 if (imageDropList[i].childCount > 0) continue;
                 itemEmptyRectList[itemEmptyIdx].gameObject.GetComponent<ItemDataBase>().itemType = ItemDataBase.ItemType.SHOTGUNBULLET;
                 shotgunBulletIdx = itemEmptyIdx;
-                AddItem(i, shotgunBulletBoxSprite, ItemDataBase.itemDataBase.shotgunBulletCount);
+                AddItem(i, gunData.sgB_Sprite, gunData.Sg_Count);
                 
                 isShotGunBullet = true;
                 break;
@@ -183,7 +178,7 @@ public class GameManager : MonoBehaviour
         }
         else 
         {
-            itemEmptyText[shotgunBulletIdx].text = ItemDataBase.itemDataBase.shotgunBulletCount.ToString();
+            itemEmptyText[shotgunBulletIdx].text = gunData.Sg_Count.ToString();
         }
     }
     private void AddItem(int array, Sprite sprite, int itemCount)
@@ -198,13 +193,13 @@ public class GameManager : MonoBehaviour
     }
     private void HealItem()
     {
-        ItemDataBase.itemDataBase.itemHealCount--;
-        itemEmptyText[healIdx].text = ItemDataBase.itemDataBase.itemHealCount.ToString();
-        playerDamage.HP += (int)ItemDataBase.itemDataBase.itemHealValue;
-        playerDamage.hpBarImage.fillAmount = (float)playerDamage.HP / (float)playerDamage.maxHp;
+        madicinData.m_Count--;
+        itemEmptyText[healIdx].text = madicinData.m_Count.ToString();
+        playerDamage.HP += (int)madicinData.m_Value;
+        playerDamage.hpBarImage.fillAmount = (float)playerDamage.HP / (float)playerData.maxHp;
         if(playerDamage.HP >= 100)
             playerDamage.HP = 100;
-        if(ItemDataBase.itemDataBase.itemHealCount == 0)
+        if(madicinData.m_Count == 0)
         {
             itemEmptyRectList[healIdx].SetParent(itemEmptyRect[0]);
             itemEmptyRectList[healIdx].GetComponent<Image>().enabled = false;
@@ -212,6 +207,6 @@ public class GameManager : MonoBehaviour
             itemEmptyText[healIdx].gameObject.SetActive(false);
             isHeal = false;
         }
-        GetComponent<LoopSpawn>().spawnMadicineCount--;
+        madicinData.m_SpawnCount--;
     }
 }

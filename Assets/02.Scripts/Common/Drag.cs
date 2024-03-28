@@ -52,7 +52,6 @@ public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         }
         else if(itemTr.parent != rightHand && this.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLE )
         {
-            Debug.Log("ตส>");
             fireCtrl.isRifle = false;
         }
         else if(itemTr.parent != rightHand && this.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)

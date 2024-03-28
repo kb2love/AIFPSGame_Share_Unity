@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d60121680a81c8648a5cf7bd8bdb07db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stairList: []
+  enemyData: {fileID: 11400000, guid: 1019b2233d467ac41a72a6440c072272, type: 2}
   walkSpeed: 0
   isTrace: 0
 --- !u!114 &4682237385620714500
@@ -115,6 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38553e10de442704bad88143415a2f73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _enemyData: {fileID: 11400000, guid: 1019b2233d467ac41a72a6440c072272, type: 2}
   hp: 0
 --- !u!114 &4733915959139430265
 MonoBehaviour:

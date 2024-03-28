@@ -235,4 +235,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 857368a1568fea145ad198813dac43c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shot: {fileID: 11400000, guid: 01fb565c638d8f04aace1ef43ee8e1e0, type: 2}
   damage: 15

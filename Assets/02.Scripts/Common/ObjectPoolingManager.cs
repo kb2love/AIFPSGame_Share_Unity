@@ -63,7 +63,7 @@ public class ObjectPoolingManager : MonoBehaviour
         GameObject enemyBulletGroup = new GameObject("EnemyBulletGroup");
         for (int i = 0; i < maxEnmeyBullet; i++)
         {
-            GameObject e_bullet = Instantiate(enemyBullet, enemyBulletGroup.transform);
+            GameObject e_bullet = Instantiate(enemyBullet, enemyBulletGroup.transform); 
             e_bullet.name = "e_" + (i + 1).ToString() + "¹ß";
             e_bullet.gameObject.SetActive(false);
             enemyBulletList.Add(e_bullet);

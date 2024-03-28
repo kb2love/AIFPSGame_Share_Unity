@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.AI;
 public class EnemyMove : MonoBehaviour
 {
-   // private CharacterController ch;
+    // private CharacterController ch;
+    [SerializeField] EnemyData enemyData;
     private Transform[] stairsPoint;
     private Transform playerTr;
-   [SerializeField] private List<Transform> stairList = new List<Transform>();
+    private List<Transform> stairList = new List<Transform>();
     public float walkSpeed;
     private int nextIdx = 0;
     private float dist;
@@ -29,7 +30,6 @@ public class EnemyMove : MonoBehaviour
             stairList.Add(stairsPoint[i]);
         }
         stairList.RemoveAt(0);
-        walkSpeed = 1.5f;
         rayPer = 2;
         RayDistance = 1;
     }
@@ -37,6 +37,7 @@ public class EnemyMove : MonoBehaviour
     {
         isStair = false;
         isTrace = false;
+        walkSpeed = enemyData.e_MoveSpeed;
     }
 
     public void RacastStairs()
