@@ -9,6 +9,7 @@ public class GetItem : MonoBehaviour
     private GameObject getItemPanel;
     public bool isContact;
     [SerializeField] private List<GameObject> collidersSet = new List<GameObject>();
+    [SerializeField] private List<GameObject> coliderContain = new List<GameObject>();
     void Awake()
     {
         getItemPanel = GameObject.Find("Canvas_ui").transform.GetChild(1).gameObject;
@@ -24,9 +25,20 @@ public class GetItem : MonoBehaviour
         if(other.gameObject.CompareTag(itemTag))
         {
             getItemPanel.SetActive(true);
-            collidersSet.Clear();
             collidersSet.Add(other.gameObject);
-            isContact = true;
+            if(collidersSet.Count > 1)
+            {
+                for (int i = 1; i < collidersSet.Count; i++)
+                {
+                    coliderContain.Add(collidersSet[i]);
+                    collidersSet.Remove(collidersSet[i]);
+                }
+                isContact = true;
+            }
+            else if(collidersSet.Count == 1)
+            {
+                isContact = true;
+            }
             StartCoroutine(GetItemPlayer());
         }
     }
@@ -39,7 +51,7 @@ public class GetItem : MonoBehaviour
             { 
                 if (Input.GetKeyDown(KeyCode.F))
                 {
-                    GetItemF(collidersSet[0]);
+                    GetItemF();
                     GameManager.Instance.AddItem(ItemDataBase.ItemType.HEAL);
                 }
             }
@@ -47,8 +59,7 @@ public class GetItem : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.F))
                 {
-                    GetItemF(collidersSet[0]);
-                    Debug.Log("왜두번될까");
+                    GetItemF();
                     GameManager.Instance.AddItem(ItemDataBase.ItemType.RIFLE);
                 }
             }
@@ -56,7 +67,7 @@ public class GetItem : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.F))
                 {
-                    GetItemF(collidersSet[0]);
+                    GetItemF();
                     GameManager.Instance.AddItem(ItemDataBase.ItemType.SHOTGUN);
                 }
             }
@@ -64,8 +75,7 @@ public class GetItem : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.F))
                 {
-                    GetItemF(collidersSet[0]);
-                    Debug.Log("왜두번될까");
+                    GetItemF();
                     GameManager.Instance.AddItem(ItemDataBase.ItemType.RIFLEBULLET);
                 }
             }
@@ -73,18 +83,30 @@ public class GetItem : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.F))
                 {
-                    GetItemF(collidersSet[0]);
+                    GetItemF();
                     GameManager.Instance.AddItem(ItemDataBase.ItemType.SHOTGUNBULLET);
                 }
             }
         }
     }
 
-    private void GetItemF(GameObject other)
+    private void GetItemF()
     {
-        other.SetActive(false);
-        getItemPanel.SetActive(false);
-        isContact = false;
+        collidersSet[0].gameObject.SetActive(false);
+        collidersSet.RemoveAt(0);
+        if(collidersSet.Count == 0 && coliderContain.Count == 0)
+        {
+            getItemPanel.SetActive(false);
+            isContact = false;
+        }
+        else if(coliderContain.Count > 0)
+        {
+            for(int i = 0;  i < coliderContain.Count; i++)
+            {
+                collidersSet.Add(coliderContain[i]);
+                coliderContain.Remove(coliderContain[i]);
+            }
+        }
     }
 
     void OnTriggerExit(Collider other)
@@ -93,6 +115,8 @@ public class GetItem : MonoBehaviour
         {
             getItemPanel.SetActive(false);
             isContact = false;
+            collidersSet.Clear();
+            coliderContain.Clear();
         }
     }
 }
