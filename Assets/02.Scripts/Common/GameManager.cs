@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] MadicinData madicinData;
     [SerializeField] GunData gunData;
     [SerializeField] PlayerData playerData;
+    [SerializeField] GranadeData granadeData;
     public List<Text> itemEmptyText = new List<Text>();
 
     private RectTransform[] itemEmptyRect;
@@ -24,12 +25,16 @@ public class GameManager : MonoBehaviour
 
     private FireCtrl fireCtrl;
     public int itemEmptyIdx;
+    public int rifleIdx;
+    public int shotgunIdx;
     public int rifleBulletIdx;
     public int shotgunBulletIdx;
+    public int granadeIdx;
     private int healIdx;
     private bool isHeal;
     public bool isRifleBullet;
     public bool isShotGunBullet;
+    public bool isGranadeGet;
     void Awake()
     {
         if(Instance == null)
@@ -64,11 +69,11 @@ public class GameManager : MonoBehaviour
         itemEmptyIdx = 0;
         rifleBulletIdx = 0;
         healIdx = 0;
+        rifleIdx = 0;
+        shotgunIdx = 0;
         isRifleBullet = false;
         isShotGunBullet = false;
         isHeal = false;
-        gunData.Rf_SpawnCount = 10;
-        madicinData.m_SpawnCount = 10;
         gunData.Rf_Count = 0;
         gunData.Sg_Count = 0;
     }
@@ -80,10 +85,12 @@ public class GameManager : MonoBehaviour
                 CaseHeal();
                 break;
             case ItemDataBase.ItemType.RIFLE:
-                AddGun(gunData.rf_Sprite, ItemDataBase.ItemType.RIFLE);
+                AddGun(gunData.rf_Sprite, ItemDataBase.ItemType.RIFLE, rifleIdx);
+                fireCtrl.getRifle = true;
                 break;
             case ItemDataBase.ItemType.SHOTGUN:
-                AddGun(gunData.sg_Sprite, ItemDataBase.ItemType.SHOTGUN);
+                AddGun(gunData.sg_Sprite, ItemDataBase.ItemType.SHOTGUN, shotgunIdx);
+                fireCtrl.getShotGun = true;
                 break;
             case ItemDataBase.ItemType.RIFLEBULLET:
                 CaseRifleBullet();
@@ -92,7 +99,7 @@ public class GameManager : MonoBehaviour
                 CaseShotGunBullet();
                 break;
             case ItemDataBase.ItemType.GRENADE:
-
+                CaseGranade();
                 break;
 
         }
@@ -102,8 +109,6 @@ public class GameManager : MonoBehaviour
 
         madicinData.m_Count++;
         itemEmptyText[itemEmptyIdx].text = madicinData.m_Count.ToString();
-        loopSpawn.spawnMadicineCount--;
-        madicinData.m_SpawnCount--;
         for (int i = 0; i < imageDropList.Count; i++)
         {
             if (!isHeal)
@@ -119,20 +124,6 @@ public class GameManager : MonoBehaviour
             {
                 itemEmptyText[healIdx].text = madicinData.m_Count.ToString();
             }
-        }
-    }
-    private void AddGun(Sprite sprite, ItemDataBase.ItemType type)
-    {
-        for (int i = 0; i < imageDropList.Count; i++)
-        {
-            if (imageDropList[i].childCount > 0) continue;
-            itemEmptyRectList[itemEmptyIdx].SetParent(imageDropList[i]);
-            itemEmptyRectList[itemEmptyIdx].GetComponent<Image>().sprite = sprite;
-            itemEmptyRectList[itemEmptyIdx].GetComponent<Image>().enabled = true;
-            itemEmptyRectList[itemEmptyIdx].gameObject.GetComponent<ItemDataBase>().itemType = type;
-            itemEmptyIdx++;
-            if (itemEmptyIdx >= 16) itemEmptyIdx = 0;
-            break;
         }
     }
     private void CaseRifleBullet()
@@ -181,6 +172,46 @@ public class GameManager : MonoBehaviour
             itemEmptyText[shotgunBulletIdx].text = gunData.Sg_Count.ToString();
         }
     }
+    private void AddGun(Sprite sprite, ItemDataBase.ItemType type, int idx)
+    {
+        for (int i = 0; i < imageDropList.Count; i++)
+        {
+            if (imageDropList[i].childCount > 0) continue;
+            itemEmptyRectList[itemEmptyIdx].SetParent(imageDropList[i]);
+            itemEmptyRectList[itemEmptyIdx].GetComponent<Image>().sprite = sprite;
+            itemEmptyRectList[itemEmptyIdx].GetComponent<Image>().enabled = true;
+            itemEmptyRectList[itemEmptyIdx].gameObject.GetComponent<ItemDataBase>().itemType = type;
+            itemEmptyIdx++;
+            idx = itemEmptyIdx;
+            if (itemEmptyIdx >= 16) itemEmptyIdx = 0;
+            break;
+        }
+    }
+    private void CaseGranade()
+    {
+        granadeData.Count++;
+        fireCtrl.getGranade = true;
+        if(fireCtrl.isGranade)
+            fireCtrl.bulletText.text = granadeData.Count.ToString();
+        if (!isGranadeGet)
+        {
+            for (int i = 0; i < imageDropList.Count; i++)  //인벤토리에 불렛이 추가된다
+            {
+                if (imageDropList[i].childCount > 0) continue;
+                itemEmptyRectList[itemEmptyIdx].gameObject.GetComponent<ItemDataBase>().itemType = ItemDataBase.ItemType.GRENADE;
+                granadeIdx = itemEmptyIdx;
+                AddItem(i, granadeData.sprite, granadeData.Count);
+
+                isGranadeGet = true;
+                break;
+            }
+        }
+        else
+        {
+            itemEmptyText[granadeIdx].text = granadeData.Count.ToString();
+        }
+
+    }
     private void AddItem(int array, Sprite sprite, int itemCount)
     {
         itemEmptyRectList[itemEmptyIdx].SetParent(imageDropList[array]);
@@ -207,6 +238,5 @@ public class GameManager : MonoBehaviour
             itemEmptyText[healIdx].gameObject.SetActive(false);
             isHeal = false;
         }
-        madicinData.m_SpawnCount--;
     }
 }

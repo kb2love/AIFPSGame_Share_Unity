@@ -8,12 +8,14 @@ public class GetItem : MonoBehaviour
     private string itemTag = "Item";
     private GameObject getItemPanel;
     public bool isContact;
+    [SerializeField] private bool isInputF;
     [SerializeField] private List<GameObject> collidersSet = new List<GameObject>();
     [SerializeField] private List<GameObject> coliderContain = new List<GameObject>();
     void Awake()
     {
         getItemPanel = GameObject.Find("Canvas_ui").transform.GetChild(1).gameObject;
         isContact = false;
+        isInputF = false;
     }
     void Start()
     {
@@ -26,19 +28,7 @@ public class GetItem : MonoBehaviour
         {
             getItemPanel.SetActive(true);
             collidersSet.Add(other.gameObject);
-            if(collidersSet.Count > 1)
-            {
-                for (int i = 1; i < collidersSet.Count; i++)
-                {
-                    coliderContain.Add(collidersSet[i]);
-                    collidersSet.Remove(collidersSet[i]);
-                }
-                isContact = true;
-            }
-            else if(collidersSet.Count == 1)
-            {
-                isContact = true;
-            }
+            isContact = true;
             StartCoroutine(GetItemPlayer());
         }
     }
@@ -47,65 +37,52 @@ public class GetItem : MonoBehaviour
         while (isContact)
         {
             yield return new WaitForSeconds(0.002f);
-            if (collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.HEAL)
-            { 
-                if (Input.GetKeyDown(KeyCode.F))
-                {
-                    GetItemF();
-                    GameManager.Instance.AddItem(ItemDataBase.ItemType.HEAL);
-                }
+            if(Input.GetKeyDown(KeyCode.F))
+            {
+                isInputF = true;
             }
+            if (collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.HEAL)
+            {
+                GetItemF(ItemDataBase.ItemType.HEAL);
+            }
+            
             else if (collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLE)
             {
-                if (Input.GetKeyDown(KeyCode.F))
-                {
-                    GetItemF();
-                    GameManager.Instance.AddItem(ItemDataBase.ItemType.RIFLE);
-                }
+                GetItemF(ItemDataBase.ItemType.RIFLE);
             }
             else if (collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)
             {
-                if (Input.GetKeyDown(KeyCode.F))
-                {
-                    GetItemF();
-                    GameManager.Instance.AddItem(ItemDataBase.ItemType.SHOTGUN);
-                }
+                GetItemF(ItemDataBase.ItemType.SHOTGUN);
             }
             else if (collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLEBULLET)
             {
-                if (Input.GetKeyDown(KeyCode.F))
-                {
-                    GetItemF();
-                    GameManager.Instance.AddItem(ItemDataBase.ItemType.RIFLEBULLET);
-                }
+                GetItemF(ItemDataBase.ItemType.RIFLEBULLET);
             }
             else if (collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUNBULLET)
             {
-                if (Input.GetKeyDown(KeyCode.F))
-                {
-                    GetItemF();
-                    GameManager.Instance.AddItem(ItemDataBase.ItemType.SHOTGUNBULLET);
-                }
+                GetItemF(ItemDataBase.ItemType.SHOTGUNBULLET);
+            }
+            else if (collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.GRENADE)
+            {
+                GetItemF(ItemDataBase.ItemType.GRENADE);
             }
         }
     }
 
-    private void GetItemF()
+    private void GetItemF(ItemDataBase.ItemType itemType)
     {
-        collidersSet[0].gameObject.SetActive(false);
-        collidersSet.RemoveAt(0);
-        if(collidersSet.Count == 0 && coliderContain.Count == 0)
+        if (isInputF)
         {
-            getItemPanel.SetActive(false);
-            isContact = false;
-        }
-        else if(coliderContain.Count > 0)
-        {
-            for(int i = 0;  i < coliderContain.Count; i++)
+            collidersSet[0].gameObject.SetActive(false);
+            collidersSet.RemoveAt(0);
+            isInputF = false;
+            Debug.Log("µÎ¹øµÅ´Âµí?");
+            if (collidersSet.Count == 0)
             {
-                collidersSet.Add(coliderContain[i]);
-                coliderContain.Remove(coliderContain[i]);
+                getItemPanel.SetActive(false);
+                isContact = false;
             }
+            GameManager.Instance.AddItem(itemType);
         }
     }
 

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class ObjectPoolingManager : MonoBehaviour
 {
     public static ObjectPoolingManager objPooling;
@@ -12,6 +11,10 @@ public class ObjectPoolingManager : MonoBehaviour
     private GameObject rifleBulletBox;
     private GameObject shotgunBulletBox;
     private GameObject enemy;
+    private GameObject w_granade;
+    private GameObject s_granade;
+    private List<GameObject> s_granadeList = new List<GameObject>();
+    private List<GameObject> w_granadeList = new List<GameObject>();
     private List<GameObject> enemyList = new List<GameObject>();
     private List<GameObject> rifleBulletBoxList = new List<GameObject>();
     private List<GameObject> shotgunBulletBoxList = new List<GameObject>();
@@ -36,6 +39,8 @@ public class ObjectPoolingManager : MonoBehaviour
         rifleBulletBox = Resources.Load<GameObject>("Spawn/RifleBulletBox");
         shotgunBulletBox = Resources.Load<GameObject>("Spawn/ShotGunBulletBox");
         enemy = Resources.Load<GameObject>("Spawn/Enemy");
+        w_granade = Resources.Load<GameObject>("Weapon/ThrowGranade");
+        s_granade = Resources.Load<GameObject>("Spawn/SpawnGranade");
         maxEnmeyBullet = 40;
         maxPlayerBullet = 30;
         itemSpawnCount = 10;
@@ -46,6 +51,8 @@ public class ObjectPoolingManager : MonoBehaviour
         CreateRifleBulletBox();
         CreateShotGunBulletBox();
         CreateEnemy();
+        CreateWeaponGranade();
+        CreateSpawnGranade();
     }
     void CreatePlayerBullet()
     {
@@ -124,6 +131,28 @@ public class ObjectPoolingManager : MonoBehaviour
             enemyList.Add(_enemy);
         }
     }
+    void CreateWeaponGranade()
+    {
+        GameObject w_GranadeGroup = new GameObject("W_GranadeGroup");
+        for (int i = 0; i < 4; i++)
+        {
+            GameObject _w_granade = Instantiate(w_granade, w_GranadeGroup.transform);
+            _w_granade.name = (i + 1).ToString() + "¹ø Granade";
+            _w_granade.gameObject.SetActive(false);
+            w_granadeList.Add(_w_granade);
+        }
+    }
+    void CreateSpawnGranade()
+    {
+        GameObject s_GranadeGroup = new GameObject("S_GranadeGroup");
+        for (int i = 0; i < itemSpawnCount; i++)
+        {
+            GameObject _s_granade = Instantiate(s_granade, s_GranadeGroup.transform);
+            _s_granade.name = (i + 1).ToString() + "¹ø Granade";
+            _s_granade.gameObject.SetActive(false);
+            s_granadeList.Add(_s_granade);
+        }
+    }
     public GameObject GetPlayerBullet()
     {
         foreach (GameObject _bullet in playerBulletList)
@@ -186,6 +215,24 @@ public class ObjectPoolingManager : MonoBehaviour
         {
             if (!_enemy.activeSelf)
                 return _enemy;
+        }
+        return null;
+    }
+    public GameObject GetWeaponGranade()
+    {
+        foreach (GameObject _w_granade in w_granadeList)
+        {
+            if (!_w_granade.activeSelf)
+                return _w_granade;
+        }
+        return null;
+    }
+    public GameObject GetSpawnGranade()
+    {
+        foreach (GameObject _s_granade in s_granadeList)
+        {
+            if (!_s_granade.activeSelf)
+                return _s_granade;
         }
         return null;
     }

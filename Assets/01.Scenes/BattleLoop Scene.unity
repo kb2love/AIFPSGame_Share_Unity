@@ -2199,13 +2199,18 @@ MonoBehaviour:
   madicinData: {fileID: 11400000, guid: 262b6e006aef81144b58ef85c14d3176, type: 2}
   gunData: {fileID: 11400000, guid: 01fb565c638d8f04aace1ef43ee8e1e0, type: 2}
   playerData: {fileID: 11400000, guid: 4f4746ae52464b042bb75eb2666d9a5b, type: 2}
+  granadeData: {fileID: 11400000, guid: ba23817986170bd45909cc7c7d8480e6, type: 2}
   itemEmptyText: []
   itemEmptyRectList: []
   itemEmptyIdx: 0
+  rifleIdx: 0
+  shotgunIdx: 0
   rifleBulletIdx: 0
   shotgunBulletIdx: 0
+  granadeIdx: 0
   isRifleBullet: 0
   isShotGunBullet: 0
+  isGranadeGet: 0
 --- !u!114 &93276722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2231,13 +2236,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0628a331106a6af488d487e9fb964c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyData: {fileID: 11400000, guid: 1019b2233d467ac41a72a6440c072272, type: 2}
-  madicinData: {fileID: 11400000, guid: 262b6e006aef81144b58ef85c14d3176, type: 2}
-  gunData: {fileID: 11400000, guid: 01fb565c638d8f04aace1ef43ee8e1e0, type: 2}
-  spawnSgBulletCount: 0
-  spawnRfBulletCount: 0
-  spawnMadicineCount: 0
-  enemySpawnCount: 0
   allSpawnTime: 0
 --- !u!1 &96544358
 GameObject:
@@ -5539,11 +5537,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunData: {fileID: 11400000, guid: 01fb565c638d8f04aace1ef43ee8e1e0, type: 2}
+  granadeData: {fileID: 11400000, guid: ba23817986170bd45909cc7c7d8480e6, type: 2}
   bulletText: {fileID: 0}
   rifleBulletCount: 0
   shotgunBulletCount: 0
+  granadeCount: 0
+  isGranade: 0
   isRifle: 0
   isShotGun: 0
+  getGranade: 0
+  getShotGun: 0
+  getRifle: 0
 --- !u!82 &255077950
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5682,7 +5686,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isContact: 0
+  isInputF: 0
   collidersSet: []
+  coliderContain: []
 --- !u!1001 &256322578
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10436,6 +10442,9 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 400046, guid: ffe78ae0827493a4b80d05df0c9c2cf3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1048215385}
     - targetCorrespondingSourceObject: {fileID: 400012, guid: ffe78ae0827493a4b80d05df0c9c2cf3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1247288038}
@@ -19377,6 +19386,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4000010230679374, guid: fee6e1da33beae9409089ab8a832464f, type: 3}
   m_PrefabInstance: {fileID: 1042834933}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1048215384
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1048215385}
+  m_Layer: 3
+  m_Name: GrandePos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1048215385
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1048215384}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.602, y: 1.692, z: -0.177}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 466365090}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1051826150
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38818,7 +38858,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 16892491989318649, guid: 5de6a909b250ae840a30fd8593e43a1a, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 672887901525585292, guid: 5de6a909b250ae840a30fd8593e43a1a, type: 3}
       propertyPath: m_RootOrder
@@ -38867,6 +38907,10 @@ PrefabInstance:
     - target: {fileID: 5944853559079427932, guid: 5de6a909b250ae840a30fd8593e43a1a, type: 3}
       propertyPath: m_Name
       value: SCIGrenade
+      objectReference: {fileID: 0}
+    - target: {fileID: 5944853559079427932, guid: 5de6a909b250ae840a30fd8593e43a1a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

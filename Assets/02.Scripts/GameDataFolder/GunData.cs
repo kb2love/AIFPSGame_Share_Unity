@@ -5,9 +5,7 @@ using UnityEngine;
 public class GunData : ScriptableObject
 {
     public int Sg_Count;
-    public int Sg_SpawnCount;
     public int Rf_Count;
-    public int Rf_SpawnCount;
     public float g_damage;
     public Sprite sgB_Sprite;
     public Sprite rfB_Sprite;

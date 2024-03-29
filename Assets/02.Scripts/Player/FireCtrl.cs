@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class FireCtrl : MonoBehaviour
 {
     [SerializeField] GunData gunData;
+    [SerializeField] GranadeData granadeData;
     private Transform rifleFirePos;
     private Transform shotgunFirePos;
+    private Transform granadePos;
     private AudioSource source;
     private AudioClip rifleClip;
     private AudioClip shotgunClip;
@@ -21,31 +24,40 @@ public class FireCtrl : MonoBehaviour
     private RectTransform itemEmptyGroup;
     private MeshRenderer rifleMesh;
     private MeshRenderer shotgunMesh;
+    private MeshRenderer granadeMesh;
     private bool tabOn;
     private float curTime;
     private float fireTIme;
     private readonly int aniFire = Animator.StringToHash("FireTrigger");
     private readonly int aniReload = Animator.StringToHash("ReloadTrigger");
     private readonly int aniIsReload = Animator.StringToHash("IsReload");
+    private readonly int aniIsGun = Animator.StringToHash("IsGun");
+    private readonly int aniGranade = Animator.StringToHash("GranadeTrigger");
     public int rifleBulletCount;
     private int rifleBulletMaxCount;
     public int shotgunBulletCount;
     private int shotgunBulletMaxCount;
     private bool isReload;
+    public bool isGranade;
     public bool isRifle;
     public bool isShotGun;
+    public bool getGranade;
+    public bool getShotGun;
+    public bool getRifle;
     void Start()
     {
         animator = transform.GetChild(0).GetComponent<Animator>();
 
         rifleFirePos = animator.transform.GetChild(0).GetChild(0).GetChild(0).transform;
         shotgunFirePos = animator.transform.GetChild(0).GetChild(1).GetChild(0).transform;
+        granadePos = animator.transform.GetChild(4).transform;
 
         rifleFlash = rifleFirePos.GetChild(0).GetComponent<ParticleSystem>();
         shotgunFlahs = shotgunFirePos.GetChild(0).GetComponent <ParticleSystem>();
 
         rifleMesh = rifleFirePos.parent.GetComponent<MeshRenderer>();
         shotgunMesh = shotgunFirePos.parent.GetComponent<MeshRenderer>();
+        granadeMesh = animator.transform.GetChild(0).GetChild(2).GetComponent<MeshRenderer>();
 
         itemEmptyGroup = GameObject.Find("Item_EmptyGroup").GetComponent<RectTransform>();
         source = GetComponent<AudioSource>();
@@ -57,7 +69,6 @@ public class FireCtrl : MonoBehaviour
         playerDamage = GetComponent<PlayerDamage>();
         curTime = Time.time;
         fireTIme = 0.1f;
-
         rifleBulletMaxCount = 30;
         rifleBulletCount = gunData.Rf_Count;
 
@@ -66,19 +77,27 @@ public class FireCtrl : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        isGranade = false;
         isShotGun = false;
         isRifle = false;
+        getGranade = false;
+        getShotGun = false;
+        getRifle = false;
         tabOn = false;
         isReload = false;
         rifleFlash.Stop();
         shotgunFlahs.Stop();
         StartCoroutine(OnFIre());
+        granadeData.Count = 0;
+        gunData.Rf_Count = 0;
+        gunData.Sg_Count = 0;
     }
     IEnumerator OnFIre()
     {
         while(!playerDamage.isDie)
         {
             yield return new WaitForSeconds(0.002f);
+            ChangeWeapon();
             if (isRifle)
                 RifleFireAndReload();
             else
@@ -87,7 +106,10 @@ public class FireCtrl : MonoBehaviour
                 ShotGunFireAndReload();
             else
                 shotgunMesh.enabled = false;
-
+            if (isGranade)
+                GranadeThrow();
+            else
+                granadeMesh.enabled = false;
             TabInventory();
         }
     }
@@ -110,7 +132,21 @@ public class FireCtrl : MonoBehaviour
             canvasGroup.alpha = 0;
         }
     }
-    
+    private void ChangeWeapon()
+    {
+        if(Input.GetKeyDown(KeyCode.Alpha1) && getRifle)
+        {
+            ChangeRifle();
+        }
+        else if(Input.GetKeyDown(KeyCode.Alpha2) && getShotGun)
+        {
+            ChangeShotGun();
+        }
+        else if( Input.GetKeyDown(KeyCode.Alpha3) && getGranade)
+        {
+            ChangeGranade();
+        }
+    }
     private void RifleFireAndReload()
     {
         if (Time.time - curTime > fireTIme && Input.GetMouseButton(0) && isRifle)
@@ -142,13 +178,44 @@ public class FireCtrl : MonoBehaviour
                     StartCoroutine(ShotGunReload());
             }
         }
-        if (Input.GetKeyDown(KeyCode.R) && shotgunBulletCount != gunData.Sg_Count && !isReload & gunData.Sg_SpawnCount > 0 && shotgunBulletCount < 10 && isShotGun)
+        if (Input.GetKeyDown(KeyCode.R) && shotgunBulletCount != gunData.Sg_Count && !isReload & gunData.Sg_Count> 0 && shotgunBulletCount < 10 && isShotGun)
             StartCoroutine(ShotGunReload());
     }
-
+    private void GranadeThrow()
+    {
+        if (Input.GetMouseButtonDown(0) && isGranade)
+        {
+            Debug.Log("왜안됄까여");
+            if(granadeData.Count > 0 && !tabOn)
+            {
+                granadeData.Count--;
+                bulletText.text = granadeData.Count.ToString();
+                GameObject _granade = ObjectPoolingManager.objPooling.GetWeaponGranade();
+                _granade.transform.position = granadePos.position;
+                _granade.transform.rotation = Quaternion.identity;
+                _granade.SetActive(true);
+                animator.SetTrigger(aniGranade);
+            }
+            else if(granadeData.Count == 0)
+            {
+                getGranade = false;
+            }
+        }
+    }
+    public void ChangeGranade()
+    {
+        isGranade = true;
+        isRifle = false;
+        isShotGun = false;
+        granadeMesh.enabled = true;
+        animator.SetBool(aniIsGun, false);
+        bulletText.text = granadeData.Count.ToString();
+    }
     public void ChangeShotGun()
     {
+        animator.SetBool(aniIsGun, true);
         isRifle = false;
+        isShotGun = true;
         rifleMesh.enabled = false;
         shotgunMesh.enabled = true;
         gunData.g_damage = 50;
@@ -156,9 +223,13 @@ public class FireCtrl : MonoBehaviour
     }
     public void ChangeRifle()
     {
+        animator.SetBool(aniIsGun, true);
         isShotGun = false;
+        isRifle = true;
+        isGranade = false;
         shotgunMesh.enabled = false;
         rifleMesh.enabled = true;
+        Debug.Log("안돼ㅔ?");
         gunData.g_damage = 15;
         bulletText.text = rifleBulletCount.ToString() + " / " + gunData.Rf_Count.ToString();
     }
@@ -259,7 +330,6 @@ public class FireCtrl : MonoBehaviour
             GameManager.Instance.itemEmptyRectList[GameManager.Instance.rifleBulletIdx].GetComponent<Image>().enabled = false;
             GameManager.Instance.itemEmptyText[GameManager.Instance.rifleBulletIdx].enabled = false;
             GameManager.Instance.isRifleBullet = false;
-            GameManager.Instance.GetComponent<LoopSpawn>().spawnRfBulletCount--;
         }
     }
     IEnumerator ShotGunReload()
@@ -317,7 +387,6 @@ public class FireCtrl : MonoBehaviour
             GameManager.Instance.itemEmptyRectList[GameManager.Instance.shotgunBulletIdx].GetComponent<Image>().enabled = false;
             GameManager.Instance.itemEmptyText[GameManager.Instance.shotgunBulletIdx].enabled = false;
             GameManager.Instance.isShotGunBullet = false;
-            GameManager.Instance.GetComponent<LoopSpawn>().spawnSgBulletCount--;
         }
     }
     void RifleFlashStop()

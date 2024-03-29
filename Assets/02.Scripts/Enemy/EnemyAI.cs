@@ -128,7 +128,6 @@ public class EnemyAI : MonoBehaviour
     private void OffObject()
     {
         gameObject.SetActive(false);
-        GameManager.Instance.GetComponent<LoopSpawn>().enemySpawnCount--;
     }
     void OnDisable()
     {

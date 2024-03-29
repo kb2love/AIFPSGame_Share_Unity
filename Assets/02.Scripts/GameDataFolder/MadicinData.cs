@@ -6,6 +6,5 @@ public class MadicinData : ScriptableObject
 {
     public int m_Count;
     public float m_Value;
-    public int m_SpawnCount;
     public Sprite m_Sprite;
 }
