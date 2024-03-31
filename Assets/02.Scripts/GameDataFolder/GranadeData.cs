@@ -7,6 +7,8 @@ public class GranadeData : ScriptableObject
 {
     public int Count;
     public float Damage;
-    public Sprite sprite;
     public float throwSpeed;
+    public Sprite sprite;
+    public GameObject spawnGranade;
+    public GameObject throwGranade;
 }

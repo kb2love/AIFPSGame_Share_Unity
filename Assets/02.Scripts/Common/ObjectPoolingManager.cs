@@ -4,14 +4,12 @@ using UnityEngine;
 public class ObjectPoolingManager : MonoBehaviour
 {
     public static ObjectPoolingManager objPooling;
-    private GameObject playerBullet;
-    private GameObject enemyBullet;
-    private GameObject hitEffect;
+    [SerializeField] private PlayerData playerData;
+    [SerializeField] private EnemyData enemyData;
+    [SerializeField] private GranadeData granadeData;
     private GameObject madicine;
     private GameObject rifleBulletBox;
     private GameObject shotgunBulletBox;
-    private GameObject enemy;
-    private GameObject w_granade;
     private GameObject s_granade;
     private List<GameObject> s_granadeList = new List<GameObject>();
     private List<GameObject> w_granadeList = new List<GameObject>();
@@ -32,14 +30,9 @@ public class ObjectPoolingManager : MonoBehaviour
         else if (objPooling != this)
             Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
-        playerBullet = Resources.Load<GameObject>("Weapon/Bullet");
-        enemyBullet = Resources.Load<GameObject>("Weapon/E_Bullet");
-        hitEffect = Resources.Load<GameObject>("Effects/GoopSpray");
         madicine = Resources.Load<GameObject>("Spawn/Madicine");
         rifleBulletBox = Resources.Load<GameObject>("Spawn/RifleBulletBox");
         shotgunBulletBox = Resources.Load<GameObject>("Spawn/ShotGunBulletBox");
-        enemy = Resources.Load<GameObject>("Spawn/Enemy");
-        w_granade = Resources.Load<GameObject>("Weapon/ThrowGranade");
         s_granade = Resources.Load<GameObject>("Spawn/SpawnGranade");
         maxEnmeyBullet = 40;
         maxPlayerBullet = 30;
@@ -59,7 +52,7 @@ public class ObjectPoolingManager : MonoBehaviour
         GameObject playerBulletGroup = new GameObject("PlayerBulletGroup");
         for (int i = 0; i < maxPlayerBullet; i++)
         {
-            GameObject _bullet = Instantiate(playerBullet, playerBulletGroup.transform);
+            GameObject _bullet = Instantiate(playerData.bullet, playerBulletGroup.transform);
             _bullet.name = (i + 1).ToString() + "발";
             _bullet.gameObject.SetActive(false);
             playerBulletList.Add(_bullet);
@@ -70,7 +63,7 @@ public class ObjectPoolingManager : MonoBehaviour
         GameObject enemyBulletGroup = new GameObject("EnemyBulletGroup");
         for (int i = 0; i < maxEnmeyBullet; i++)
         {
-            GameObject e_bullet = Instantiate(enemyBullet, enemyBulletGroup.transform); 
+            GameObject e_bullet = Instantiate(enemyData.e_bullet, enemyBulletGroup.transform); 
             e_bullet.name = "e_" + (i + 1).ToString() + "발";
             e_bullet.gameObject.SetActive(false);
             enemyBulletList.Add(e_bullet);
@@ -81,7 +74,7 @@ public class ObjectPoolingManager : MonoBehaviour
         GameObject hitEffectGroup = new GameObject("HitEffectGroup");
         for (int i = 0; i < itemSpawnCount; i++)
         {
-            GameObject _effect = Instantiate(hitEffect, hitEffectGroup.transform);
+            GameObject _effect = Instantiate(enemyData.hitParticle, hitEffectGroup.transform);
             _effect.name = (i + 1).ToString() + "번 Effect";
             _effect.gameObject.SetActive(false);
             hitE_List.Add(_effect);
@@ -125,7 +118,7 @@ public class ObjectPoolingManager : MonoBehaviour
         GameObject enemyGroup = new GameObject("EnemyGroup");
         for (int i = 0; i < 6; i++)
         {
-            GameObject _enemy = Instantiate(enemy, enemyGroup.transform);
+            GameObject _enemy = Instantiate(enemyData.spawnEnemy, enemyGroup.transform);
             _enemy.name = (i + 1).ToString() + "번 Enemy";
             _enemy.gameObject.SetActive(false);
             enemyList.Add(_enemy);
@@ -136,7 +129,7 @@ public class ObjectPoolingManager : MonoBehaviour
         GameObject w_GranadeGroup = new GameObject("W_GranadeGroup");
         for (int i = 0; i < 4; i++)
         {
-            GameObject _w_granade = Instantiate(w_granade, w_GranadeGroup.transform);
+            GameObject _w_granade = Instantiate(granadeData.throwGranade, w_GranadeGroup.transform);
             _w_granade.name = (i + 1).ToString() + "번 Granade";
             _w_granade.gameObject.SetActive(false);
             w_granadeList.Add(_w_granade);
@@ -147,7 +140,7 @@ public class ObjectPoolingManager : MonoBehaviour
         GameObject s_GranadeGroup = new GameObject("S_GranadeGroup");
         for (int i = 0; i < itemSpawnCount; i++)
         {
-            GameObject _s_granade = Instantiate(s_granade, s_GranadeGroup.transform);
+            GameObject _s_granade = Instantiate(granadeData.spawnGranade, s_GranadeGroup.transform);
             _s_granade.name = (i + 1).ToString() + "번 Granade";
             _s_granade.gameObject.SetActive(false);
             s_granadeList.Add(_s_granade);

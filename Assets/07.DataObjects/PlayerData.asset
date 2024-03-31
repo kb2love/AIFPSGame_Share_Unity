@@ -16,3 +16,12 @@ MonoBehaviour:
   moveSpeed: 3
   runSpeed: 5
   jumpForce: 0.03
+  bullet: {fileID: 578413683858959061, guid: 0ac5eb6039e08b3478df6f93bbbc6999, type: 3}
+  granade: {fileID: 8967797812412512394, guid: 6280102a254b95246a77d5b53a685016, type: 3}
+  walkClip: {fileID: 8300000, guid: fb5b916bab1084849bdf50d38635dd93, type: 3}
+  runClip: {fileID: 8300000, guid: bf8f9c625477b6d4fb8f3add607a0b2c, type: 3}
+  jumpClip: {fileID: 8300000, guid: db634f10e8544c14b8ac6c7c78b52e86, type: 3}
+  rfFireClip: {fileID: 8300000, guid: 3988c7241ff434c2a900f22726ee7a08, type: 3}
+  rfReloadClip: {fileID: 8300000, guid: fadf80bb36a4b4b11956cd0e19f9a859, type: 3}
+  sgFireClip: {fileID: 8300000, guid: e0fb72457183d4665afc7b1b90c9e01b, type: 3}
+  sgReloadClip: {fileID: 8300000, guid: 479d94af985554c7e9f8a50c3eeea6d1, type: 3}

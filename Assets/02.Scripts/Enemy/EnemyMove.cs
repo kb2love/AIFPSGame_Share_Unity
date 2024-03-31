@@ -9,6 +9,8 @@ public class EnemyMove : MonoBehaviour
     private Transform[] stairsPoint;
     private Transform playerTr;
     private List<Transform> stairList = new List<Transform>();
+    [SerializeField] private EnemyAI enemyAI;
+    [SerializeField] private EnemyFire enemyFire;
     public float walkSpeed;
     private int nextIdx = 0;
     private float dist;
@@ -17,14 +19,17 @@ public class EnemyMove : MonoBehaviour
     private float RayDistance;
     private float rayPer;
     public bool isTrace;
+    public bool isMove;
     private RaycastHit frontHit;
     private RaycastHit righHit;
     private RaycastHit leftHit;
-    void Start()
+    void Awake()
     {
        // ch = GetComponent<CharacterController>();
         playerTr = GameObject.FindWithTag("Player").transform;
         stairsPoint = GameObject.Find("StairPoints").GetComponentsInChildren<Transform>();
+        enemyAI = GetComponent<EnemyAI>();
+        enemyFire = GetComponent<EnemyFire>();
         for (int i = 0; i < stairsPoint.Length; i++)
         {
             stairList.Add(stairsPoint[i]);
@@ -37,12 +42,34 @@ public class EnemyMove : MonoBehaviour
     {
         isStair = false;
         isTrace = false;
+        isMove = true;
         walkSpeed = enemyData.e_MoveSpeed;
+        StartCoroutine(EnemyMoveRoop());
     }
-
-    public void RacastStairs()
+    IEnumerator EnemyMoveRoop()
     {
-        if (isTrace) return;
+        while(!enemyAI.isDie)
+        {
+            yield return new WaitForSeconds(0.002f);
+            if(isMove)
+            {
+                EnemyVaseMove();
+            }
+            else if(isTrace)
+            {
+                OnPlayerTrace();
+            }
+            else if(enemyFire.isAttack)
+            {
+                Vector3 rot = playerTr.position - transform.position;
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(rot), 10f * Time.deltaTime);
+                transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
+            }    
+        }
+    }
+    public void EnemyVaseMove()
+    {
+        if (!isMove) return;
         disOne = (stairList[nextIdx].position - transform.position).normalized;
         dist = Vector3.Distance(stairList[nextIdx].position, transform.position);
         Vector3 height = new Vector3(transform.position.x, transform.position.y + 0.25f, transform.position.z);
@@ -121,6 +148,13 @@ public class EnemyMove : MonoBehaviour
             isTrace = true;
         }
         isTrace = true;*/
+        float dis = playerTr.position.y - transform.position.y;
+        if (dis > 1)
+        {
+            isMove = true;
+            isTrace = false;
+            return;
+        }
         Vector3 plDis = (playerTr.position - transform.position).normalized;
         transform.Translate(plDis * walkSpeed * Time.deltaTime);
         Vector3 plRot = playerTr.position - transform.position;

@@ -8,18 +8,17 @@ public class GetItem : MonoBehaviour
     private string itemTag = "Item";
     private GameObject getItemPanel;
     public bool isContact;
+    private Animator animator;
+    private readonly int aniGetItem = Animator.StringToHash("GetItemTrigger");
     [SerializeField] private bool isInputF;
     [SerializeField] private List<GameObject> collidersSet = new List<GameObject>();
     [SerializeField] private List<GameObject> coliderContain = new List<GameObject>();
     void Awake()
     {
         getItemPanel = GameObject.Find("Canvas_ui").transform.GetChild(1).gameObject;
+        animator = transform.GetChild(0).GetComponent<Animator>();
         isContact = false;
         isInputF = false;
-    }
-    void Start()
-    {
-       
     }
     private 
     void OnTriggerEnter(Collider other)
@@ -32,37 +31,41 @@ public class GetItem : MonoBehaviour
             StartCoroutine(GetItemPlayer());
         }
     }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            isInputF = true;
+        }
+    }
     IEnumerator GetItemPlayer()
     {
         while (isContact)
         {
-            yield return new WaitForSeconds(0.002f);
-            if(Input.GetKeyDown(KeyCode.F))
-            {
-                isInputF = true;
-            }
-            if (collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.HEAL)
+            yield return new WaitForSeconds(0.05f);
+            
+            if (isInputF && collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.HEAL)
             {
                 GetItemF(ItemDataBase.ItemType.HEAL);
             }
             
-            else if (collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLE)
+            else if (isInputF && collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLE)
             {
                 GetItemF(ItemDataBase.ItemType.RIFLE);
             }
-            else if (collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)
+            else if (isInputF && collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)
             {
                 GetItemF(ItemDataBase.ItemType.SHOTGUN);
             }
-            else if (collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLEBULLET)
+            else if (isInputF && collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLEBULLET)
             {
                 GetItemF(ItemDataBase.ItemType.RIFLEBULLET);
             }
-            else if (collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUNBULLET)
+            else if (isInputF && collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUNBULLET)
             {
                 GetItemF(ItemDataBase.ItemType.SHOTGUNBULLET);
             }
-            else if (collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.GRENADE)
+            else if (isInputF && collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.GRENADE)
             {
                 GetItemF(ItemDataBase.ItemType.GRENADE);
             }
@@ -82,6 +85,7 @@ public class GetItem : MonoBehaviour
                 getItemPanel.SetActive(false);
                 isContact = false;
             }
+            animator.SetTrigger(aniGetItem);
             GameManager.Instance.AddItem(itemType);
         }
     }

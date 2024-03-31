@@ -24,7 +24,7 @@ public class FireCtrl : MonoBehaviour
     private RectTransform itemEmptyGroup;
     private MeshRenderer rifleMesh;
     private MeshRenderer shotgunMesh;
-    private MeshRenderer granadeMesh;
+    public MeshRenderer granadeMesh;
     private bool tabOn;
     private float curTime;
     private float fireTIme;
@@ -188,19 +188,31 @@ public class FireCtrl : MonoBehaviour
             Debug.Log("왜안됄까여");
             if(granadeData.Count > 0 && !tabOn)
             {
-                granadeData.Count--;
-                bulletText.text = granadeData.Count.ToString();
-                GameObject _granade = ObjectPoolingManager.objPooling.GetWeaponGranade();
-                _granade.transform.position = granadePos.position;
-                _granade.transform.rotation = Quaternion.identity;
-                _granade.SetActive(true);
                 animator.SetTrigger(aniGranade);
-            }
-            else if(granadeData.Count == 0)
-            {
-                getGranade = false;
+                StartCoroutine(ThrowGranade());
+                
             }
         }
+        else if (granadeData.Count == 0)
+        {
+            granadeMesh.enabled = false;
+            GameManager.Instance.itemEmptyRectList[GameManager.Instance.granadeIdx].SetParent(itemEmptyGroup);
+            GameManager.Instance.itemEmptyRectList[GameManager.Instance.granadeIdx].GetComponent<Image>().enabled = false;
+            GameManager.Instance.itemEmptyText[GameManager.Instance.granadeIdx].enabled = false;
+            GameManager.Instance.isGranadeGet = false;
+            getGranade = false;
+        }
+    }
+    IEnumerator ThrowGranade()
+    {
+        yield return new WaitForSeconds(1.8f);
+        granadeData.Count--;
+        bulletText.text = granadeData.Count.ToString();
+        GameObject _granade = ObjectPoolingManager.objPooling.GetWeaponGranade();
+        _granade.transform.position = granadePos.position;
+        _granade.transform.rotation = granadePos.rotation;
+        _granade.SetActive(true);
+        GameManager.Instance.itemEmptyText[GameManager.Instance.granadeIdx].text = gunData.Rf_Count.ToString();
     }
     public void ChangeGranade()
     {
@@ -273,6 +285,7 @@ public class FireCtrl : MonoBehaviour
         bulletText.text = bulletCount.ToString() + " / " + itemDatabaseCount.ToString();
 
     }
+
     IEnumerator RifleReload()
     {
         

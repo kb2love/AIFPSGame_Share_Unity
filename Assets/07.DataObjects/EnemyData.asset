@@ -14,5 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   e_Hp: 100
   e_Damage: 15
-  e_SpawnCount: 5
   e_MoveSpeed: 1.5
+  e_bullet: {fileID: 578413683858959061, guid: 4b4e700ce54033e498ba0a4cd7fcf3df, type: 3}
+  hitParticle: {fileID: 1240250018707908, guid: 5656e7ea1f1a75d4c895547ec2b824b3, type: 3}
+  spawnEnemy: {fileID: 3747864343802613917, guid: 49d59b31fabf96a47b181981fb650e59, type: 3}
+  shotClip: {fileID: 8300000, guid: 3988c7241ff434c2a900f22726ee7a08, type: 3}
+  walkClip: {fileID: 8300000, guid: 5c99b34d8cf114346b17457fc68a03ec, type: 3}

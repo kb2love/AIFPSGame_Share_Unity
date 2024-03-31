@@ -7,4 +7,9 @@ public class EnemyData : ScriptableObject
     public int e_Hp;
     public int e_Damage;
     public float e_MoveSpeed;
+    public GameObject e_bullet;
+    public GameObject hitParticle;
+    public GameObject spawnEnemy;
+    public AudioClip shotClip;
+    public AudioClip walkClip;
 }

@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class EnemyDamage : MonoBehaviour
 {
-    [SerializeField]
-    private EnemyData _enemyData;
+    [SerializeField] private EnemyData _enemyData;
     private Animator animator;
     private string bulletTag = "Bullet";
     [SerializeField] private int hp;
-    private int maxHp;
     private readonly int aniE_Hit = Animator.StringToHash("EnemyHit");
     private EnemyAI enemyAI;
     private GameObject _effect;
@@ -22,8 +20,7 @@ public class EnemyDamage : MonoBehaviour
     }
     void OnEnable()
     {
-        maxHp = _enemyData.e_Hp;
-        hp = maxHp;
+        hp = _enemyData.e_Hp;
     }
 
     private void OnCollisionEnter(Collision col)

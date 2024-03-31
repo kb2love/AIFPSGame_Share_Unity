@@ -201,7 +201,8 @@ public class GameManager : MonoBehaviour
                 itemEmptyRectList[itemEmptyIdx].gameObject.GetComponent<ItemDataBase>().itemType = ItemDataBase.ItemType.GRENADE;
                 granadeIdx = itemEmptyIdx;
                 AddItem(i, granadeData.sprite, granadeData.Count);
-
+                if(fireCtrl.isGranade)
+                    fireCtrl.granadeMesh.enabled = true;
                 isGranadeGet = true;
                 break;
             }

@@ -13,7 +13,7 @@ public class EnemyFire : MonoBehaviour
     private int maxBulletCount;
     public bool isAttack;
     private bool isReload;
-    EnemyAI enemyAI;
+    private EnemyAI enemyAI;
     void Start()
     {
         maxBulletCount = 20;

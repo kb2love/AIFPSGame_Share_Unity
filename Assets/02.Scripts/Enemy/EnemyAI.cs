@@ -43,7 +43,7 @@ public class EnemyAI : MonoBehaviour
             {
                     state = State.ATTACK;
             }
-            else if(dist < traceDist && enemyMove.isTrace)
+            else if(dist < traceDist)
             {
                 state = State.TRACE;
             }
@@ -58,7 +58,7 @@ public class EnemyAI : MonoBehaviour
     {
         while(!isDie)
         {
-            yield return new WaitForSeconds(0.002f);
+            yield return new WaitForSeconds(0.1f);
             switch(state)
             {
                 case State.IDLE:
@@ -85,25 +85,23 @@ public class EnemyAI : MonoBehaviour
         animator.SetBool("IsMove", false);
         enemyMove.isTrace = false;
         enemyFire.isAttack = true;
-
-        Vector3 rot = playerTr.position - transform.position;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(rot), 10f * Time.deltaTime);
-        transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
+        enemyMove.isMove = false;
     }
 
     private void TraceState()
     {
         animator.SetBool("IsMove", true);
-        enemyMove.OnPlayerTrace();
         enemyFire.isAttack = false;
+        enemyMove.isTrace = true;
+        enemyMove.isMove = false;
     }
 
     private void PatrolState()
     {
         enemyMove.isTrace = false;
         enemyFire.isAttack = false;
+        enemyMove.isMove = true;
         animator.SetBool("IsMove", true);
-        enemyMove.RacastStairs();
     }
 
     private void IdleState()
