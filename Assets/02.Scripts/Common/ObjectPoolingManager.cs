@@ -7,10 +7,8 @@ public class ObjectPoolingManager : MonoBehaviour
     [SerializeField] private PlayerData playerData;
     [SerializeField] private EnemyData enemyData;
     [SerializeField] private GranadeData granadeData;
-    private GameObject madicine;
-    private GameObject rifleBulletBox;
-    private GameObject shotgunBulletBox;
-    private GameObject s_granade;
+    [SerializeField] private GunData gunData;
+    [SerializeField] private MadicinData madicinData;
     private List<GameObject> s_granadeList = new List<GameObject>();
     private List<GameObject> w_granadeList = new List<GameObject>();
     private List<GameObject> enemyList = new List<GameObject>();
@@ -30,10 +28,6 @@ public class ObjectPoolingManager : MonoBehaviour
         else if (objPooling != this)
             Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
-        madicine = Resources.Load<GameObject>("Spawn/Madicine");
-        rifleBulletBox = Resources.Load<GameObject>("Spawn/RifleBulletBox");
-        shotgunBulletBox = Resources.Load<GameObject>("Spawn/ShotGunBulletBox");
-        s_granade = Resources.Load<GameObject>("Spawn/SpawnGranade");
         maxEnmeyBullet = 40;
         maxPlayerBullet = 30;
         itemSpawnCount = 10;
@@ -85,7 +79,7 @@ public class ObjectPoolingManager : MonoBehaviour
         GameObject madicineGroup = new GameObject("MadicineGroup");
         for (int i = 0; i < itemSpawnCount; i++)
         {
-            GameObject _madicine = Instantiate(madicine, madicineGroup.transform);
+            GameObject _madicine = Instantiate(madicinData.madicine, madicineGroup.transform);
             _madicine.name = (i + 1).ToString() + "¹ø Madicine";
             _madicine.gameObject.SetActive(false);
             madicineList.Add(_madicine);
@@ -96,7 +90,7 @@ public class ObjectPoolingManager : MonoBehaviour
         GameObject rifleBulletBoxGroup = new GameObject("RifleBulletBoxGroup");
         for (int i = 0; i < itemSpawnCount; i++)
         {
-            GameObject _rifleBulletBox = Instantiate(rifleBulletBox, rifleBulletBoxGroup.transform);
+            GameObject _rifleBulletBox = Instantiate(gunData.rifleBullet, rifleBulletBoxGroup.transform);
             _rifleBulletBox.name = (i + 1).ToString() + "¹ø rifleBulletBox";
             _rifleBulletBox.gameObject.SetActive(false);
             rifleBulletBoxList.Add(_rifleBulletBox);
@@ -107,7 +101,7 @@ public class ObjectPoolingManager : MonoBehaviour
         GameObject shotgunBulletBoxGroup = new GameObject("ShotGunBulletBoxGroup");
         for (int i = 0; i < itemSpawnCount; i++)
         {
-            GameObject _shotgunBulletBox = Instantiate(shotgunBulletBox, shotgunBulletBoxGroup.transform);
+            GameObject _shotgunBulletBox = Instantiate(gunData.shotgunBullet, shotgunBulletBoxGroup.transform);
             _shotgunBulletBox.name = (i + 1).ToString() + "¹ø rifleBulletBox";
             _shotgunBulletBox.gameObject.SetActive(false);
             shotgunBulletBoxList.Add(_shotgunBulletBox);

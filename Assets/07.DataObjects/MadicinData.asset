@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0b3880dd446e1140b1d29dad531d836, type: 3}
   m_Name: MadicinData
   m_EditorClassIdentifier: 
-  m_Count: 0
+  m_Count: 6
   m_Value: 15
-  m_SpawnCount: 2
   m_Sprite: {fileID: 21300000, guid: e5bb652ebb17e614bb95ebf09e022e8d, type: 3}
+  madicine: {fileID: 6571314434036841874, guid: 009f0422a809bcc4cba6bbb9cf1a1b8f, type: 3}

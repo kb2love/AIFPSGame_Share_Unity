@@ -4,26 +4,56 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
-    public enum State { IDLE =1, PATROL, TRACE, ATTACK, DIE }
+    public enum State { IDLE = 1, PATROL, TRACE, ATTACK, DIE }
     public State state;
     private Transform playerTr;
     private Animator animator;
     private float attackDist;
     private float traceDist;
     public bool isDie;
-    private EnemyFire enemyFire;
-    private EnemyMove enemyMove;
+    public bool isAttack
+    {
+        get { return _isAttack; }
+        set
+        {
+            _isAttack = value;
+            if(_isAttack)
+            isAttack = value;
+        }
+    }
+    private bool _isAttack;
+    public bool isTrace
+    {
+        get { return _isTrace; }
+        set
+        {
+            _isTrace = value;
+            if(_isTrace)
+                _isTrace = value;
+        }
+    }
+    private bool _isTrace;
+    public bool isMove
+    {
+        get { return _isMove; }
+        set
+        {
+            _isMove = value;
+            if(_isMove)
+                _isMove = value;
+        }
+    }
+    private bool _isMove;
     
     void Start()
     {
 
         playerTr = GameObject.FindWithTag("Player").GetComponent<Transform>();
         animator = transform.GetChild(0).GetComponent<Animator>();
-        enemyFire = GetComponent<EnemyFire>();
-        enemyMove = GetComponent<EnemyMove>();
         attackDist = 5f;
         traceDist = 10f;
     }
+   
     private void OnEnable()
     {
         GetComponent<Rigidbody>().useGravity = true;
@@ -31,7 +61,10 @@ public class EnemyAI : MonoBehaviour
         GetComponent<CapsuleCollider>().isTrigger = false;
         isDie = false;
         StartCoroutine(EnemyScope());
-        StartCoroutine(EnemyMotion());  
+        StartCoroutine(EnemyMotion());
+        _isMove = true;
+        _isAttack = false;
+        _isTrace = false;
     }
     IEnumerator EnemyScope()
     {
@@ -41,7 +74,7 @@ public class EnemyAI : MonoBehaviour
             float dist = Vector3.Distance(playerTr.position, transform.position);
             if(dist < attackDist)
             {
-                    state = State.ATTACK;
+                state = State.ATTACK;
             }
             else if(dist < traceDist)
             {
@@ -83,40 +116,42 @@ public class EnemyAI : MonoBehaviour
     private void AttackState()
     {
         animator.SetBool("IsMove", false);
-        enemyMove.isTrace = false;
-        enemyFire.isAttack = true;
-        enemyMove.isMove = false;
+        _isAttack = true;
+        isTrace = false;
+        isMove = false;
     }
 
     private void TraceState()
     {
         animator.SetBool("IsMove", true);
-        enemyFire.isAttack = false;
-        enemyMove.isTrace = true;
-        enemyMove.isMove = false;
+        _isAttack = false;
+        isTrace = true;
+        isMove = false;
     }
 
     private void PatrolState()
     {
-        enemyMove.isTrace = false;
-        enemyFire.isAttack = false;
-        enemyMove.isMove = true;
+        isTrace = false;
+        isMove = true;
+        _isAttack = false;
         animator.SetBool("IsMove", true);
     }
 
     private void IdleState()
     {
         Debug.Log("Idle");
-        enemyMove.isTrace = false;
-        enemyFire.isAttack = false;
+        _isTrace = false;
+        _isMove= false;
+        _isAttack= false;
         animator.SetBool("IsMove", false);
     }
 
     public void EnemyDie()
     {
         animator.SetBool("IsMove", false);
-        enemyMove.isTrace = false;
-        enemyFire.isAttack = false;
+        isTrace = false;
+        _isAttack = false;
+        isMove = false;
         GetComponent<Rigidbody>().useGravity = false;
         GetComponent<Rigidbody>().isKinematic = true;
         GetComponent<CapsuleCollider>().isTrigger = true;

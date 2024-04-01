@@ -5,14 +5,13 @@ using UnityEngine.AI;
 
 public class LoopSpawn : MonoBehaviour
 {
+    [SerializeField] private GunData gunData;
     private Transform[] spawnPoints;
     private Transform[] enemySpanwPoint;
     private Transform gunSpawnPoint;
     private List<Transform> spawnPointsList = new List<Transform>();
     private List<Transform> enemySpanwPointList = new List<Transform>();
     private PlayerDamage playerDamage;
-    private GameObject rifleItem;
-    private GameObject shotgunItem;
     private int spawnTrIdx;
     private int e_spawnTrIdx;
     private int e_Count;
@@ -23,8 +22,6 @@ public class LoopSpawn : MonoBehaviour
     void Start()
     {
         playerDamage =FindObjectOfType<PlayerDamage>();
-        rifleItem = Resources.Load<GameObject>("Spawn/RifleItem");
-        shotgunItem = Resources.Load<GameObject>("Spawn/ShotGunItem");
         spawnPoints = GameObject.Find("SpawnPointsGroup").GetComponentsInChildren<Transform>();
         enemySpanwPoint = GameObject.Find("EnemySpawnPoints").GetComponentsInChildren<Transform>();
         gunSpawnPoint = GameObject.Find("GunSpawnPoint").transform;
@@ -45,7 +42,7 @@ public class LoopSpawn : MonoBehaviour
     {
        
         yield return new WaitForSeconds(2f);
-        Instantiate(rifleItem, gunSpawnPoint.position, Quaternion.identity);
+        Instantiate(gunData.rifle, gunSpawnPoint.position, Quaternion.identity);
         GameObject _rifleBulletBox1 = ObjectPoolingManager.objPooling.GetRifleBulletBox();
         _rifleBulletBox1.transform.position = gunSpawnPoint.position + (Vector3.right * 0.5f);
         _rifleBulletBox1.transform.rotation = Quaternion.identity;
@@ -54,7 +51,7 @@ public class LoopSpawn : MonoBehaviour
         {
             spawnTrIdx = Random.Range(0, spawnPointsList.Count);
         } while (spawnIdx.Contains(spawnTrIdx));
-        Instantiate(shotgunItem, spawnPointsList[spawnTrIdx].position, Quaternion.identity);
+        Instantiate(gunData.shotgun, spawnPointsList[spawnTrIdx].position, Quaternion.identity);
         spawnIdx.Add(spawnTrIdx);
         while (!playerDamage.isDie )
         {

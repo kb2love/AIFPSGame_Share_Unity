@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.UI;
-public class GameManager : MonoBehaviour
+public class ItemManager : MonoBehaviour
 {
-    public static GameManager Instance = null;
+    public static ItemManager Instance = null;
 
     [SerializeField] MadicinData madicinData;
     [SerializeField] GunData gunData;
@@ -21,7 +21,6 @@ public class GameManager : MonoBehaviour
     private List<RectTransform> imageDropList = new List<RectTransform>();
 
     private PlayerDamage playerDamage;
-    private LoopSpawn loopSpawn;
 
     private FireCtrl fireCtrl;
     public int itemEmptyIdx;
@@ -45,12 +44,10 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        DontDestroyOnLoad(this.gameObject);
         fireCtrl = FindObjectOfType<FireCtrl>();
         itemEmptyRect = GameObject.Find("Item_EmptyGroup").transform.GetComponentsInChildren<RectTransform>(includeInactive: false);
         imageDrop = GameObject.Find("ItemList").GetComponentsInChildren<RectTransform>();
         playerDamage = FindObjectOfType<PlayerDamage>();   
-        loopSpawn = FindObjectOfType<LoopSpawn>();
         for(int i = 1; i < imageDrop.Length; i++)
         {
             imageDropList.Add(imageDrop[i]);
@@ -76,6 +73,8 @@ public class GameManager : MonoBehaviour
         isHeal = false;
         gunData.Rf_Count = 0;
         gunData.Sg_Count = 0;
+        madicinData.m_Count = 0;
+        granadeData.Count = 0;
     }
     public void AddItem(ItemDataBase.ItemType itemType)
     {

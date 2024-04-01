@@ -13,11 +13,17 @@ MonoBehaviour:
   m_Name: GunData
   m_EditorClassIdentifier: 
   Sg_Count: 0
-  Sg_SpawnCount: 10
   Rf_Count: 0
-  Rf_SpawnCount: 10
   g_damage: 15
   sgB_Sprite: {fileID: 21300000, guid: bbef690e2f46d914996e00aa9a8207e8, type: 3}
   rfB_Sprite: {fileID: 21300000, guid: 2955dd9e6f801e145b4de022fed3a903, type: 3}
   sg_Sprite: {fileID: 21300000, guid: 5c9a346ecdb82fa48bc4d0a25e74295e, type: 3}
   rf_Sprite: {fileID: 21300000, guid: 1fdf57fd1b36113449cd424f828a8f00, type: 3}
+  rifle: {fileID: 4886314855705931971, guid: 9d8ff323d38afdd4c910a81013c4917a, type: 3}
+  rifleBullet: {fileID: 1370597286371639369, guid: 1657e579832c7204d95bc014e1da5555, type: 3}
+  rifleClip: {fileID: 8300000, guid: 641ff25f5da444ddf8874d961a56f0c9, type: 3}
+  rifleReloadClip: {fileID: 8300000, guid: fadf80bb36a4b4b11956cd0e19f9a859, type: 3}
+  shotgun: {fileID: 6527952553570927082, guid: 20c346849f4a5154a80e4ba59651658b, type: 3}
+  shotgunBullet: {fileID: 1829745767863675356, guid: 13ce755d129ff0549ac680c85b354686, type: 3}
+  shotgunClip: {fileID: 8300000, guid: e0fb72457183d4665afc7b1b90c9e01b, type: 3}
+  shotgunReloadClip: {fileID: 8300000, guid: 479d94af985554c7e9f8a50c3eeea6d1, type: 3}

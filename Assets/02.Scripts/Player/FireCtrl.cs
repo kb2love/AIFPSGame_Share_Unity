@@ -12,8 +12,6 @@ public class FireCtrl : MonoBehaviour
     private Transform shotgunFirePos;
     private Transform granadePos;
     private AudioSource source;
-    private AudioClip rifleClip;
-    private AudioClip shotgunClip;
     private Animator animator;
     private PlayerDamage playerDamage;
     private ParticleSystem rifleFlash;
@@ -48,21 +46,19 @@ public class FireCtrl : MonoBehaviour
     {
         animator = transform.GetChild(0).GetComponent<Animator>();
 
-        rifleFirePos = animator.transform.GetChild(0).GetChild(0).GetChild(0).transform;
-        shotgunFirePos = animator.transform.GetChild(0).GetChild(1).GetChild(0).transform;
-        granadePos = animator.transform.GetChild(4).transform;
+        rifleFirePos = animator.transform.GetChild(2).GetChild(0).GetChild(0).transform;
+        shotgunFirePos = animator.transform.GetChild(2).GetChild(1).GetChild(0).transform;
+        granadePos = animator.transform.GetChild(6).transform;
 
         rifleFlash = rifleFirePos.GetChild(0).GetComponent<ParticleSystem>();
         shotgunFlahs = shotgunFirePos.GetChild(0).GetComponent <ParticleSystem>();
 
         rifleMesh = rifleFirePos.parent.GetComponent<MeshRenderer>();
         shotgunMesh = shotgunFirePos.parent.GetComponent<MeshRenderer>();
-        granadeMesh = animator.transform.GetChild(0).GetChild(2).GetComponent<MeshRenderer>();
+        granadeMesh = animator.transform.GetChild(2).GetChild(2).GetComponent<MeshRenderer>();
 
         itemEmptyGroup = GameObject.Find("Item_EmptyGroup").GetComponent<RectTransform>();
         source = GetComponent<AudioSource>();
-        rifleClip = Resources.Load<AudioClip>("Sounds/Fires/p_ak_1");
-        shotgunClip = Resources.Load<AudioClip>("Sounds/Fires/p_sg_01");
         canvasGroup = GameObject.Find("Canvas_ui").transform.GetChild(0).GetComponent<CanvasGroup>();
         weaponImage = GameObject.Find("Panel-Weapon").transform.GetChild(0).GetComponent<Image>();
         bulletText = weaponImage.transform.parent.GetChild(1).GetComponent<Text>();
@@ -153,7 +149,7 @@ public class FireCtrl : MonoBehaviour
         {
             if (!isReload && !tabOn && rifleBulletCount > 0)
             {
-                ShootFire(rifleFlash, "RifleFlashStop", rifleBulletCount, rifleClip, gunData.Rf_Count);
+                ShootFire(rifleFlash, "RifleFlashStop", rifleBulletCount, gunData.rifleClip, gunData.Rf_Count);
                 rifleBulletCount--;
                 if (rifleBulletCount == 0 & gunData.Rf_Count > 0)
                     StartCoroutine(RifleReload());
@@ -164,15 +160,13 @@ public class FireCtrl : MonoBehaviour
             StartCoroutine(RifleReload());
     }
 
-    
-
     private void ShotGunFireAndReload()
     {
         if (Input.GetMouseButtonDown(0) && isShotGun)
         {
             if (!isReload && !tabOn && shotgunBulletCount > 0)
             {
-                ShootFire(shotgunFlahs, "ShotGunFlashStop", shotgunBulletCount,shotgunClip,gunData.Sg_Count);
+                ShootFire(shotgunFlahs, "ShotGunFlashStop", shotgunBulletCount,gunData.shotgunClip,gunData.Sg_Count);
                 shotgunBulletCount--;
                 if (shotgunBulletCount == 0 && gunData.Sg_Count > 0)
                     StartCoroutine(ShotGunReload());
@@ -196,10 +190,10 @@ public class FireCtrl : MonoBehaviour
         else if (granadeData.Count == 0)
         {
             granadeMesh.enabled = false;
-            GameManager.Instance.itemEmptyRectList[GameManager.Instance.granadeIdx].SetParent(itemEmptyGroup);
-            GameManager.Instance.itemEmptyRectList[GameManager.Instance.granadeIdx].GetComponent<Image>().enabled = false;
-            GameManager.Instance.itemEmptyText[GameManager.Instance.granadeIdx].enabled = false;
-            GameManager.Instance.isGranadeGet = false;
+            ItemManager.Instance.itemEmptyRectList[ItemManager.Instance.granadeIdx].SetParent(itemEmptyGroup);
+            ItemManager.Instance.itemEmptyRectList[ItemManager.Instance.granadeIdx].GetComponent<Image>().enabled = false;
+            ItemManager.Instance.itemEmptyText[ItemManager.Instance.granadeIdx].enabled = false;
+            ItemManager.Instance.isGranadeGet = false;
             getGranade = false;
         }
     }
@@ -212,7 +206,7 @@ public class FireCtrl : MonoBehaviour
         _granade.transform.position = granadePos.position;
         _granade.transform.rotation = granadePos.rotation;
         _granade.SetActive(true);
-        GameManager.Instance.itemEmptyText[GameManager.Instance.granadeIdx].text = gunData.Rf_Count.ToString();
+        ItemManager.Instance.itemEmptyText[ItemManager.Instance.granadeIdx].text = gunData.Rf_Count.ToString();
     }
     public void ChangeGranade()
     {
@@ -227,6 +221,7 @@ public class FireCtrl : MonoBehaviour
     {
         animator.SetBool(aniIsGun, true);
         isRifle = false;
+        isGranade = false;
         isShotGun = true;
         rifleMesh.enabled = false;
         shotgunMesh.enabled = true;
@@ -245,33 +240,6 @@ public class FireCtrl : MonoBehaviour
         gunData.g_damage = 15;
         bulletText.text = rifleBulletCount.ToString() + " / " + gunData.Rf_Count.ToString();
     }
-    /*void RifleFire()
-    {
-        GameObject _bullet = ObjectPoolingManager.objPooling.GetPlayerBullet();
-        _bullet.transform.position = rifleFirePos.position;
-        _bullet.transform.rotation = rifleFirePos.rotation;
-        _bullet.SetActive(true);
-        rifleFlash.Play();
-        Invoke("RifleFlashStop", 0.1f);
-        animator.SetTrigger(aniFire);
-        --rifleBulletCount;
-        source.PlayOneShot(rifleClip, 1.0f);
-        bulletText.text = rifleBulletCount.ToString() + " / " + ItemDataBase.itemDataBase.rifleBulletCount.ToString();
-    }*/
-    /*void ShotGun()
-    {
-        GameObject _bullet = ObjectPoolingManager.objPooling.GetPlayerBullet();
-        _bullet.transform.position = shotgunFirePos.position;
-        _bullet.transform.rotation = shotgunFirePos.rotation;
-        _bullet.SetActive(true);
-        shotgunFlahs.Play();
-        Invoke("ShotGunFlashStop", 0.1f);
-        animator.SetTrigger(aniFire);
-        --shotgunBulletCount;
-        source.PlayOneShot(shotgunClip, 1.0f);
-        bulletText.text = shotgunBulletCount.ToString() + " / " + ItemDataBase.itemDataBase.shotgunBulletCount.ToString();
-
-    }*/
     void ShootFire(ParticleSystem particle, string st, int bulletCount, AudioClip clip, int itemDatabaseCount)
     {
         GameObject _bullet = ObjectPoolingManager.objPooling.GetPlayerBullet();
@@ -281,9 +249,8 @@ public class FireCtrl : MonoBehaviour
         particle.Play();
         Invoke(st, 0.1f);
         animator.SetTrigger(aniFire);
-        source.PlayOneShot(clip, 1.0f);
         bulletText.text = bulletCount.ToString() + " / " + itemDatabaseCount.ToString();
-
+        SoundManager.soundInst.PlayeOneShot(clip, source);
     }
 
     IEnumerator RifleReload()
@@ -293,6 +260,7 @@ public class FireCtrl : MonoBehaviour
         animator.SetTrigger(aniReload);
         animator.SetBool(aniIsReload, true);
         yield return new WaitForSeconds(1.55f);
+        SoundManager.soundInst.PlayeOneShot(gunData.rifleReloadClip, source);
         animator.SetBool(aniIsReload, false);
         isReload = false;
         if(gunData.Rf_Count >= rifleBulletMaxCount)
@@ -334,15 +302,15 @@ public class FireCtrl : MonoBehaviour
             }
             
         }
-        /*GameManager.Instance.itemEmptyObject.text = bulletValue.ToString();*/
+        /*ItemManager.Instance.itemEmptyObject.text = bulletValue.ToString();*/
         bulletText.text = rifleBulletCount.ToString() + " / " + gunData.Rf_Count.ToString();
-        GameManager.Instance.itemEmptyText[GameManager.Instance.rifleBulletIdx].text = gunData.Rf_Count.ToString();
+        ItemManager.Instance.itemEmptyText[ItemManager.Instance.rifleBulletIdx].text = gunData.Rf_Count.ToString();
         if(gunData.Rf_Count == 0)
         {
-            GameManager.Instance.itemEmptyRectList[GameManager.Instance.rifleBulletIdx].SetParent(itemEmptyGroup);
-            GameManager.Instance.itemEmptyRectList[GameManager.Instance.rifleBulletIdx].GetComponent<Image>().enabled = false;
-            GameManager.Instance.itemEmptyText[GameManager.Instance.rifleBulletIdx].enabled = false;
-            GameManager.Instance.isRifleBullet = false;
+            ItemManager.Instance.itemEmptyRectList[ItemManager.Instance.rifleBulletIdx].SetParent(itemEmptyGroup);
+            ItemManager.Instance.itemEmptyRectList[ItemManager.Instance.rifleBulletIdx].GetComponent<Image>().enabled = false;
+            ItemManager.Instance.itemEmptyText[ItemManager.Instance.rifleBulletIdx].enabled = false;
+            ItemManager.Instance.isRifleBullet = false;
         }
     }
     IEnumerator ShotGunReload()
@@ -351,6 +319,7 @@ public class FireCtrl : MonoBehaviour
         animator.SetTrigger(aniReload);
         animator.SetBool(aniIsReload, true);
         yield return new WaitForSeconds(1.55f);
+        SoundManager.soundInst.PlayeOneShot(gunData.shotgunReloadClip, source); 
         animator.SetBool(aniIsReload, false);
         isReload = false;
         if (gunData.Sg_Count >= shotgunBulletMaxCount)
@@ -393,13 +362,13 @@ public class FireCtrl : MonoBehaviour
 
         }
         bulletText.text = shotgunBulletCount.ToString() + " / " + gunData.Sg_Count.ToString();
-        GameManager.Instance.itemEmptyText[GameManager.Instance.rifleBulletIdx].text = gunData.Sg_Count.ToString();
+        ItemManager.Instance.itemEmptyText[ItemManager.Instance.rifleBulletIdx].text = gunData.Sg_Count.ToString();
         if (gunData.Sg_Count == 0)
         {
-            GameManager.Instance.itemEmptyRectList[GameManager.Instance.shotgunBulletIdx].SetParent(itemEmptyGroup);
-            GameManager.Instance.itemEmptyRectList[GameManager.Instance.shotgunBulletIdx].GetComponent<Image>().enabled = false;
-            GameManager.Instance.itemEmptyText[GameManager.Instance.shotgunBulletIdx].enabled = false;
-            GameManager.Instance.isShotGunBullet = false;
+            ItemManager.Instance.itemEmptyRectList[ItemManager.Instance.shotgunBulletIdx].SetParent(itemEmptyGroup);
+            ItemManager.Instance.itemEmptyRectList[ItemManager.Instance.shotgunBulletIdx].GetComponent<Image>().enabled = false;
+            ItemManager.Instance.itemEmptyText[ItemManager.Instance.shotgunBulletIdx].enabled = false;
+            ItemManager.Instance.isShotGunBullet = false;
         }
     }
     void RifleFlashStop()

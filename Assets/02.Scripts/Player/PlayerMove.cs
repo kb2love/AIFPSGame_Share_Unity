@@ -62,14 +62,8 @@ public class PlayerMove : MonoBehaviour
         {
             if (!audioSource.isPlaying || audioSource.clip != (playerData.walkClip || playerData.runClip))
             {
-                audioSource.clip = isSprint ? playerData.runClip : playerData.walkClip ;
-                audioSource.loop = true;
-                audioSource.Play();
+                SoundManager.soundInst.PlaySound(isSprint ? playerData.runClip : playerData.walkClip, audioSource);
             }
-        }
-        else if(ch.velocity.sqrMagnitude <= 0.1f)
-        {
-            audioSource.Stop();
         }
         ch.Move(moveVelocity);
     }
@@ -99,17 +93,15 @@ public class PlayerMove : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 hei = playerData.jumpForce;
-                audioSource.Stop();
                 if (isSprint)
                 {
                     animator.SetTrigger(aniSprintJump);
-                    audioSource.PlayOneShot(playerData.jumpClip, 1.0f);
                 }
                 else
                 {
                     animator.SetTrigger(aniStandingJump);
-                    audioSource.PlayOneShot(playerData.jumpClip, 1.0f);
                 }
+                SoundManager.soundInst.PlaySound(playerData.jumpClip, audioSource);
             }
         }
     }

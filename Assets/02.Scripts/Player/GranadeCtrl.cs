@@ -1,27 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+using TMPro;
 
 public class GranadeCtrl : MonoBehaviour
 {
     [SerializeField]
     private GranadeData granadeData;
-    private Rigidbody rb;
+    Vector3 targetPosition;
     void OnEnable()
     {
-        rb = GetComponent<Rigidbody>();
-        Vector3 throwFower = new Vector3(0, 1, 1);
-        throwFower = transform.TransformDirection(throwFower);
-        rb.AddForce(throwFower * granadeData.throwSpeed, ForceMode.Impulse);
+        targetPosition = transform.position + transform.forward * 5f;
+        transform.DOJump(targetPosition, 1f, 1, granadeData.arriveTime).SetEase(Ease.InOutSine).OnComplete(Bomb);
     }
-    void OnCollisionEnter(Collision collision)
+    private void Bomb()
     {
-        StartCoroutine(Bomb());
+        if(gameObject.activeSelf)
+        StartCoroutine(Explozion());
     }
-    private IEnumerator Bomb()
+    private IEnumerator Explozion()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1);
         gameObject.SetActive(false);
-        rb.Sleep();
+
     }
 }

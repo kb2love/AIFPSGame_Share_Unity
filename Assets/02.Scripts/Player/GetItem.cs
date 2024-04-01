@@ -9,19 +9,19 @@ public class GetItem : MonoBehaviour
     private GameObject getItemPanel;
     public bool isContact;
     private Animator animator;
+    [SerializeField] private int setCount;
     private readonly int aniGetItem = Animator.StringToHash("GetItemTrigger");
     [SerializeField] private bool isInputF;
     [SerializeField] private List<GameObject> collidersSet = new List<GameObject>();
-    [SerializeField] private List<GameObject> coliderContain = new List<GameObject>();
     void Awake()
     {
         getItemPanel = GameObject.Find("Canvas_ui").transform.GetChild(1).gameObject;
         animator = transform.GetChild(0).GetComponent<Animator>();
         isContact = false;
         isInputF = false;
+        setCount = 0;
     }
-    private 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag(itemTag))
         {
@@ -29,6 +29,7 @@ public class GetItem : MonoBehaviour
             collidersSet.Add(other.gameObject);
             isContact = true;
             StartCoroutine(GetItemPlayer());
+            setCount = 0;
         }
     }
     private void Update()
@@ -38,58 +39,92 @@ public class GetItem : MonoBehaviour
             isInputF = true;
         }
     }
-    IEnumerator GetItemPlayer()
+    /*IEnumerator GetItemPlayer()
     {
         while (isContact)
         {
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.2f);
             
-            if (isInputF && collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.HEAL)
+            if (isInputF && collidersSet.Count > 0 && collidersSet[setCount].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.HEAL)
             {
                 GetItemF(ItemDataBase.ItemType.HEAL);
             }
             
-            else if (isInputF && collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLE)
+            else if (isInputF && collidersSet.Count > 0 && collidersSet[setCount].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLE)
             {
                 GetItemF(ItemDataBase.ItemType.RIFLE);
             }
-            else if (isInputF && collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)
+            else if (isInputF && collidersSet.Count > 0 && collidersSet[setCount].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)
             {
                 GetItemF(ItemDataBase.ItemType.SHOTGUN);
             }
-            else if (isInputF && collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLEBULLET)
+            else if (isInputF && collidersSet.Count > 0 && collidersSet[setCount].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLEBULLET)
             {
                 GetItemF(ItemDataBase.ItemType.RIFLEBULLET);
             }
-            else if (isInputF && collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUNBULLET)
+            else if (isInputF && collidersSet.Count > 0 && collidersSet[setCount].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUNBULLET)
             {
                 GetItemF(ItemDataBase.ItemType.SHOTGUNBULLET);
             }
-            else if (isInputF && collidersSet.Count > 0 && collidersSet[0].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.GRENADE)
+            else if (isInputF && collidersSet.Count > 0 && collidersSet[setCount].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.GRENADE)
             {
                 GetItemF(ItemDataBase.ItemType.GRENADE);
             }
         }
-    }
+    }*/
+    IEnumerator GetItemPlayer()
+    {
+        while (isContact)
+        {
+            yield return new WaitForSeconds(0.2f);
 
+            if (isInputF && collidersSet.Count > 0)
+            {
+                var itemType = collidersSet[setCount].GetComponent<ItemDataBase>().itemType;
+                GetItemF(itemType);
+            }
+        }
+    }
+    /*private void GetItemF(ItemDataBase.ItemType itemType)
+    {
+        if (isInputF)
+        {
+            collidersSet[setCount].gameObject.SetActive(false);
+            setCount++;
+            colliderContain.RemoveAt(0);
+            isInputF = false;
+            Debug.Log("µÎ¹øµÅ´Âµí?");
+            if (colliderContain.Count == 0)
+            {
+                getItemPanel.SetActive(false);
+                collidersSet.Clear();
+                setCount = 0;
+                isContact = false;
+            }
+            animator.SetTrigger(aniGetItem);
+            ItemManager.Instance.AddItem(itemType);
+        }
+    }*/
     private void GetItemF(ItemDataBase.ItemType itemType)
     {
         if (isInputF)
         {
-            collidersSet[0].gameObject.SetActive(false);
-            collidersSet.RemoveAt(0);
+            collidersSet[setCount].gameObject.SetActive(false);
+            setCount++;
             isInputF = false;
-            Debug.Log("µÎ¹øµÅ´Âµí?");
-            if (collidersSet.Count == 0)
+
+            if (setCount >= collidersSet.Count)
             {
                 getItemPanel.SetActive(false);
+                collidersSet.Clear();
+                setCount = 0;
                 isContact = false;
             }
+
             animator.SetTrigger(aniGetItem);
-            GameManager.Instance.AddItem(itemType);
+            ItemManager.Instance.AddItem(itemType);
         }
     }
-
     void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag(itemTag))
@@ -97,7 +132,6 @@ public class GetItem : MonoBehaviour
             getItemPanel.SetActive(false);
             isContact = false;
             collidersSet.Clear();
-            coliderContain.Clear();
         }
     }
 }

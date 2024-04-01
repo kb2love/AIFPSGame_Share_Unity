@@ -7,4 +7,5 @@ public class MadicinData : ScriptableObject
     public int m_Count;
     public float m_Value;
     public Sprite m_Sprite;
+    public GameObject madicine;
 }

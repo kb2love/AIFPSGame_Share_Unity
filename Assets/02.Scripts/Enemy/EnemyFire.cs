@@ -4,24 +4,25 @@ using UnityEngine;
 
 public class EnemyFire : MonoBehaviour
 {
+    [SerializeField] private EnemyData enemyData;
     private Transform firePos;
     private ParticleSystem shotFlash;
     private Animator animator;
+    private AudioSource source;
     readonly int Anireload = Animator.StringToHash("ReloadTrigger");
     readonly int Anifire = Animator.StringToHash("FireTrigger");
     private int bulletCount;
     private int maxBulletCount;
-    public bool isAttack;
     private bool isReload;
     private EnemyAI enemyAI;
     void Start()
     {
+        source = GetComponent<AudioSource>();
         maxBulletCount = 20;
         bulletCount = maxBulletCount;
     }
     private void OnEnable()
     {
-        isAttack = false;
         isReload = false;
         animator = transform.GetChild(0).GetComponent<Animator>();
         firePos = transform.GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetComponent<Transform>();
@@ -35,7 +36,7 @@ public class EnemyFire : MonoBehaviour
         while(!enemyAI.isDie)
         {
             yield return new WaitForSeconds(0.5f);
-            while (isAttack)
+            while (enemyAI.isAttack)
             {
                 yield return new WaitForSeconds(0.2f);
                 if(!isReload)
@@ -54,6 +55,7 @@ public class EnemyFire : MonoBehaviour
         e_bullet.SetActive(true);
         animator.SetTrigger(Anifire);
         shotFlash.Play();
+        SoundManager.soundInst.PlayeOneShot(enemyData.shotClip, source);
         Invoke("ShootFlashStop", 0.1f);
         if(bulletCount <= 0)
         {
