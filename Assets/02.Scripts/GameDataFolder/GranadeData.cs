@@ -9,7 +9,11 @@ public class GranadeData : ScriptableObject
     public float Damage;
     public float throwSpeed;
     public float arriveTime;
-    public Sprite sprite;
+    public Sprite itme_Sprite;
+    public Sprite ui_Sprite;
     public GameObject spawnGranade;
     public GameObject throwGranade;
+    public GameObject expEffect;
+    public AudioClip expClip;
+    public AudioClip throwClip;
 }

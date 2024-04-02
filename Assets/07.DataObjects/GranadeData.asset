@@ -14,7 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Count: 0
   Damage: 100
-  throwSpeed: 5
-  sprite: {fileID: 21300000, guid: b9e6f2f892a04ec48b6b80b8a186f62f, type: 3}
+  throwSpeed: 300
+  arriveTime: 0
+  itme_Sprite: {fileID: 21300000, guid: b9e6f2f892a04ec48b6b80b8a186f62f, type: 3}
+  ui_Sprite: {fileID: 21300000, guid: 3ab45003a164c004084c8bb0586c1e5a, type: 3}
   spawnGranade: {fileID: 6773804979363258921, guid: e3b51167d5e26a04a98250a6d9dcdf34, type: 3}
   throwGranade: {fileID: 8967797812412512394, guid: 6280102a254b95246a77d5b53a685016, type: 3}
+  expEffect: {fileID: 1337198075554910, guid: 25c7aa9ad705fe143a4d71c1c8deb7d4, type: 3}
+  expClip: {fileID: 8300000, guid: c59b70e4dec5147a487fd2b4d5acbfc2, type: 3}
+  throwClip: {fileID: 8300000, guid: 719c79003770c2c40846a24f9c3edf47, type: 3}

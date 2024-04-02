@@ -34,6 +34,9 @@ public class ItemManager : MonoBehaviour
     public bool isRifleBullet;
     public bool isShotGunBullet;
     public bool isGranadeGet;
+    public bool getGranade;
+    public bool getShotGun;
+    public bool getRifle;
     void Awake()
     {
         if(Instance == null)
@@ -75,6 +78,9 @@ public class ItemManager : MonoBehaviour
         gunData.Sg_Count = 0;
         madicinData.m_Count = 0;
         granadeData.Count = 0;
+        getGranade = false;
+        getShotGun = false;
+        getRifle = false;
     }
     public void AddItem(ItemDataBase.ItemType itemType)
     {
@@ -85,11 +91,15 @@ public class ItemManager : MonoBehaviour
                 break;
             case ItemDataBase.ItemType.RIFLE:
                 AddGun(gunData.rf_Sprite, ItemDataBase.ItemType.RIFLE, rifleIdx);
-                fireCtrl.getRifle = true;
+                if (!getShotGun && !getGranade)
+                    fireCtrl.weaponImage.sprite = gunData.rf_UISprite;
+                getRifle = true;
                 break;
             case ItemDataBase.ItemType.SHOTGUN:
                 AddGun(gunData.sg_Sprite, ItemDataBase.ItemType.SHOTGUN, shotgunIdx);
-                fireCtrl.getShotGun = true;
+                if (!getRifle && !getGranade)
+                    fireCtrl.weaponImage.sprite = gunData.sg_UISprite;
+                getShotGun = true;
                 break;
             case ItemDataBase.ItemType.RIFLEBULLET:
                 CaseRifleBullet();
@@ -171,7 +181,7 @@ public class ItemManager : MonoBehaviour
             itemEmptyText[shotgunBulletIdx].text = gunData.Sg_Count.ToString();
         }
     }
-    private void AddGun(Sprite sprite, ItemDataBase.ItemType type, int idx)
+    private void AddGun(Sprite sprite,ItemDataBase.ItemType type, int idx)
     {
         for (int i = 0; i < imageDropList.Count; i++)
         {
@@ -182,6 +192,7 @@ public class ItemManager : MonoBehaviour
             itemEmptyRectList[itemEmptyIdx].gameObject.GetComponent<ItemDataBase>().itemType = type;
             itemEmptyIdx++;
             idx = itemEmptyIdx;
+            fireCtrl.weaponImage.enabled = true;
             if (itemEmptyIdx >= 16) itemEmptyIdx = 0;
             break;
         }
@@ -189,8 +200,11 @@ public class ItemManager : MonoBehaviour
     private void CaseGranade()
     {
         granadeData.Count++;
-        fireCtrl.getGranade = true;
-        if(fireCtrl.isGranade)
+        getGranade = true;
+        if(!getRifle && !getGranade)
+        fireCtrl.weaponImage.sprite = granadeData.ui_Sprite;
+        fireCtrl.weaponImage.enabled = true;
+        if (fireCtrl.isGranade)
             fireCtrl.bulletText.text = granadeData.Count.ToString();
         if (!isGranadeGet)
         {
@@ -199,7 +213,7 @@ public class ItemManager : MonoBehaviour
                 if (imageDropList[i].childCount > 0) continue;
                 itemEmptyRectList[itemEmptyIdx].gameObject.GetComponent<ItemDataBase>().itemType = ItemDataBase.ItemType.GRENADE;
                 granadeIdx = itemEmptyIdx;
-                AddItem(i, granadeData.sprite, granadeData.Count);
+                AddItem(i, granadeData.itme_Sprite, granadeData.Count);
                 if(fireCtrl.isGranade)
                     fireCtrl.granadeMesh.enabled = true;
                 isGranadeGet = true;
@@ -226,10 +240,10 @@ public class ItemManager : MonoBehaviour
     {
         madicinData.m_Count--;
         itemEmptyText[healIdx].text = madicinData.m_Count.ToString();
-        playerDamage.HP += (int)madicinData.m_Value;
-        playerDamage.hpBarImage.fillAmount = (float)playerDamage.HP / (float)playerData.maxHp;
-        if(playerDamage.HP >= 100)
-            playerDamage.HP = 100;
+        playerDamage.hp += (int)madicinData.m_Value;
+        playerDamage.hpBarImage.fillAmount = (float)playerDamage.hp / (float)playerData.maxHp;
+        if(playerDamage.hp >= 100)
+            playerDamage.hp = 100;
         if(madicinData.m_Count == 0)
         {
             itemEmptyRectList[healIdx].SetParent(itemEmptyRect[0]);

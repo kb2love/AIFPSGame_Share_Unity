@@ -8,8 +8,10 @@ public class EnemyAI : MonoBehaviour
     public State state;
     private Transform playerTr;
     private Animator animator;
-    private float attackDist;
-    private float traceDist;
+    public float attackDist;
+    public float traceDist;
+    private readonly int aniDieTrigger = Animator.StringToHash("DieTrigger");
+    private readonly int aniDieIdx = Animator.StringToHash("DieIdx");
     public bool isDie;
     public bool isAttack
     {
@@ -59,6 +61,7 @@ public class EnemyAI : MonoBehaviour
         GetComponent<Rigidbody>().useGravity = true;
         GetComponent<Rigidbody>().isKinematic = false;
         GetComponent<CapsuleCollider>().isTrigger = false;
+        state = State.PATROL;
         isDie = false;
         StartCoroutine(EnemyScope());
         StartCoroutine(EnemyMotion());
@@ -107,7 +110,7 @@ public class EnemyAI : MonoBehaviour
                     AttackState();
                     break;
                 case State.DIE:
-                    EnemyDie();
+                    StartCoroutine(EnemyDie());
                     break;
             }
         }
@@ -117,22 +120,22 @@ public class EnemyAI : MonoBehaviour
     {
         animator.SetBool("IsMove", false);
         _isAttack = true;
-        isTrace = false;
-        isMove = false;
+        _isTrace = false;
+        _isMove = false;
     }
 
     private void TraceState()
     {
         animator.SetBool("IsMove", true);
         _isAttack = false;
-        isTrace = true;
-        isMove = false;
+        _isTrace = true;
+        _isMove = false;
     }
 
     private void PatrolState()
     {
-        isTrace = false;
-        isMove = true;
+        _isTrace = false;
+        _isMove = true;
         _isAttack = false;
         animator.SetBool("IsMove", true);
     }
@@ -144,26 +147,29 @@ public class EnemyAI : MonoBehaviour
         _isMove= false;
         _isAttack= false;
         animator.SetBool("IsMove", false);
+        
     }
 
-    public void EnemyDie()
+    private IEnumerator EnemyDie()
     {
-        animator.SetBool("IsMove", false);
-        isTrace = false;
+        _isTrace = false;
         _isAttack = false;
-        isMove = false;
+        _isMove = false;
+        isDie = true;
+        animator.SetBool("IsMove", false);
+        animator.SetInteger(aniDieIdx, Random.Range(0, 2));
+        animator.SetTrigger(aniDieTrigger);
         GetComponent<Rigidbody>().useGravity = false;
         GetComponent<Rigidbody>().isKinematic = true;
         GetComponent<CapsuleCollider>().isTrigger = true;
-        isDie = true;
-        Invoke("OffObject", 2.0f);
-    }
-    private void OffObject()
-    {
+        yield return new WaitForSeconds(3);
+        ItemManager.Instance.GetComponent<LoopSpawn>().e_Count--;
         gameObject.SetActive(false);
     }
     void OnDisable()
     {
-
+        isDie = false;
+        attackDist = 5f;
+        traceDist = 10f;
     }
 }

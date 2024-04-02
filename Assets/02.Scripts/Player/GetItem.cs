@@ -34,44 +34,11 @@ public class GetItem : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F) && isContact)
         {
             isInputF = true;
         }
     }
-    /*IEnumerator GetItemPlayer()
-    {
-        while (isContact)
-        {
-            yield return new WaitForSeconds(0.2f);
-            
-            if (isInputF && collidersSet.Count > 0 && collidersSet[setCount].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.HEAL)
-            {
-                GetItemF(ItemDataBase.ItemType.HEAL);
-            }
-            
-            else if (isInputF && collidersSet.Count > 0 && collidersSet[setCount].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLE)
-            {
-                GetItemF(ItemDataBase.ItemType.RIFLE);
-            }
-            else if (isInputF && collidersSet.Count > 0 && collidersSet[setCount].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)
-            {
-                GetItemF(ItemDataBase.ItemType.SHOTGUN);
-            }
-            else if (isInputF && collidersSet.Count > 0 && collidersSet[setCount].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLEBULLET)
-            {
-                GetItemF(ItemDataBase.ItemType.RIFLEBULLET);
-            }
-            else if (isInputF && collidersSet.Count > 0 && collidersSet[setCount].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUNBULLET)
-            {
-                GetItemF(ItemDataBase.ItemType.SHOTGUNBULLET);
-            }
-            else if (isInputF && collidersSet.Count > 0 && collidersSet[setCount].GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.GRENADE)
-            {
-                GetItemF(ItemDataBase.ItemType.GRENADE);
-            }
-        }
-    }*/
     IEnumerator GetItemPlayer()
     {
         while (isContact)
@@ -80,31 +47,12 @@ public class GetItem : MonoBehaviour
 
             if (isInputF && collidersSet.Count > 0)
             {
-                var itemType = collidersSet[setCount].GetComponent<ItemDataBase>().itemType;
-                GetItemF(itemType);
+                var itemType = collidersSet[setCount].GetComponent<ItemDataBase>()?.itemType;
+                if (itemType != null)
+                    GetItemF(itemType.Value);
             }
         }
     }
-    /*private void GetItemF(ItemDataBase.ItemType itemType)
-    {
-        if (isInputF)
-        {
-            collidersSet[setCount].gameObject.SetActive(false);
-            setCount++;
-            colliderContain.RemoveAt(0);
-            isInputF = false;
-            Debug.Log("µÎ¹øµÅ´Âµí?");
-            if (colliderContain.Count == 0)
-            {
-                getItemPanel.SetActive(false);
-                collidersSet.Clear();
-                setCount = 0;
-                isContact = false;
-            }
-            animator.SetTrigger(aniGetItem);
-            ItemManager.Instance.AddItem(itemType);
-        }
-    }*/
     private void GetItemF(ItemDataBase.ItemType itemType)
     {
         if (isInputF)
@@ -127,10 +75,11 @@ public class GetItem : MonoBehaviour
     }
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag(itemTag))
+        if (other.CompareTag(itemTag))
         {
             getItemPanel.SetActive(false);
             isContact = false;
+            if(!isInputF)
             collidersSet.Clear();
         }
     }

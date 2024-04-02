@@ -9,6 +9,7 @@ public class ObjectPoolingManager : MonoBehaviour
     [SerializeField] private GranadeData granadeData;
     [SerializeField] private GunData gunData;
     [SerializeField] private MadicinData madicinData;
+    private List<GameObject> expEffectList = new List<GameObject>();
     private List<GameObject> s_granadeList = new List<GameObject>();
     private List<GameObject> w_granadeList = new List<GameObject>();
     private List<GameObject> enemyList = new List<GameObject>();
@@ -40,6 +41,7 @@ public class ObjectPoolingManager : MonoBehaviour
         CreateEnemy();
         CreateWeaponGranade();
         CreateSpawnGranade();
+        CreateExpEffect();
     }
     void CreatePlayerBullet()
     {
@@ -140,6 +142,17 @@ public class ObjectPoolingManager : MonoBehaviour
             s_granadeList.Add(_s_granade);
         }
     }
+    void CreateExpEffect()
+    {
+        GameObject expEffectGroup = new GameObject("ExpEffectGroup");
+        for (int i = 0; i < 4; i++)
+        {
+            GameObject _expEffect = Instantiate(granadeData.expEffect, expEffectGroup.transform);
+            _expEffect.name = (i + 1).ToString() + "¹ø expEffect";
+            _expEffect.gameObject.SetActive(false);
+            expEffectList.Add(_expEffect);
+        }
+    }
     public GameObject GetPlayerBullet()
     {
         foreach (GameObject _bullet in playerBulletList)
@@ -220,6 +233,15 @@ public class ObjectPoolingManager : MonoBehaviour
         {
             if (!_s_granade.activeSelf)
                 return _s_granade;
+        }
+        return null;
+    }
+    public GameObject GetExpEffect()
+    {
+        foreach (GameObject _expEffect in expEffectList)
+        {
+            if (!_expEffect.activeSelf)
+                return _expEffect;
         }
         return null;
     }

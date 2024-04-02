@@ -15,9 +15,9 @@ public class FireCtrl : MonoBehaviour
     private Animator animator;
     private PlayerDamage playerDamage;
     private ParticleSystem rifleFlash;
-     private ParticleSystem shotgunFlahs;
+    private ParticleSystem shotgunFlahs;
     private CanvasGroup canvasGroup;
-    private Image weaponImage;
+    public Image weaponImage;
     public Text bulletText;
     private RectTransform itemEmptyGroup;
     private MeshRenderer rifleMesh;
@@ -39,9 +39,6 @@ public class FireCtrl : MonoBehaviour
     public bool isGranade;
     public bool isRifle;
     public bool isShotGun;
-    public bool getGranade;
-    public bool getShotGun;
-    public bool getRifle;
     void Start()
     {
         animator = transform.GetChild(0).GetComponent<Animator>();
@@ -76,9 +73,6 @@ public class FireCtrl : MonoBehaviour
         isGranade = false;
         isShotGun = false;
         isRifle = false;
-        getGranade = false;
-        getShotGun = false;
-        getRifle = false;
         tabOn = false;
         isReload = false;
         rifleFlash.Stop();
@@ -130,15 +124,15 @@ public class FireCtrl : MonoBehaviour
     }
     private void ChangeWeapon()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha1) && getRifle)
+        if(Input.GetKeyDown(KeyCode.Alpha1) && ItemManager.Instance.getRifle)
         {
             ChangeRifle();
         }
-        else if(Input.GetKeyDown(KeyCode.Alpha2) && getShotGun)
+        else if(Input.GetKeyDown(KeyCode.Alpha2) && ItemManager.Instance.getShotGun)
         {
             ChangeShotGun();
         }
-        else if( Input.GetKeyDown(KeyCode.Alpha3) && getGranade)
+        else if( Input.GetKeyDown(KeyCode.Alpha3) && ItemManager.Instance.getGranade)
         {
             ChangeGranade();
         }
@@ -179,7 +173,6 @@ public class FireCtrl : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && isGranade)
         {
-            Debug.Log("왜안됄까여");
             if(granadeData.Count > 0 && !tabOn)
             {
                 animator.SetTrigger(aniGranade);
@@ -194,19 +187,23 @@ public class FireCtrl : MonoBehaviour
             ItemManager.Instance.itemEmptyRectList[ItemManager.Instance.granadeIdx].GetComponent<Image>().enabled = false;
             ItemManager.Instance.itemEmptyText[ItemManager.Instance.granadeIdx].enabled = false;
             ItemManager.Instance.isGranadeGet = false;
-            getGranade = false;
+            ItemManager.Instance.getGranade = false;
         }
     }
     IEnumerator ThrowGranade()
     {
-        yield return new WaitForSeconds(1.8f);
         granadeData.Count--;
+        yield return new WaitForSeconds(1.8f);
+        SoundManager.soundInst.PlayeOneShot(granadeData.throwClip, source);
         bulletText.text = granadeData.Count.ToString();
         GameObject _granade = ObjectPoolingManager.objPooling.GetWeaponGranade();
         _granade.transform.position = granadePos.position;
         _granade.transform.rotation = granadePos.rotation;
         _granade.SetActive(true);
+        
         ItemManager.Instance.itemEmptyText[ItemManager.Instance.granadeIdx].text = gunData.Rf_Count.ToString();
+        yield return new WaitForSeconds(4f);
+        SoundManager.soundInst.PlayeOneShot(granadeData.expClip, source);
     }
     public void ChangeGranade()
     {
@@ -216,6 +213,7 @@ public class FireCtrl : MonoBehaviour
         granadeMesh.enabled = true;
         animator.SetBool(aniIsGun, false);
         bulletText.text = granadeData.Count.ToString();
+        weaponImage.sprite = granadeData.ui_Sprite;
     }
     public void ChangeShotGun()
     {
@@ -227,6 +225,7 @@ public class FireCtrl : MonoBehaviour
         shotgunMesh.enabled = true;
         gunData.g_damage = 50;
         bulletText.text = shotgunBulletCount.ToString() + " / " + gunData.Sg_Count.ToString();
+        weaponImage.sprite = gunData.sg_UISprite;
     }
     public void ChangeRifle()
     {
@@ -236,9 +235,9 @@ public class FireCtrl : MonoBehaviour
         isGranade = false;
         shotgunMesh.enabled = false;
         rifleMesh.enabled = true;
-        Debug.Log("안돼ㅔ?");
         gunData.g_damage = 15;
         bulletText.text = rifleBulletCount.ToString() + " / " + gunData.Rf_Count.ToString();
+        weaponImage.sprite = gunData.rf_UISprite;
     }
     void ShootFire(ParticleSystem particle, string st, int bulletCount, AudioClip clip, int itemDatabaseCount)
     {

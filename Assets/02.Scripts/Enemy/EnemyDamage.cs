@@ -20,7 +20,7 @@ public class EnemyDamage : MonoBehaviour
     }
     void OnEnable()
     {
-        hp = _enemyData.e_Hp;
+        hp = _enemyData.e_Hp;   
     }
 
     private void OnCollisionEnter(Collision col)
@@ -28,17 +28,23 @@ public class EnemyDamage : MonoBehaviour
         if(col.gameObject.CompareTag(bulletTag))
         {
             col.gameObject.SetActive(false);
-            hp -= (int)col.gameObject.GetComponent<BulletCtlr>().damage;
+            ReceiveDamage((int)col.gameObject.GetComponent<BulletCtlr>().damage);
             Vector3 normal = col.contacts[0].normal;
             _effect.transform.position = col.contacts[0].point;
             _effect.transform.rotation = Quaternion.FromToRotation(-Vector3.forward, normal);
             _effect.SetActive(true);
+            enemyAI.attackDist = 10f;
+            enemyAI.traceDist = 50f;
             Invoke("EffectOff", 1f);
             animator.SetTrigger(aniE_Hit);
-            if(hp <= 0)
-            {
-                enemyAI.EnemyDie();
-            }
+        }
+    }
+    public void ReceiveDamage(int damage)
+    {
+        hp -= damage;
+        if(hp <= 0)
+        {
+            enemyAI.state = EnemyAI.State.DIE;
         }
     }
     private void EffectOff()

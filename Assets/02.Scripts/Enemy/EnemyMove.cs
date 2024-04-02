@@ -65,7 +65,6 @@ public class EnemyMove : MonoBehaviour
     }
     public void EnemyVaseMove()
     {
-        if (!enemyAI.isMove) return;
         disOne = (stairList[nextIdx].position - transform.position).normalized;
         dist = Vector3.Distance(stairList[nextIdx].position, transform.position);
         Vector3 height = new Vector3(transform.position.x, transform.position.y + 0.25f, transform.position.z);
@@ -133,24 +132,7 @@ public class EnemyMove : MonoBehaviour
     }
     public void OnPlayerTrace()
     {
-        /*if (!isTrace) return;
-        float distY = playerTr.position.y - transform.position.y;
-        if (distY > 1)
-        {
-            isTrace = false;
-        }
-        else if(distY < 1)
-        {
-            isTrace = true;
-        }
-        isTrace = true;*/
-        float dis = playerTr.position.y - transform.position.y;
-        if (dis > 1)
-        {
-            enemyAI.isMove = true;
-            enemyAI.isTrace = false;
-            return;
-        }
+        //float dis = playerTr.position.y - transform.position.y;
         Vector3 plDis = (playerTr.position - transform.position).normalized;
         transform.Translate(plDis * walkSpeed * Time.deltaTime);
         Vector3 plRot = playerTr.position - transform.position;

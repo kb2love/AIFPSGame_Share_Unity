@@ -15,10 +15,12 @@ MonoBehaviour:
   Sg_Count: 0
   Rf_Count: 0
   g_damage: 15
-  sgB_Sprite: {fileID: 21300000, guid: bbef690e2f46d914996e00aa9a8207e8, type: 3}
   rfB_Sprite: {fileID: 21300000, guid: 2955dd9e6f801e145b4de022fed3a903, type: 3}
-  sg_Sprite: {fileID: 21300000, guid: 5c9a346ecdb82fa48bc4d0a25e74295e, type: 3}
   rf_Sprite: {fileID: 21300000, guid: 1fdf57fd1b36113449cd424f828a8f00, type: 3}
+  rf_UISprite: {fileID: 21300000, guid: d01f671d7d5110f4d8b492c926cd8320, type: 3}
+  sgB_Sprite: {fileID: 21300000, guid: bbef690e2f46d914996e00aa9a8207e8, type: 3}
+  sg_Sprite: {fileID: 21300000, guid: 5c9a346ecdb82fa48bc4d0a25e74295e, type: 3}
+  sg_UISprite: {fileID: 21300000, guid: ad6a5541c314b444f87fdb067793205a, type: 3}
   rifle: {fileID: 4886314855705931971, guid: 9d8ff323d38afdd4c910a81013c4917a, type: 3}
   rifleBullet: {fileID: 1370597286371639369, guid: 1657e579832c7204d95bc014e1da5555, type: 3}
   rifleClip: {fileID: 8300000, guid: 641ff25f5da444ddf8874d961a56f0c9, type: 3}

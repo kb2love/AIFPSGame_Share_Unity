@@ -14,7 +14,7 @@ public class LoopSpawn : MonoBehaviour
     private PlayerDamage playerDamage;
     private int spawnTrIdx;
     private int e_spawnTrIdx;
-    private int e_Count;
+    public int e_Count;
     public int allSpawnTime;
     private int allItemCount;
     private HashSet<int> e_spawnIdx = new HashSet<int>();
@@ -69,9 +69,10 @@ public class LoopSpawn : MonoBehaviour
                 _rifleBulletBox.transform.rotation = Quaternion.identity;
                 _rifleBulletBox.SetActive(true);
                 allItemCount++;
-                if (allItemCount == spawnPointsList.Count-1)
+                if (allItemCount >= spawnPointsList.Count)
                 {
                     spawnIdx.Clear();
+                    allItemCount = 0;
                 }
             }
             if (ObjectPoolingManager.objPooling.GetShotGunBulletBox() != null)
@@ -86,9 +87,10 @@ public class LoopSpawn : MonoBehaviour
                 _shotgunBulletBox.transform.rotation = Quaternion.identity;
                 _shotgunBulletBox.SetActive(true);
                 allItemCount++;
-                if (allItemCount == spawnPointsList.Count - 1)
+                if (allItemCount >= spawnPointsList.Count)
                 {
                     spawnIdx.Clear();
+                    allItemCount = 0;
                 }
             }
             if (ObjectPoolingManager.objPooling.GetMadicine() != null)
@@ -103,9 +105,10 @@ public class LoopSpawn : MonoBehaviour
                 _madicine.transform.rotation = Quaternion.identity;
                 _madicine.SetActive(true);
                 allItemCount++;
-                if (allItemCount >= spawnPointsList.Count - 6)
+                if (allItemCount >= spawnPointsList.Count)
                 {
                     spawnIdx.Clear();
+                    allItemCount = 0;
                 }
             }
             if (ObjectPoolingManager.objPooling.GetSpawnGranade() != null)
@@ -120,9 +123,10 @@ public class LoopSpawn : MonoBehaviour
                 _granade.transform.rotation = Quaternion.identity;
                 _granade.SetActive(true);
                 allItemCount++;
-                if (allItemCount >= spawnPointsList.Count - 6)
+                if (allItemCount >= spawnPointsList.Count)
                 {
                     spawnIdx.Clear();
+                    allItemCount= 0;
                 }
             }
             if (ObjectPoolingManager.objPooling.GetEnemy() != null)
@@ -136,9 +140,10 @@ public class LoopSpawn : MonoBehaviour
                 _enemy.transform.rotation = Quaternion.identity;
                 _enemy.SetActive(true);
                 e_Count++;
-                if(e_Count >= enemySpanwPointList.Count-2)
+                if(e_Count >= enemySpanwPointList.Count)
                 {
                     e_spawnIdx.Clear();
+                    e_Count = 0;
                 }
             }
 
