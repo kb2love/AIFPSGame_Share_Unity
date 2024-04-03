@@ -399,9 +399,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 561190561}
-        m_TargetAssemblyTypeName: SceneMove, Assembly-CSharp
-        m_MethodName: QuitButton
+      - m_Target: {fileID: 2018300017}
+        m_TargetAssemblyTypeName: StartScene, Assembly-CSharp
+        m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -644,7 +644,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Load Game
+  m_Text: "\uAC8C\uC784\uD558\uAE30"
 --- !u!222 &761255878
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -724,7 +724,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: New Game
+  m_Text: "\uD29C\uD1A0\uB9AC\uC5BC"
 --- !u!222 &831523643
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -746,7 +746,7 @@ GameObject:
   - component: {fileID: 856604087}
   - component: {fileID: 856604086}
   m_Layer: 5
-  m_Name: Button (Legacy)_LoadGame
+  m_Name: Button (Legacy)_PlayGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -816,7 +816,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 856604087}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2018300017}
+        m_TargetAssemblyTypeName: StartScene, Assembly-CSharp
+        m_MethodName: StartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &856604087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1000,7 +1012,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.3301887, g: 0.3301887, b: 0.3301887, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1020,7 +1032,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Quit Game
+  m_Text: "\uB098\uAC00\uAE30"
 --- !u!222 &1404708036
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1118,6 +1130,7 @@ GameObject:
   - component: {fileID: 2018300015}
   - component: {fileID: 2018300014}
   - component: {fileID: 2018300013}
+  - component: {fileID: 2018300017}
   m_Layer: 5
   m_Name: Canvas_StartUI
   m_TagString: Untagged
@@ -1212,6 +1225,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &2018300017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2018300012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aba7c08d4c142b642b958024651f7d90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2066333157
 GameObject:
   m_ObjectHideFlags: 0
@@ -1225,7 +1250,7 @@ GameObject:
   - component: {fileID: 2066333160}
   - component: {fileID: 2066333159}
   m_Layer: 5
-  m_Name: Button (Legacy)_NewGame
+  m_Name: Button (Legacy)_TutoGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1296,9 +1321,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 561190561}
-        m_TargetAssemblyTypeName: SceneMove, Assembly-CSharp
-        m_MethodName: StartButton
+      - m_Target: {fileID: 2018300017}
+        m_TargetAssemblyTypeName: StartScene, Assembly-CSharp
+        m_MethodName: TutoScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

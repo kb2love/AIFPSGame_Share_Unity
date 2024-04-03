@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6810178748332002555}
   - component: {fileID: 6502626828320061531}
   - component: {fileID: 5953439106399294870}
-  - component: {fileID: 6198371529043025832}
+  - component: {fileID: 604608595783458153}
   m_Layer: 0
   m_Name: RifleBulletBox
   m_TagString: Item
@@ -83,7 +83,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &6198371529043025832
+--- !u!114 &604608595783458153
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,19 +92,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1370597286371639369}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0067adb7d323731458d22ce2a3e37ab6, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c3090eb6e09bd04c89e2932f821f7a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemData: {fileID: 11400000, guid: 64461ca4220b3a54697e5b1aeaa2966d, type: 2}
   itemType: 4
-  itemCount: 0
-  itemName: PistolBulletBox
-  itemImage: {fileID: 21300000, guid: 2955dd9e6f801e145b4de022fed3a903, type: 3}
-  rifleBulletCount: 0
-  rifleBulletDamage: 0
-  shotgunBulletCount: 0
-  shotgunBulletDamage: 0
-  itemHealCount: 0
-  itemHealValue: 0
 --- !u!1001 &7363341139392202104
 PrefabInstance:
   m_ObjectHideFlags: 0

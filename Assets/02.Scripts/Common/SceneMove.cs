@@ -4,9 +4,30 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class SceneMove : MonoBehaviour
 {
-    public void StartButton()
+    public static SceneMove sceneInst;
+    void Awake()
     {
-        SceneManager.LoadScene("Battle Scene");
+        /*if (sceneInst == null)
+        {*/
+            sceneInst = this;
+        /*}
+        else if (sceneInst != this)
+        {
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(gameObject);*/
+    }
+    public void TutoButton()
+    {
+        SceneManager.LoadScene("Tutorial Scene");
+    }
+    public void PlayGame()
+    {
+        SceneManager.LoadScene("BattleLoop Scene");
+    }
+    public void StartScene()
+    {
+        SceneManager.LoadScene("StartScene");
     }
     public void QuitButton()
     {

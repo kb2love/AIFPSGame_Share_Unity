@@ -38,25 +38,25 @@ public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         canvasGroup.blocksRaycasts = true;
 
         
-        if(itemTr.parent == rightHand && this.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLE)
+        if(itemTr.parent == rightHand && this.gameObject.GetComponent<ItemData>().itemType == ItemData.ItemType.RIFLE)
         {
             fireCtrl.isRifle = true;
             fireCtrl.isShotGun = false;
             fireCtrl.isGranade = false;
             fireCtrl.ChangeRifle();
         }
-        else if(itemTr.parent == rightHand && this.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)
+        else if(itemTr.parent == rightHand && this.gameObject.GetComponent<ItemData>().itemType == ItemData.ItemType.SHOTGUN)
         {
             fireCtrl.isShotGun = true;
             fireCtrl.isRifle = false;
             fireCtrl.isGranade= false;
             fireCtrl.ChangeShotGun();
         }
-        else if(itemTr.parent != rightHand && this.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.RIFLE )
+        else if(itemTr.parent != rightHand && this.gameObject.GetComponent<ItemData>().itemType == ItemData.ItemType.RIFLE )
         {
             fireCtrl.isRifle = false;
         }
-        else if(itemTr.parent != rightHand && this.gameObject.GetComponent<ItemDataBase>().itemType == ItemDataBase.ItemType.SHOTGUN)
+        else if(itemTr.parent != rightHand && this.gameObject.GetComponent<ItemData>().itemType == ItemData.ItemType.SHOTGUN)
         {
             fireCtrl.isShotGun = false;
         }

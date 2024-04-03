@@ -15,14 +15,11 @@ public class EnemyFire : MonoBehaviour
     private int maxBulletCount;
     private bool isReload;
     private EnemyAI enemyAI;
-    void Start()
+    private void OnEnable()
     {
         source = GetComponent<AudioSource>();
         maxBulletCount = 20;
         bulletCount = maxBulletCount;
-    }
-    private void OnEnable()
-    {
         isReload = false;
         animator = transform.GetChild(0).GetComponent<Animator>();
         firePos = transform.GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetComponent<Transform>();

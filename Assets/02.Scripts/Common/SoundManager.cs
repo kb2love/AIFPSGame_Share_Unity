@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using DG.Tweening;
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager soundInst; 
@@ -11,12 +11,12 @@ public class SoundManager : MonoBehaviour
         if (soundInst == null)
         {
             soundInst = this;
-            DontDestroyOnLoad(gameObject);
         }
-        else
+        else if(soundInst != this)
         {
             Destroy(gameObject);
         }
+        DontDestroyOnLoad(gameObject);
     }
 
     public void PlaySound(AudioClip clip, AudioSource source)

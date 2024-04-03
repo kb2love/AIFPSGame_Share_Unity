@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 public class ObjectPoolingManager : MonoBehaviour
 {
@@ -24,11 +25,14 @@ public class ObjectPoolingManager : MonoBehaviour
     private int itemSpawnCount;
     void Awake()
     {
-        if (objPooling == null)
+        /*if (objPooling == null)*/
             objPooling = this;
-        else if (objPooling != this)
+        /*else if (objPooling != this)
             Destroy(gameObject);
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);*/
+    }
+    void OnEnable()
+    {
         maxEnmeyBullet = 40;
         maxPlayerBullet = 30;
         itemSpawnCount = 10;
@@ -145,7 +149,7 @@ public class ObjectPoolingManager : MonoBehaviour
     void CreateExpEffect()
     {
         GameObject expEffectGroup = new GameObject("ExpEffectGroup");
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 6; i++)
         {
             GameObject _expEffect = Instantiate(granadeData.expEffect, expEffectGroup.transform);
             _expEffect.name = (i + 1).ToString() + "¹ø expEffect";

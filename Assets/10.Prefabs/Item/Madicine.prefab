@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7766077915533447579}
   - component: {fileID: 5261837276830378754}
   - component: {fileID: 2949390665989585291}
-  - component: {fileID: 2201122851008433384}
+  - component: {fileID: 6176340778502768577}
   m_Layer: 0
   m_Name: Madicine
   m_TagString: Item
@@ -83,7 +83,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &2201122851008433384
+--- !u!114 &6176340778502768577
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,9 +92,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6571314434036841874}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0067adb7d323731458d22ce2a3e37ab6, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c3090eb6e09bd04c89e2932f821f7a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemData: {fileID: 11400000, guid: 64461ca4220b3a54697e5b1aeaa2966d, type: 2}
   itemType: 1
 --- !u!1001 &2138755327773089556
 PrefabInstance:

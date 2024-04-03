@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 722455112577151636}
   - component: {fileID: 954912403156468362}
   - component: {fileID: 4408377028342193990}
-  - component: {fileID: 5313842134969615111}
+  - component: {fileID: 6497616693682704138}
   m_Layer: 0
   m_Name: RifleItem
   m_TagString: Item
@@ -83,7 +83,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &5313842134969615111
+--- !u!114 &6497616693682704138
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,19 +92,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4886314855705931971}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0067adb7d323731458d22ce2a3e37ab6, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c3090eb6e09bd04c89e2932f821f7a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemData: {fileID: 11400000, guid: 64461ca4220b3a54697e5b1aeaa2966d, type: 2}
   itemType: 2
-  itemCount: 0
-  itemName: 
-  itemImage: {fileID: 0}
-  rifleBulletCount: 0
-  rifleBulletDamage: 0
-  shotgunBulletCount: 0
-  shotgunBulletDamage: 0
-  itemHealCount: 0
-  itemHealValue: 0
 --- !u!1001 &3684314931004602106
 PrefabInstance:
   m_ObjectHideFlags: 0

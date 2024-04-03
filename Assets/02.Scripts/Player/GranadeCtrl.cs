@@ -11,10 +11,12 @@ public class GranadeCtrl : MonoBehaviour
     private Rigidbody rb;
     private EnemyDamage enemyDamage;
     private PlayerDamage playerDamage;
+    private AudioSource source;
     private int enemyLayer;
     private int playerLayer;
     void OnEnable()
     {
+        source = GetComponent<AudioSource>();
         enemyDamage = FindObjectOfType<EnemyDamage>();
         playerDamage = FindObjectOfType<PlayerDamage>();
         enemyLayer = 1 << LayerMask.NameToLayer("Enemy");
@@ -32,6 +34,7 @@ public class GranadeCtrl : MonoBehaviour
         _expEffect.transform.position = transform.position;
         _expEffect.transform.rotation = Quaternion.identity;
         _expEffect.SetActive(true);
+        SoundManager.soundInst.PlaySound(granadeData.expClip, source);
         Collider[] cols = Physics.OverlapSphere(transform.position, 10f, enemyLayer | playerLayer);
         foreach (Collider col in cols)
         {
@@ -40,6 +43,7 @@ public class GranadeCtrl : MonoBehaviour
             {
                 rb.mass = 1.0f;
                 rb.AddExplosionForce(1000f, transform.position, 8f, 100f);
+                if(col !=  null)
                 col.GetComponent<EnemyDamage>().ReceiveDamage(50);
 
             }

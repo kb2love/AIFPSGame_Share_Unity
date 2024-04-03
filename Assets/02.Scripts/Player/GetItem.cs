@@ -13,7 +13,7 @@ public class GetItem : MonoBehaviour
     private readonly int aniGetItem = Animator.StringToHash("GetItemTrigger");
     [SerializeField] private bool isInputF;
     [SerializeField] private List<GameObject> collidersSet = new List<GameObject>();
-    void Awake()
+    void OnEnable()
     {
         getItemPanel = GameObject.Find("Canvas_ui").transform.GetChild(1).gameObject;
         animator = transform.GetChild(0).GetComponent<Animator>();
@@ -47,13 +47,13 @@ public class GetItem : MonoBehaviour
 
             if (isInputF && collidersSet.Count > 0)
             {
-                var itemType = collidersSet[setCount].GetComponent<ItemDataBase>()?.itemType;
+                var itemType = collidersSet[setCount].GetComponent<ItemInfo>()?.itemType;
                 if (itemType != null)
                     GetItemF(itemType.Value);
             }
         }
     }
-    private void GetItemF(ItemDataBase.ItemType itemType)
+    private void GetItemF(ItemData.ItemType itemType)
     {
         if (isInputF)
         {
@@ -70,7 +70,7 @@ public class GetItem : MonoBehaviour
             }
 
             animator.SetTrigger(aniGetItem);
-            ItemManager.Instance.AddItem(itemType);
+            GameManager.Instance.AddItem(itemType);
         }
     }
     void OnTriggerExit(Collider other)

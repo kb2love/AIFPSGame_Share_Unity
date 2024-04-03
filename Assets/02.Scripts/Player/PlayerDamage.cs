@@ -10,23 +10,29 @@ public class PlayerDamage : MonoBehaviour
     private string e_bulletTag = "E_Bullet";
     public Image hpBarImage;
     private GameObject _effect;
-    void Start()
+    private GameObject dieUi;
+    void OnEnable()
     {
-        _effect = ObjectPoolingManager.objPooling.GetHitEffect();
-        hpBarImage = GameObject.Find("Image-HpBar").GetComponent<Image>();
+        hpBarImage = GameObject.Find("Image-HpBar").GetComponent<Image>();  
         isDie = false;
         hp = playerData.maxHp;
+        dieUi = GameObject.Find("Canvas_ui").transform.GetChild(4).gameObject;
     }
     void OnCollisionEnter(Collision col)
     {
         if(col.gameObject.CompareTag(e_bulletTag))
         {
             PlayerReceiveDamage((int)col.gameObject.GetComponent<EnemyBulletCtrl>().damage);
-            Vector3 normal = col.contacts[0].normal;
-            _effect.transform.position = col.contacts[0].point;
-            _effect.transform.rotation = Quaternion.FromToRotation(-Vector3.forward, normal);
-            _effect.SetActive(true);
-            Invoke("EffectOff", 1f);
+            StartCoroutine(HitEffect(col));
+        }
+    }
+    void OnTriggerEnter(Collider other)
+    {
+
+        if (other.gameObject.tag == "DeadLine")
+        {
+            isDie = true;
+            StartCoroutine(PlayerDie());
         }
     }
     public void PlayerReceiveDamage(int damage)
@@ -36,10 +42,27 @@ public class PlayerDamage : MonoBehaviour
         if (hp <= 0)
         {
             isDie = true;
+            StartCoroutine(PlayerDie());
         }
     }
-    private void EffectOff()
+    IEnumerator PlayerDie()
     {
+        yield return new WaitForSeconds(1f);
+        dieUi.SetActive(true );
+        yield return new WaitForSeconds(2f);
+        GameManager.Instance.ScoureSave();
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        SceneMove.sceneInst.StartScene();
+    }
+    private IEnumerator HitEffect(Collision col)
+    {
+        Vector3 normal = col.contacts[0].normal;
+        _effect = ObjectPoolingManager.objPooling.GetHitEffect();
+        _effect.transform.position = col.contacts[0].point;
+        _effect.transform.rotation = Quaternion.FromToRotation(-Vector3.forward, normal);
+        _effect.SetActive(true);
+        yield return new WaitForSeconds(1.0f);
         _effect.SetActive(false);
     }
 }

@@ -163,7 +163,7 @@ public class EnemyAI : MonoBehaviour
         GetComponent<Rigidbody>().isKinematic = true;
         GetComponent<CapsuleCollider>().isTrigger = true;
         yield return new WaitForSeconds(3);
-        ItemManager.Instance.GetComponent<LoopSpawn>().e_Count--;
+        GameManager.Instance.GetComponent<LoopSpawn>().e_Count--;
         gameObject.SetActive(false);
     }
     void OnDisable()

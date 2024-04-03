@@ -1,28 +1,32 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.UI;
-public class ItemManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
-    public static ItemManager Instance = null;
-
+    public static GameManager Instance = null;
     [SerializeField] MadicinData madicinData;
     [SerializeField] GunData gunData;
     [SerializeField] PlayerData playerData;
     [SerializeField] GranadeData granadeData;
+    [SerializeField] ItemInfo info;
     public List<Text> itemEmptyText = new List<Text>();
-
+    
     private RectTransform[] itemEmptyRect;
     public List<RectTransform> itemEmptyRectList = new List<RectTransform>();
 
     private RectTransform[] imageDrop;
     private List<RectTransform> imageDropList = new List<RectTransform>();
 
-    private PlayerDamage playerDamage;
+    private Text scoreText;
 
+    private PlayerDamage playerDamage;
     private FireCtrl fireCtrl;
+
+    private int killCount = 0;
     public int itemEmptyIdx;
     public int rifleIdx;
     public int shotgunIdx;
@@ -39,14 +43,18 @@ public class ItemManager : MonoBehaviour
     public bool getRifle;
     void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
         }
-        else if(Instance != this)
+        else if (Instance != this)
         {
             Destroy(this.gameObject);
         }
+        DontDestroyOnLoad(gameObject);
+    }
+    void OnEnable()
+    {
         fireCtrl = FindObjectOfType<FireCtrl>();
         itemEmptyRect = GameObject.Find("Item_EmptyGroup").transform.GetComponentsInChildren<RectTransform>(includeInactive: false);
         imageDrop = GameObject.Find("ItemList").GetComponentsInChildren<RectTransform>();
@@ -66,6 +74,7 @@ public class ItemManager : MonoBehaviour
             Text textCompenet = childTransform.transform.GetChild(0).GetComponent<Text>();
             itemEmptyText.Add(textCompenet);
         }
+        scoreText = GameObject.Find("Text (Legacy)-KillScore").GetComponent<Text>();  
         itemEmptyIdx = 0;
         rifleBulletIdx = 0;
         healIdx = 0;
@@ -81,33 +90,34 @@ public class ItemManager : MonoBehaviour
         getGranade = false;
         getShotGun = false;
         getRifle = false;
+
     }
-    public void AddItem(ItemDataBase.ItemType itemType)
+    public void AddItem(ItemData.ItemType itemType)
     {
         switch(itemType)
         {
-            case ItemDataBase.ItemType.HEAL:
+            case ItemData.ItemType.Meadicine:
                 CaseHeal();
                 break;
-            case ItemDataBase.ItemType.RIFLE:
-                AddGun(gunData.rf_Sprite, ItemDataBase.ItemType.RIFLE, rifleIdx);
+            case ItemData.ItemType.RIFLE:
+                AddGun(gunData.rf_Sprite, ItemData.ItemType.RIFLE, rifleIdx);
                 if (!getShotGun && !getGranade)
                     fireCtrl.weaponImage.sprite = gunData.rf_UISprite;
                 getRifle = true;
                 break;
-            case ItemDataBase.ItemType.SHOTGUN:
-                AddGun(gunData.sg_Sprite, ItemDataBase.ItemType.SHOTGUN, shotgunIdx);
+            case ItemData.ItemType.SHOTGUN:
+                AddGun(gunData.sg_Sprite, ItemData.ItemType.SHOTGUN, shotgunIdx);
                 if (!getRifle && !getGranade)
                     fireCtrl.weaponImage.sprite = gunData.sg_UISprite;
                 getShotGun = true;
                 break;
-            case ItemDataBase.ItemType.RIFLEBULLET:
+            case ItemData.ItemType.RIFLEBULLET:
                 CaseRifleBullet();
                 break;
-            case ItemDataBase.ItemType.SHOTGUNBULLET:
+            case ItemData.ItemType.SHOTGUNBULLET:
                 CaseShotGunBullet();
                 break;
-            case ItemDataBase.ItemType.GRENADE:
+            case ItemData.ItemType.GRENADE:
                 CaseGranade();
                 break;
 
@@ -146,7 +156,7 @@ public class ItemManager : MonoBehaviour
             for (int i = 0; i < imageDropList.Count; i++)  //인벤토리에 불렛이 추가된다
             {
                 if (imageDropList[i].childCount > 0) continue;
-                itemEmptyRectList[itemEmptyIdx].gameObject.GetComponent<ItemDataBase>().itemType = ItemDataBase.ItemType.RIFLE;
+                itemEmptyRectList[itemEmptyIdx].gameObject.GetComponent<ItemInfo>().itemType = ItemData.ItemType.RIFLE;
                 rifleBulletIdx = itemEmptyIdx;
                 AddItem(i, gunData.rfB_Sprite,gunData.Rf_Count);
                 isRifleBullet = true;
@@ -168,7 +178,7 @@ public class ItemManager : MonoBehaviour
             for (int i = 0; i < imageDropList.Count; i++)  //인벤토리에 불렛이 추가된다
             {
                 if (imageDropList[i].childCount > 0) continue;
-                itemEmptyRectList[itemEmptyIdx].gameObject.GetComponent<ItemDataBase>().itemType = ItemDataBase.ItemType.SHOTGUNBULLET;
+                itemEmptyRectList[itemEmptyIdx].gameObject.GetComponent<ItemInfo>().itemType = ItemData.ItemType.SHOTGUNBULLET;
                 shotgunBulletIdx = itemEmptyIdx;
                 AddItem(i, gunData.sgB_Sprite, gunData.Sg_Count);
                 
@@ -181,7 +191,7 @@ public class ItemManager : MonoBehaviour
             itemEmptyText[shotgunBulletIdx].text = gunData.Sg_Count.ToString();
         }
     }
-    private void AddGun(Sprite sprite,ItemDataBase.ItemType type, int idx)
+    private void AddGun(Sprite sprite,ItemData.ItemType type, int idx)
     {
         for (int i = 0; i < imageDropList.Count; i++)
         {
@@ -189,7 +199,7 @@ public class ItemManager : MonoBehaviour
             itemEmptyRectList[itemEmptyIdx].SetParent(imageDropList[i]);
             itemEmptyRectList[itemEmptyIdx].GetComponent<Image>().sprite = sprite;
             itemEmptyRectList[itemEmptyIdx].GetComponent<Image>().enabled = true;
-            itemEmptyRectList[itemEmptyIdx].gameObject.GetComponent<ItemDataBase>().itemType = type;
+            itemEmptyRectList[itemEmptyIdx].gameObject.GetComponent<ItemInfo>().itemType = type;
             itemEmptyIdx++;
             idx = itemEmptyIdx;
             fireCtrl.weaponImage.enabled = true;
@@ -211,7 +221,7 @@ public class ItemManager : MonoBehaviour
             for (int i = 0; i < imageDropList.Count; i++)  //인벤토리에 불렛이 추가된다
             {
                 if (imageDropList[i].childCount > 0) continue;
-                itemEmptyRectList[itemEmptyIdx].gameObject.GetComponent<ItemDataBase>().itemType = ItemDataBase.ItemType.GRENADE;
+                itemEmptyRectList[itemEmptyIdx].gameObject.GetComponent<ItemInfo>().itemType = ItemData.ItemType.GRENADE;
                 granadeIdx = itemEmptyIdx;
                 AddItem(i, granadeData.itme_Sprite, granadeData.Count);
                 if(fireCtrl.isGranade)
@@ -252,5 +262,18 @@ public class ItemManager : MonoBehaviour
             itemEmptyText[healIdx].gameObject.SetActive(false);
             isHeal = false;
         }
+    }
+    public void ScoreUp(int score)
+    {
+        killCount += score;
+        scoreText.text = killCount.ToString();
+    }
+    public void ScoureSave()
+    {
+        PlayerPrefs.SetInt("KillCount", killCount);
+    }
+    public void ScoreDelete()
+    {
+        PlayerPrefs.DeleteKey("KillCount");
     }
 }

@@ -15,7 +15,7 @@ public class LoopSpawn : MonoBehaviour
     private int spawnTrIdx;
     private int e_spawnTrIdx;
     public int e_Count;
-    public int allSpawnTime;
+    private int allSpawnTime;
     private int allItemCount;
     private HashSet<int> e_spawnIdx = new HashSet<int>();
     private HashSet<int> spawnIdx = new HashSet<int>();

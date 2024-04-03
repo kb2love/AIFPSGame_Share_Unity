@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
@@ -21,7 +22,7 @@ public class PlayerMove : MonoBehaviour
     private readonly int aniSprint = Animator.StringToHash("IsSprint");
     private readonly int aniStandingJump = Animator.StringToHash("StandingJump");
     private readonly int aniSprintJump = Animator.StringToHash("SprintJump");
-    void Start()
+    void OnEnable()
     {
         ch = GetComponent<CharacterController>();
         animator = transform.GetChild(0).GetComponent<Animator>();

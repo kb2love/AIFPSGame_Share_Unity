@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5196034252131001995}
   - component: {fileID: 7663902327151486323}
   - component: {fileID: 6656312380766755044}
-  - component: {fileID: 7764999055316705189}
+  - component: {fileID: 8293193855569540249}
   m_Layer: 0
   m_Name: SpawnGranade
   m_TagString: Item
@@ -33,7 +33,7 @@ Transform:
   m_Children:
   - {fileID: 8578063704708059819}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &7663902327151486323
 Rigidbody:
@@ -83,7 +83,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7764999055316705189
+--- !u!114 &8293193855569540249
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,9 +92,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6773804979363258921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0067adb7d323731458d22ce2a3e37ab6, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c3090eb6e09bd04c89e2932f821f7a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemData: {fileID: 11400000, guid: 64461ca4220b3a54697e5b1aeaa2966d, type: 2}
   itemType: 6
 --- !u!1001 &9105702880456523559
 PrefabInstance:
