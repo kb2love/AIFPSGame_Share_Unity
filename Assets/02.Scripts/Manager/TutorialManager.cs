@@ -69,10 +69,12 @@ public class TutorialManager : MonoBehaviour
     {
         GameObject.Find("Canvas_ui").transform.GetChild(2).gameObject.SetActive(true);
         GameObject.Find("Canvas_ui").transform.GetChild(3).gameObject.SetActive(true);
+        GameObject.Find("Canvas_ui").transform.GetChild(6).gameObject.SetActive(true);
         GameManager.Instance.gameObject.SetActive(true);
         ObjectPoolingManager.objPooling.GetComponent<ObjectPoolingManager>().enabled = true;
+        ObjectPoolingManager.objPooling.GetComponent<LoopSpawn>().enabled = true;
         GameManager.Instance.GetComponent<GameManager>().enabled = true;
-        GameManager.Instance.GetComponent<LoopSpawn>().enabled = true;
+        
         GameObject.Find("Rweaponholder").transform.GetChild(0).gameObject.SetActive(true);
         GameObject.Find("Rweaponholder").transform.GetChild(0).gameObject.SetActive(true);
         player.GetComponent<PlayerMove>().enabled = true;
