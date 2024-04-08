@@ -268,7 +268,7 @@ public class GameManager : MonoBehaviour
         killCount += score;
         scoreText.text = killCount.ToString();
     }
-    public void ScoureSave()
+    public void ScoreSave()
     {
         PlayerPrefs.SetInt("KillCount", killCount);
     }

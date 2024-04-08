@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/01.Scenes/BattleLoop Scene.unity
     guid: 0f7d0af0b6d06ed4cad665a799f0553e
+  - enabled: 1
+    path: Assets/01.Scenes/EndScene.unity
+    guid: 121163c38fafb344dbe1d3aa123e8c62
   m_configObjects: {}

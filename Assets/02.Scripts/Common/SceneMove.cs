@@ -29,6 +29,10 @@ public class SceneMove : MonoBehaviour
     {
         SceneManager.LoadScene("StartScene");
     }
+    public void EndScene()
+    {
+        SceneManager.LoadScene("EndScene");
+    }
     public void QuitButton()
     {
 #if UNITY_EDITOR

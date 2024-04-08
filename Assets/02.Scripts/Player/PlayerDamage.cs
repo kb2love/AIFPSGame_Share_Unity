@@ -50,10 +50,10 @@ public class PlayerDamage : MonoBehaviour
         yield return new WaitForSeconds(1f);
         dieUi.SetActive(true );
         yield return new WaitForSeconds(2f);
-        GameManager.Instance.ScoureSave();
+        GameManager.Instance.ScoreSave();
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        SceneMove.sceneInst.StartScene();
+        SceneMove.sceneInst.EndScene();
     }
     private IEnumerator HitEffect(Collision col)
     {
