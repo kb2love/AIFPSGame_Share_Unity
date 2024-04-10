@@ -9,7 +9,6 @@ public class PlayerDamage : MonoBehaviour
     public int hp;
     private string e_bulletTag = "E_Bullet";
     public Image hpBarImage;
-    private GameObject _effect;
     private GameObject dieUi;
     void OnEnable()
     {
@@ -23,7 +22,7 @@ public class PlayerDamage : MonoBehaviour
         if(col.gameObject.CompareTag(e_bulletTag))
         {
             PlayerReceiveDamage((int)col.gameObject.GetComponent<EnemyBulletCtrl>().damage);
-            StartCoroutine(HitEffect(col));
+            HitEffect(col);
         }
     }
     void OnTriggerEnter(Collider other)
@@ -55,14 +54,18 @@ public class PlayerDamage : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         SceneMove.sceneInst.EndScene();
     }
-    private IEnumerator HitEffect(Collision col)
+    private void HitEffect(Collision col)
     {
         Vector3 normal = col.contacts[0].normal;
-        _effect = ObjectPoolingManager.objPooling.GetHitEffect();
+        GameObject _effect = ObjectPoolingManager.objPooling.GetHitEffect();
         _effect.transform.position = col.contacts[0].point;
         _effect.transform.rotation = Quaternion.FromToRotation(-Vector3.forward, normal);
         _effect.SetActive(true);
+        StartCoroutine(EffectFalse(_effect));
+    }
+    private IEnumerator EffectFalse(GameObject gameObject)
+    {
         yield return new WaitForSeconds(1.0f);
-        _effect.SetActive(false);
+        gameObject.SetActive(false);
     }
 }

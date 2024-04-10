@@ -9,12 +9,16 @@ public class EndSecneManager : MonoBehaviour
     void Start()
     {
         scoreText = GameObject.Find("Panel-Score").GetComponentsInChildren<Text>();
-        int scoreIdx = PlayerPrefs.GetInt("KillCount");
+        int[] scoreIdx = DataManager.dataInstance.gameData.score;
         for(int i = 0; i < scoreText.Length; i++)
         {
-            if (scoreText[i].enabled == true) continue;
-            scoreText[i].enabled = true;
-            scoreText[i].text = i + 1 + ". " + scoreIdx.ToString();
+            for(int j = 0; j < scoreIdx.Length; j++)
+            {
+                if (scoreText[i].enabled == true) continue;
+                scoreText[i].enabled = true;
+                scoreText[i].text = i + 1 + ". " + scoreIdx[j].ToString();
+                break;
+            }
             break;
         }
         GameManager.Instance.ScoreDelete();

@@ -92,6 +92,7 @@ public class GameManager : MonoBehaviour
         getRifle = false;
 
     }
+    //*****************************인벤토리/아이템****************************************//
     public void AddItem(ItemData.ItemType itemType)
     {
         switch(itemType)
@@ -263,6 +264,7 @@ public class GameManager : MonoBehaviour
             isHeal = false;
         }
     }
+    //**********************************점수저장/불러오기*******************************************//
     public void ScoreUp(int score)
     {
         killCount += score;

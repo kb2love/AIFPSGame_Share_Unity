@@ -20,6 +20,7 @@ public class SceneMove : MonoBehaviour
     public void TutoButton()
     {
         SceneManager.LoadScene("Tutorial Scene");
+        DataManager.dataInstance.gameData.tutorial = true;
     }
     public void PlayGame()
     {
