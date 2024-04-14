@@ -36,6 +36,7 @@ public class SceneMove : MonoBehaviour
     }
     public void QuitButton()
     {
+        DataManager.dataInstance.SaveData();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else

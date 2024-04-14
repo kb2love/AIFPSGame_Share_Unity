@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 public class PlayerDamage : MonoBehaviour
 {
@@ -49,7 +50,8 @@ public class PlayerDamage : MonoBehaviour
         yield return new WaitForSeconds(1f);
         dieUi.SetActive(true );
         yield return new WaitForSeconds(2f);
-        GameManager.Instance.ScoreSave();
+        DataManager.dataInstance.gameData.score.Add(GameManager.Instance.killCount);
+        DataManager.dataInstance.SaveData();
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         SceneMove.sceneInst.EndScene();

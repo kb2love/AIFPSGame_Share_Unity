@@ -6,7 +6,7 @@ using UnityEngine.iOS;
 public class GameData
 {
     public string ranking;
-    public int[] score;
+    public List<int> score = new List<int>();
     public bool tutorial;
 }
 public class DataManager : MonoBehaviour
@@ -26,16 +26,20 @@ public class DataManager : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
-        path = Application.persistentDataPath + "/";
+        path = Path.Combine(Application.persistentDataPath, fileName);
     }
     public void SaveData()
     {
         string data = JsonUtility.ToJson(gameData);
-        File.WriteAllText(path + fileName, data);
+        File.WriteAllText(path, data);
     }
     public void LoadData()
     {
-        string data = File.ReadAllText(path + fileName);
-        gameData =  JsonUtility.FromJson<GameData>(data);
+        if(File.Exists(path))
+        {
+
+            string data = File.ReadAllText(path);
+            gameData = JsonUtility.FromJson<GameData>(data);
+        }
     }
 }

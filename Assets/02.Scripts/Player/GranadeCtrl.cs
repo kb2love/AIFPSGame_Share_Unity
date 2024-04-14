@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using TMPro;
 
 public class GranadeCtrl : MonoBehaviour
 {
@@ -17,7 +16,7 @@ public class GranadeCtrl : MonoBehaviour
     void OnEnable()
     {
         source = GetComponent<AudioSource>();
-        enemyDamage = FindObjectOfType<EnemyDamage>();
+        enemyDamage = FindObjectOfType<EnemyDamage>();   
         playerDamage = FindObjectOfType<PlayerDamage>();
         enemyLayer = 1 << LayerMask.NameToLayer("Enemy");
         playerLayer = 1 << LayerMask.NameToLayer("Player");
@@ -38,15 +37,18 @@ public class GranadeCtrl : MonoBehaviour
         Collider[] cols = Physics.OverlapSphere(transform.position, 10f, enemyLayer | playerLayer);
         foreach (Collider col in cols)
         {
-            Rigidbody rb = col.GetComponent<Rigidbody>();
-            if (rb != null)
+            if (col.gameObject.layer == enemyLayer)
             {
-                rb.mass = 1.0f;
-                rb.AddExplosionForce(1000f, transform.position, 8f, 100f);
-                if(col !=  null)
-                col.GetComponent<EnemyDamage>().ReceiveDamage(50);
-
+                col.gameObject.GetComponent<EnemyDamage>().ReceiveDamage(50);
+                Debug.Log("µÅ?");
             }
+            else if (col.gameObject.layer == playerLayer)
+            {
+                col.gameObject.GetComponent<PlayerDamage>().PlayerReceiveDamage(50);
+                Debug.Log("¾ÈµÅ?");
+            }
+            Vector3 dis = (transform.position - col.transform.position);
+            //col.transform.DOJump(dis, 2, 1, 2);
         }
 
         yield return new WaitForSeconds(1);

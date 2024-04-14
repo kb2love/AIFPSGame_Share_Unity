@@ -9,18 +9,13 @@ public class EndSecneManager : MonoBehaviour
     void Start()
     {
         scoreText = GameObject.Find("Panel-Score").GetComponentsInChildren<Text>();
-        int[] scoreIdx = DataManager.dataInstance.gameData.score;
-        for(int i = 0; i < scoreText.Length; i++)
+        List<int> scoreIdx = DataManager.dataInstance.gameData.score;
+        scoreIdx.Sort((a, b) => b.CompareTo(a));
+        for (int i = 0; i < scoreIdx.Count; i++)
         {
-            for(int j = 0; j < scoreIdx.Length; j++)
-            {
-                if (scoreText[i].enabled == true) continue;
-                scoreText[i].enabled = true;
-                scoreText[i].text = i + 1 + ". " + scoreIdx[j].ToString();
-                break;
-            }
-            break;
+            if (scoreText.Length < i | scoreIdx.Count < i) return;
+            scoreText[i].enabled = true;
+            scoreText[i].text = i + 1 + ". " + scoreIdx[i].ToString();
         }
-        GameManager.Instance.ScoreDelete();
     }
 }

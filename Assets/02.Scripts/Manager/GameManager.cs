@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     private PlayerDamage playerDamage;
     private FireCtrl fireCtrl;
 
-    private int killCount = 0;
+    public int killCount = 0;
     public int itemEmptyIdx;
     public int rifleIdx;
     public int shotgunIdx;
@@ -269,13 +269,5 @@ public class GameManager : MonoBehaviour
     {
         killCount += score;
         scoreText.text = killCount.ToString();
-    }
-    public void ScoreSave()
-    {
-        PlayerPrefs.SetInt("KillCount", killCount);
-    }
-    public void ScoreDelete()
-    {
-        PlayerPrefs.DeleteKey("KillCount");
     }
 }

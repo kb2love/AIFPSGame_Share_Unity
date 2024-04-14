@@ -10111,6 +10111,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100046, guid: ffe78ae0827493a4b80d05df0c9c2cf3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 934377903}
+    - targetCorrespondingSourceObject: {fileID: 100046, guid: ffe78ae0827493a4b80d05df0c9c2cf3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 934377904}
   m_SourcePrefab: {fileID: 100100000, guid: ffe78ae0827493a4b80d05df0c9c2cf3, type: 3}
 --- !u!4 &466365090 stripped
 Transform:
@@ -13583,6 +13586,7 @@ MonoBehaviour:
   info: {fileID: 0}
   itemEmptyText: []
   itemEmptyRectList: []
+  killCount: 0
   itemEmptyIdx: 0
   rifleIdx: 0
   shotgunIdx: 0
@@ -17548,6 +17552,29 @@ LODGroup:
     renderers:
     - renderer: {fileID: 1949169371}
   m_Enabled: 1
+--- !u!136 &934377904
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934377902}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.3
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!4 &935955159 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4300533007854612, guid: c888fe221861f584e9a4f5fba2ada06e, type: 3}
