@@ -31,18 +31,11 @@ public class PlayerMove : MonoBehaviour
         gravity = gravityValue;
         isSprint = false;
         audioSource = GetComponent<AudioSource>();
-        StartCoroutine(PlayerMovement());
     }
-
-    IEnumerator PlayerMovement()
+    private void Update()
     {
-        while(!playerDamage.isDie)
-        {
-            yield return new WaitForSeconds(0.002f);
-            RunCheck();
-            Move();
-            
-        }
+        RunCheck();
+        Move();
     }
 
     private void Move()
