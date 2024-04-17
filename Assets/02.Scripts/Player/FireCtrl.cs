@@ -46,16 +46,16 @@ public class FireCtrl : MonoBehaviour
     {
         animator = transform.GetChild(0).GetComponent<Animator>();
 
-        rifleFirePos = animator.transform.GetChild(2).GetChild(0).GetChild(0).transform;
-        shotgunFirePos = animator.transform.GetChild(2).GetChild(1).GetChild(0).transform;
-        granadePos = animator.transform.GetChild(6).transform;
+        rifleFirePos = GameObject.Find("FirePos_Rifle").transform;
+        shotgunFirePos = GameObject.Find("FirePos_ShotGun").transform;
+        granadePos = GameObject.Find("GrandePos").transform;
 
         rifleFlash = rifleFirePos.GetChild(0).GetComponent<ParticleSystem>();
         shotgunFlahs = shotgunFirePos.GetChild(0).GetComponent <ParticleSystem>();
 
         rifleMesh = rifleFirePos.parent.GetComponent<MeshRenderer>();
         shotgunMesh = shotgunFirePos.parent.GetComponent<MeshRenderer>();
-        granadeMesh = animator.transform.GetChild(2).GetChild(2).GetComponent<MeshRenderer>();
+        granadeMesh = GameObject.Find("SCIGrenade").GetComponent<MeshRenderer>();
 
         itemEmptyGroup = GameObject.Find("Item_EmptyGroup").GetComponent<RectTransform>();
         source = GetComponent<AudioSource>();

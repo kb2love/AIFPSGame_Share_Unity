@@ -20,6 +20,7 @@ public class CameraDirection : MonoBehaviour
     private float weight = 1.0f;
     private float ikRotWeight = 1.0f;
     private float armAngleLimit = 60f;
+    private int aniLayerIdx;
 
     void OnEnable()
     {
@@ -33,9 +34,10 @@ public class CameraDirection : MonoBehaviour
         cameraHeight = 1.5f;
         isView = true;
         animator = GetComponentInChildren<Animator>();
-        leftHand = GameObject.Find("LeftHand").transform;
-        rightHand = GameObject.Find("RightHand").transform;
+        leftHand = GameObject.Find("Lthumb").transform;
+        rightHand = GameObject.Find("Rthumb").transform;
         playerLayer = LayerMask.NameToLayer("Player");
+        aniLayerIdx = animator.GetLayerIndex("Shot&Reload Layer");
     }
     void Update()
     {
@@ -73,25 +75,15 @@ public class CameraDirection : MonoBehaviour
         caracterRot.x = caracterRot.z = 0f;
         transform.rotation = Quaternion.Slerp(transform.rotation, caracterRot, 10f * Time.deltaTime);
     }
-    private void OnAnimatorIK()
+    private void OnAnimatorIK(int layerIdx)
     {
+        if (layerIdx != aniLayerIdx) return;
         animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHand.transform.position);
         animator.SetIKRotation(AvatarIKGoal.LeftHand, leftHand.transform.rotation);
-        DOTween.To(() => weight, x => weight = x, weight = mouseMove.x, 0.5f).SetEase(Ease.InOutQuad);
         animator.SetIKPosition(AvatarIKGoal.RightHand, rightHand.transform.position);
         animator.SetIKRotation(AvatarIKGoal.RightHand, rightHand.transform.rotation);
-        DOTween.To(() => weight, x => weight = x, weight = mouseMove.x, 0.5f).SetEase(Ease.InOutQuad);
-        float angleX = Vector3.Angle(transform.forward, rightHand.position - transform.position);
-        if (angleX > armAngleLimit)
-        {
-            DOTween.To(() => weight, x => weight = x, 0.0f, 0.5f).SetEase(Ease.InOutQuad);
-            DOTween.To(() => ikRotWeight, x => ikRotWeight = x, 0.0f, 0.5f).SetEase(Ease.InOutQuad);
-        }
-        else
-        {
-            DOTween.To(() => weight, x => weight = x, 1.0f, 0.5f).SetEase(Ease.InOutQuad);
-            DOTween.To(() => ikRotWeight, x => ikRotWeight = x, 1.0f, 0.5f).SetEase(Ease.InOutQuad);
-        }
+        leftHand.localEulerAngles = mouseMove;
+        rightHand.localEulerAngles = mouseMove;
     }
     private void OnestPerson()
     {
