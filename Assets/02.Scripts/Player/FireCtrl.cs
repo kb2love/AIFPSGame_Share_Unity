@@ -7,26 +7,26 @@ using UnityEngine.UI;
 
 public class FireCtrl : MonoBehaviour
 {
-    [SerializeField] GunData gunData;
-    [SerializeField] GranadeData granadeData;
-    private Transform rifleFirePos;
-    private Transform shotgunFirePos;
-    private Transform granadePos;
-    private AudioSource source;
-    private Animator animator;
-    private PlayerDamage playerDamage;
-    private ParticleSystem rifleFlash;
-    private ParticleSystem shotgunFlahs;
-    private CanvasGroup canvasGroup;
-    public Image weaponImage;
-    public Text bulletText;
-    private RectTransform itemEmptyGroup;
-    private MeshRenderer rifleMesh;
-    private MeshRenderer shotgunMesh;
-    public MeshRenderer granadeMesh;
-    private bool tabOn;
-    private float curTime;
-    private float fireTIme;
+    [SerializeField] private GunData gunData;           //총 스크립터블 데이터
+    [SerializeField] private GranadeData granadeData;   //수류탄 스크립터블 데이터
+    private Transform rifleFirePos;                     //라이플 총이 발사될 트랜스폼
+    private Transform shotgunFirePos;                   //샷건이 발사될 트랜스폼
+    private Transform granadePos;                       //그래네이드가 던져질 트랜스폼
+    private AudioSource source;                         //오디오 소스
+    private Animator animator;                          //애니메이터
+    private PlayerDamage playerDamage;                  //플레이어가 받을 데미지
+    private ParticleSystem rifleFlash;                  //라이플이 쏴질때 플레이 될 파티클
+    private ParticleSystem shotgunFlahs;                //샷건이 쏴질때 플레이 될 파티클
+    private CanvasGroup canvasGroup;                    //인벤토리를 보이거나 안보이게 함
+    public Image weaponImage;                           //총을 바꿀때 Ui상에 보이게 할 이미지
+    public Text bulletText;                             //총알의 개수를 텍스트로 보이게
+    private RectTransform itemEmptyGroup;               //총알을 다 썻을때 인벤토리의 
+    private MeshRenderer rifleMesh;                     //총을 바꿀때 나타날 라이플 매쉬
+    private MeshRenderer shotgunMesh;                   //총을 바꿀때 나타날 샷건 매쉬
+    public MeshRenderer granadeMesh;                    //수류탄으로 바꿀때 나타날 수류탄 매쉬
+    private bool tabOn;                                 //인벤토리를 켰는지 안켰는지 확인하기 위한 불변수
+    private float curTime;                              //총이 발사 되는 시간을 구하기 위한 현재 시간
+    private float fireTIme;                             //총이 발사 되는 시간
     private readonly int aniFire = Animator.StringToHash("FireTrigger");
     private readonly int aniReload = Animator.StringToHash("ReloadTrigger");
     private readonly int aniIsReload = Animator.StringToHash("IsReload");

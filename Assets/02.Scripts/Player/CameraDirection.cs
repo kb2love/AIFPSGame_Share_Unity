@@ -82,7 +82,7 @@ public class CameraDirection : MonoBehaviour
         animator.SetIKRotation(AvatarIKGoal.LeftHand, leftHand.transform.rotation);
         animator.SetIKPosition(AvatarIKGoal.RightHand, rightHand.transform.position);
         animator.SetIKRotation(AvatarIKGoal.RightHand, rightHand.transform.rotation);
-        leftHand.localEulerAngles = mouseMove;
+        leftHand.localEulerAngles = mouseMove;  
         rightHand.localEulerAngles = mouseMove;
     }
     private void OnestPerson()
