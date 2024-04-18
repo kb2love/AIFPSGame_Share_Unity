@@ -30,16 +30,13 @@ public class EnemyFire : MonoBehaviour
     }
     IEnumerator OnFIre()
     {
-        while(!enemyAI.isDie)
+        while (!enemyAI.isDie)
         {
             yield return new WaitForSeconds(0.5f);
-            while (enemyAI.isAttack)
+            while (enemyAI.isAttack && !isReload && !enemyAI.isDie)
             {
                 yield return new WaitForSeconds(0.2f);
-                if(!isReload)
-                {
-                    Fire();
-                }
+                Fire();
             }
         }
     }
@@ -54,7 +51,7 @@ public class EnemyFire : MonoBehaviour
         shotFlash.Play();
         SoundManager.soundInst.PlayeOneShot(enemyData.shotClip, source);
         Invoke("ShootFlashStop", 0.1f);
-        if(bulletCount <= 0)
+        if (bulletCount <= 0)
         {
             StartCoroutine(Reload());
         }

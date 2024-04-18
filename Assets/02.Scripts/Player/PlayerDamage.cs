@@ -59,11 +59,15 @@ public class PlayerDamage : MonoBehaviour
     private void HitEffect(Collision col)
     {
         Vector3 normal = col.contacts[0].normal;
+        
         GameObject _effect = ObjectPoolingManager.objPooling.GetHitEffect();
-        _effect.transform.position = col.contacts[0].point;
-        _effect.transform.rotation = Quaternion.FromToRotation(-Vector3.forward, normal);
-        _effect.SetActive(true);
-        StartCoroutine(EffectFalse(_effect));
+        if(_effect != null)
+        {
+            _effect.transform.position = col.contacts[0].point;
+            _effect.transform.rotation = Quaternion.FromToRotation(-Vector3.forward, normal);
+            _effect.SetActive(true);
+            StartCoroutine(EffectFalse(_effect));
+        }
     }
     private IEnumerator EffectFalse(GameObject gameObject)
     {

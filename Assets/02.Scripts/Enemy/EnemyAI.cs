@@ -75,13 +75,18 @@ public class EnemyAI : MonoBehaviour
         while(!isDie)
         {
             float dist = Vector3.Distance(playerTr.position, transform.position);
-            if(dist < attackDist)
+            float distY = playerTr.position.y - transform.position.y;
+            if(dist < attackDist && distY < 0.5f)
             {
                 state = State.ATTACK;
+                if (distY > 0.5f)
+                    state = State.PATROL;
             }
-            else if(dist < traceDist)
+            else if(dist < traceDist && distY < 0.5f)
             {
                 state = State.TRACE;
+                if (distY > 0.5f)
+                    state = State.PATROL;
             }
             else
             {

@@ -16,7 +16,7 @@ public class GranadeCtrl : MonoBehaviour
     void OnEnable()
     {
         source = GetComponent<AudioSource>();
-        enemyDamage = FindObjectOfType<EnemyDamage>();   
+        enemyDamage = FindObjectOfType<EnemyDamage>();
         playerDamage = FindObjectOfType<PlayerDamage>();
         enemyLayer = 1 << LayerMask.NameToLayer("Enemy");
         playerLayer = 1 << LayerMask.NameToLayer("Player");
@@ -33,24 +33,14 @@ public class GranadeCtrl : MonoBehaviour
         _expEffect.transform.position = transform.position;
         _expEffect.transform.rotation = Quaternion.identity;
         _expEffect.SetActive(true);
-        SoundManager.soundInst.PlaySound(granadeData.expClip, source);
-        Collider[] cols = Physics.OverlapSphere(transform.position, 10f, enemyLayer | playerLayer);
+        Collider[] cols = Physics.OverlapSphere(transform.position, 10f, enemyLayer);
         foreach (Collider col in cols)
         {
-            if (col.gameObject.layer == enemyLayer)
-            {
-                col.gameObject.GetComponent<EnemyDamage>().ReceiveDamage(50);
-                Debug.Log("µÅ?");
-            }
-            else if (col.gameObject.layer == playerLayer)
-            {
-                col.gameObject.GetComponent<PlayerDamage>().PlayerReceiveDamage(50);
-                Debug.Log("¾ÈµÅ?");
-            }
-            Vector3 dis = (transform.position - col.transform.position);
+            col.gameObject.GetComponent<EnemyDamage>().ReceiveDamage(150);
+            Debug.Log("µÅ?");
             //col.transform.DOJump(dis, 2, 1, 2);
         }
-
+        SoundManager.soundInst.PlayeOneShot(granadeData.expClip, source);
         yield return new WaitForSeconds(1);
         _expEffect.SetActive(false);
         gameObject.SetActive(false);
