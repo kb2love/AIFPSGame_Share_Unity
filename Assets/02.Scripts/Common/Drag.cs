@@ -10,14 +10,12 @@ public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     [SerializeField] public Vector2 origPos;
     private CanvasGroup canvasGroup;
     public static GameObject DraggingItem = null;
-    private FireCtrl fireCtrl;
    
     void Start()
     {
         canvasGroup = GetComponent<CanvasGroup>();
         itemTr = GetComponent<RectTransform>();
         inventoryTr = GameObject.Find("Image-Inventory").GetComponent<RectTransform>();
-        fireCtrl = FindObjectOfType<FireCtrl>();
         rightHand = GameObject.Find("Inventory_equipment").transform.GetChild(0).GetComponent<RectTransform>();
     }
     public void OnDrag(PointerEventData eventData)
@@ -36,31 +34,7 @@ public class Drag : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     {
         DraggingItem = null;
         canvasGroup.blocksRaycasts = true;
-
-        
-        if(itemTr.parent == rightHand && this.gameObject.GetComponent<ItemData>().itemType == ItemData.ItemType.RIFLE)
-        {
-            fireCtrl.isRifle = true;
-            fireCtrl.isShotGun = false;
-            fireCtrl.isGranade = false;
-            fireCtrl.ChangeRifle();
-        }
-        else if(itemTr.parent == rightHand && this.gameObject.GetComponent<ItemData>().itemType == ItemData.ItemType.SHOTGUN)
-        {
-            fireCtrl.isShotGun = true;
-            fireCtrl.isRifle = false;
-            fireCtrl.isGranade= false;
-            fireCtrl.ChangeShotGun();
-        }
-        else if(itemTr.parent != rightHand && this.gameObject.GetComponent<ItemData>().itemType == ItemData.ItemType.RIFLE )
-        {
-            fireCtrl.isRifle = false;
-        }
-        else if(itemTr.parent != rightHand && this.gameObject.GetComponent<ItemData>().itemType == ItemData.ItemType.SHOTGUN)
-        {
-            fireCtrl.isShotGun = false;
-        }
-        else if (itemTr.parent == inventoryTr)
+        if (itemTr.parent == inventoryTr)
         {
             itemTr.position = origPos;
         }

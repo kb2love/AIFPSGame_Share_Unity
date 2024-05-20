@@ -9,7 +9,7 @@ public class StartScene : MonoBehaviour
     private void Start()
     {
         DataManager.dataInstance.LoadData();
-        if(DataManager.dataInstance.gameData.tutorial)
+        if (DataManager.dataInstance.gameData.tutorial)
             transform.GetChild(1).gameObject.SetActive(false);
     }
     public void TutoScene()

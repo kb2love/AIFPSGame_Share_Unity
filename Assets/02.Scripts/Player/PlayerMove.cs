@@ -17,11 +17,6 @@ public class PlayerMove : MonoBehaviour
     private bool isSprint;
     private Vector3 plDir;
     private Vector3 moveVelocity;
-    private readonly int aniSpeedX = Animator.StringToHash("speedX");
-    private readonly int aniSpeedY = Animator.StringToHash("speedY");
-    private readonly int aniSprint = Animator.StringToHash("IsSprint");
-    private readonly int aniStandingJump = Animator.StringToHash("StandingJump");
-    private readonly int aniSprintJump = Animator.StringToHash("SprintJump");
     void OnEnable()
     {
         ch = GetComponent<CharacterController>();
@@ -43,8 +38,8 @@ public class PlayerMove : MonoBehaviour
         hor = Input.GetAxis("Horizontal");
         ver = Input.GetAxis("Vertical");
         {
-            animator.SetFloat(aniSpeedX, hor, 0.1f, Time.deltaTime);
-            animator.SetFloat(aniSpeedY, ver, 0.1f, Time.deltaTime);
+            animator.SetFloat("speedX", hor, 0.1f, Time.deltaTime);
+            animator.SetFloat("speedY", ver, 0.1f, Time.deltaTime);
         }
         plDir = new Vector3(hor, 0, ver);
         moveVelocity = plDir * (isSprint ? playerData.runSpeed : playerData.moveSpeed) * Time.deltaTime;
@@ -66,12 +61,12 @@ public class PlayerMove : MonoBehaviour
         if(Input.GetKey(KeyCode.LeftShift) && ch.velocity.sqrMagnitude > 0.1f)
         {
             isSprint = true;
-            animator.SetBool(aniSprint, true);
+            animator.SetBool("IsSprint", true);
         }
         else if(Input.GetKeyUp(KeyCode.LeftShift) | ch.velocity.sqrMagnitude <= 0.1f)
         {
             isSprint = false;
-            animator.SetBool(aniSprint, false);
+            animator.SetBool("IsSprint", false);
         }
     }
     private void GravityAndJump()
@@ -89,11 +84,11 @@ public class PlayerMove : MonoBehaviour
                 hei = playerData.jumpForce;
                 if (isSprint)
                 {
-                    animator.SetTrigger(aniSprintJump);
+                    animator.SetTrigger("SprintJump");
                 }
                 else
                 {
-                    animator.SetTrigger(aniStandingJump);
+                    animator.SetTrigger("StandingJump");
                 }
                 SoundManager.soundInst.PlaySound(playerData.jumpClip, audioSource);
             }

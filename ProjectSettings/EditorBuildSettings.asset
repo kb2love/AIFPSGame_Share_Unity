@@ -9,11 +9,11 @@ EditorBuildSettings:
     path: Assets/01.Scenes/StartScene.unity
     guid: 846b96cf1a527554fbf84a525c39e5e1
   - enabled: 1
-    path: Assets/01.Scenes/Tutorial Scene.unity
-    guid: 3f1dbd13c75b1844fb55ea5ff44c95e0
+    path: Assets/01.Scenes/Tutorial.unity
+    guid: 37a052f2617e72a41808544ff4422a9b
   - enabled: 1
-    path: Assets/01.Scenes/BattleLoop Scene.unity
-    guid: 0f7d0af0b6d06ed4cad665a799f0553e
+    path: Assets/01.Scenes/BattleLoop.unity
+    guid: 8459e79f8a156134cabfe6c9c2fc3b18
   - enabled: 1
     path: Assets/01.Scenes/EndScene.unity
     guid: 121163c38fafb344dbe1d3aa123e8c62

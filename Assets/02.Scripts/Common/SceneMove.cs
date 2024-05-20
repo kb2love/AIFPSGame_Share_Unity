@@ -7,24 +7,16 @@ public class SceneMove : MonoBehaviour
     public static SceneMove sceneInst;
     void Awake()
     {
-        /*if (sceneInst == null)
-        {*/
-            sceneInst = this;
-        /*}
-        else if (sceneInst != this)
-        {
-            Destroy(gameObject);
-        }
-        DontDestroyOnLoad(gameObject);*/
+        sceneInst = this;
     }
     public void TutoButton()
     {
-        SceneManager.LoadScene("Tutorial Scene");
+        SceneManager.LoadScene(1);
         DataManager.dataInstance.gameData.tutorial = true;
     }
     public void PlayGame()
     {
-        SceneManager.LoadScene("BattleLoop Scene");
+        SceneManager.LoadScene(2);
     }
     public void StartScene()
     {
