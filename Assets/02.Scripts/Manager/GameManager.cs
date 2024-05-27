@@ -12,7 +12,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GunData gunData; // 총 데이터
     [SerializeField] private PlayerData playerData; // 플레이어 데이터
     [SerializeField] private GranadeData granadeData; // 수류탄 데이터
-    [SerializeField] private ItemInfo info; // 아이템 정보
     public List<Text> itemEmptyText = new List<Text>(); // 아이템 텍스트 리스트
 
     private RectTransform[] itemEmptyRect; // 아이템 빈 슬롯 배열

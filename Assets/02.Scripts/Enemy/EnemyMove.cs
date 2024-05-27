@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 public class EnemyMove : MonoBehaviour
 {
-    // private CharacterController ch;
     [SerializeField] EnemyData enemyData;                       //에너미 데이타 스크립터블오브젝트
     private Transform[] stairsPoint;                            //계단에 도착했을때 계단을 순차적으로 이동하게 하기위한 트랜스폼
     private Transform playerTr;                                 //플레이어 포지션

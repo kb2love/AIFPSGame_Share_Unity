@@ -27,7 +27,7 @@ public class DataManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
         path = Path.Combine(Application.persistentDataPath, fileName);
-    }
+    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
     public void SaveData()
     {
         string data = JsonUtility.ToJson(gameData);
@@ -37,7 +37,6 @@ public class DataManager : MonoBehaviour
     {
         if(File.Exists(path))
         {
-
             string data = File.ReadAllText(path);
             gameData = JsonUtility.FromJson<GameData>(data);
         }
